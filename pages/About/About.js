@@ -8,10 +8,8 @@ export default function About() {
     const [typeStyle, setTypeStyle] = useState([]);
 
     useEffect(() => {
-        if (typeDevice.web()) {
+        if (typeDevice.web()) 
             return setTypeStyle(style.web);
-        }
-        
 
         return setTypeStyle(style.scrollView)
     }, [])
@@ -19,8 +17,9 @@ export default function About() {
     const share = async () => {
         try {
             if (typeDevice.mobile()) {
+                const linkShare = typeDevice.iOS() ? '' : 'https://google.com.br'
                 const result = await Share.share({
-                    message: 'Venha e Cante Uma Nova Canção com a gente!!' + `${"\n\n"}https://google.com.br`,
+                    message: 'Venha e Cante Uma Nova Canção com a gente!!' + `${"\n\n" + linkShare}`,
                     url: 'https://apple.com/br',
                     title: 'Cante Uma Nova Canção'
                 });
@@ -43,18 +42,14 @@ export default function About() {
     }
 
     function goToStore(store) {
+        if (store === 'google') 
+           return window.open('https://google.com.br/', '_blank')
 
-        console.log('VIM')
-        if (store === 'google') {
-            window.open('https://google.com.br/', '_blank')
-        } else if (store === 'apple') {
-            window.open('https://apple.com/br', '_blank')
-        }
+        return window.open('https://apple.com/br', '_blank')
     }
 
     return (
         <SafeAreaView style={style.container}>
-
             <ScrollView style={typeStyle}>
                 <View style={[style.view]}>
                     <Text>
