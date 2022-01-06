@@ -1,11 +1,22 @@
 import React, { useEffect, useState } from "react";
-import { Alert, StyleSheet, Text, Pressable, View, TextInput } from "react-native";
+import { Alert, StyleSheet, Text, Pressable, View, TextInput, ToastAndroid } from "react-native";
+import { typeDevice } from "../../utils/Index";
 
 
 export default function Search(props) {
     const [text, setText] = useState('');
 
-    const searchMusic = () => {  }
+    const searchMusic = () => {
+        let message = 'Digite o nome da música para buscar'
+        if (text.length < 1)
+            if (typeDevice.Android())
+                return ToastAndroid.show(message, ToastAndroid.SHORT);
+        if (typeDevice.iOS())
+            return Alert.alert('Hm...',message, [{
+                text: 'Fechar'
+            }
+            ])
+    }
 
     return (
         <View style={styles.centeredView}>
