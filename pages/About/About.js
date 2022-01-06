@@ -1,14 +1,25 @@
 import React, { useEffect, useState } from "react";
-import { Image, Pressable, SafeAreaView, ScrollView, Share, StatusBar, StyleSheet, Text, View } from "react-native";
+import { Image, Platform, Pressable, SafeAreaView, ScrollView, Share, StatusBar, StyleSheet, Text, View } from "react-native";
 import { typeDevice } from "../../utils/Index";
 import appleBadge from "../../assets/app-store-badge.svg";
 
 
 export default function About() {
     const [typeStyle, setTypeStyle] = useState([]);
+    const [OS, setOS] = useState('')
 
     useEffect(() => {
-        if (typeDevice.web()) 
+        switch (Platform.OS) {
+            case 'android': setOS('Android')
+                break;
+            case 'ios': setOS('iOS')
+                break
+            default: setOS('Web')
+                break
+        }
+
+
+        if (typeDevice.web())
             return setTypeStyle(style.web);
 
         return setTypeStyle(style.scrollView)
@@ -34,16 +45,14 @@ export default function About() {
                 }
                 return;
             }
-
-            console.log('Sou WEB')
         } catch (error) {
             alert(error.message);
         }
     }
 
     function goToStore(store) {
-        if (store === 'google') 
-           return window.open('https://google.com.br/', '_blank')
+        if (store === 'google')
+            return window.open('https://google.com.br/', '_blank')
 
         return window.open('https://apple.com/br', '_blank')
     }
@@ -81,7 +90,8 @@ export default function About() {
                                 </Pressable>
                             </View>
                     }
-                    <Text style={[style.viewVersion]}>Versão 1.0.0 {"\n\n"}
+                    <Text style={[style.viewVersion]}>Versão 1.0.0 {"\n"}
+                        OS: {OS + "\n\n"}
                         Densenvolvido por:{"\n"}
                         Anthony Oliveira{"\n"}
                         Fabio Ferreira
