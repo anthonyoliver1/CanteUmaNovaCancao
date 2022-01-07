@@ -2,9 +2,12 @@ import React, { useEffect, useState } from "react";
 import { Image, Platform, Pressable, SafeAreaView, ScrollView, Share, StatusBar, StyleSheet, Text, View } from "react-native";
 import { typeDevice } from "../../utils/Index";
 import appleBadge from "../../assets/app-store-badge.svg";
+import { useTheme } from '@react-navigation/native';
 
 
 export default function About() {
+    const { colors } = useTheme();
+    
     const [typeStyle, setTypeStyle] = useState([]);
     const [OS, setOS] = useState('')
 
@@ -61,7 +64,7 @@ export default function About() {
         <SafeAreaView style={style.container}>
             <ScrollView style={typeStyle}>
                 <View style={[style.view]}>
-                    <Text>
+                    <Text style={{ color: colors.text }}>
                         Seja bem-vindo ao app Cante Uma Nova Canção!{"\n\n"}
                         Ficamos muito felizes em ver você usando esse App para adorar a Deus junto com a gente 😊 {"\n\n"}
                         Espero que você goste de usar e nos envie feedback para sempre melhorarmos!!

@@ -7,18 +7,20 @@ import Lyrics from './pages/lyrics/Lyrics';
 import Cipher from './pages/cipher/Cipher';
 import Search from './pages/search/Search';
 import About from './pages/About/About';
+import { AppearanceProvider, useColorScheme } from 'react-native-appearance';
+import { DefaultTheme, DarkTheme } from '@react-navigation/native';
 
 const Tab = createBottomTabNavigator();
 
-function HomeScreen() {
+function HomeScreen({ navigation }) {
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
       <Lyrics />
     </View>
   );
 }
 
-function SettingsScreen() {
+function SettingsScreen({ navigation }) {
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
       <Cipher />
@@ -26,7 +28,7 @@ function SettingsScreen() {
   );
 }
 
-function SearchScreen() {
+function SearchScreen({ navigation }) {
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
       <Search />
@@ -34,17 +36,21 @@ function SearchScreen() {
   );
 }
 
-function AboutScreen() {
+function AboutScreen({ navigation }) {
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      {/* <Button title='FOI' onPress={() => navigation.navigate('Buscar')}/> */}
       <About />
     </View>
   );
 }
 
 export default function App() {
+  const scheme = useColorScheme();
+
   return (
-      <NavigationContainer>
+    <AppearanceProvider>
+      <NavigationContainer theme={scheme === 'dark' ? DarkTheme : DefaultTheme}>
         <Tab.Navigator
           screenOptions={({ route }) => ({
             tabBarIcon: ({ focused, color, size }) => {
@@ -74,5 +80,6 @@ export default function App() {
           <Tab.Screen name="Sobre" component={AboutScreen} />
         </Tab.Navigator>
       </NavigationContainer>
+    </AppearanceProvider>
   );
 }
