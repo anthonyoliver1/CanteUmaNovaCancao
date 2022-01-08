@@ -1,5 +1,5 @@
 import React from 'react';
-import { View } from 'react-native';
+import { View, Alert, Pressable, Text, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
@@ -9,6 +9,7 @@ import Search from './pages/search/Search';
 import About from './pages/About/About';
 import { AppearanceProvider, useColorScheme } from 'react-native-appearance';
 import { DefaultTheme, DarkTheme } from '@react-navigation/native';
+import { StatusBar } from 'expo-status-bar';
 
 const Tab = createBottomTabNavigator();
 
@@ -20,11 +21,34 @@ function HomeScreen({ navigation }) {
   );
 }
 
-function SettingsScreen({ navigation }) {
+function CipherScreen({ navigation }) {
+  Alert.alert('Em breve!', 'Logo logo teremos cifras 🎉', [
+    {
+      title: 'Ok',
+      onPress: () => navigation.navigate('Música')
+
+    }
+  ])
+
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <Pressable
+        onPress={() => navigation.navigate('Música')}
+        style={
+          ({ pressed }) => [
+            {
+              backgroundColor: pressed
+                ? '#24b1ec'
+                : '#5bc8f5'
+            },
+            style.button
+          ]
+        }
+      >
+        <Text style={[style.textStyle]}>Ir para Música</Text>
+      </Pressable>
       <Cipher />
-    </View>
+    </View >
   );
 }
 
@@ -39,7 +63,6 @@ function SearchScreen({ navigation }) {
 function AboutScreen({ navigation }) {
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      {/* <Button title='FOI' onPress={() => navigation.navigate('Buscar')}/> */}
       <About />
     </View>
   );
@@ -50,6 +73,7 @@ export default function App() {
 
   return (
     <AppearanceProvider>
+      <StatusBar />
       <NavigationContainer theme={scheme === 'dark' ? DarkTheme : DefaultTheme}>
         <Tab.Navigator
           screenOptions={({ route }) => ({
@@ -70,12 +94,12 @@ export default function App() {
 
               return <Ionicons name={iconName} size={size} color={color} />;
             },
-            tabBarActiveTintColor: 'tomato',
+            tabBarActiveTintColor: '#5bc8f5',
             tabBarInactiveTintColor: 'gray',
           })}
         >
           <Tab.Screen name="Música" component={HomeScreen} />
-          <Tab.Screen name="Cifras" component={SettingsScreen} />
+          <Tab.Screen name="Cifras" component={CipherScreen} />
           <Tab.Screen name="Buscar" component={SearchScreen} />
           <Tab.Screen name="Sobre" component={AboutScreen} />
         </Tab.Navigator>
@@ -83,3 +107,19 @@ export default function App() {
     </AppearanceProvider>
   );
 }
+
+const style = StyleSheet.create({
+  button: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
+    width: 150,
+    marginBottom: 10,
+    marginTop: 20,
+  },
+  textStyle: {
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center"
+  }
+});

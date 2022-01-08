@@ -3,11 +3,12 @@ import { Image, Platform, Pressable, SafeAreaView, ScrollView, Share, StatusBar,
 import { typeDevice } from "../../utils/Index";
 import appleBadge from "../../assets/app-store-badge.svg";
 import { useTheme } from '@react-navigation/native';
+import * as WebBrowser from 'expo-web-browser';
 
 
 export default function About() {
     const { colors } = useTheme();
-    
+
     const [typeStyle, setTypeStyle] = useState([]);
     const [OS, setOS] = useState('')
 
@@ -25,7 +26,6 @@ export default function About() {
         if (typeDevice.web())
             return setTypeStyle(style.web);
 
-        return setTypeStyle(style.scrollView)
     }, [])
 
     const share = async () => {
@@ -60,6 +60,10 @@ export default function About() {
         return window.open('https://apple.com/br', '_blank')
     }
 
+    const goToWebsite = async () => {
+        await WebBrowser.openBrowserAsync('https://www.icisp.org.br/')
+    }
+
     return (
         <SafeAreaView style={style.container}>
             <ScrollView style={typeStyle}>
@@ -72,10 +76,37 @@ export default function About() {
 
                     {
                         typeDevice.mobile() ?
-                            <Pressable style={[style.button]} onPress={() => share()}
+                            <View>
+                                <Pressable style={
+                                    ({ pressed }) => [
+                                        {
+                                            backgroundColor: pressed
+                                                ? '#24b1ec'
+                                                : '#5bc8f5'
+                                        },
+                                        style.button
+                                    ]
+                                }
+                                    onPress={() => share()}
+                                >
+                                    <Text style={[style.textStyle]}>Compartilhe!</Text>
+                                </Pressable>
+
+                                <Pressable style={
+                                ({ pressed }) => [
+                                    {
+                                        backgroundColor: pressed
+                                            ? '#24b1ec'
+                                            : '#5bc8f5'
+                                    },
+                                    style.button
+                                ]
+                            }
+                                onPress={() => goToWebsite()}
                             >
-                                <Text style={[style.textStyle]}>Compartilhe!</Text>
+                                <Text style={[style.textStyle]}>Visite nossa Igreja!</Text>
                             </Pressable>
+                            </View>
                             :
                             <View style={[style.viewBadges]}>
                                 <Pressable onPress={() => goToStore('apple')}>
@@ -109,8 +140,8 @@ const style = StyleSheet.create({
     view: {
         flex: 1,
         alignItems: 'center',
-        textAlign: 'center',
         padding: 10,
+        minWidth: '100%'
     },
     viewVersion: {
         alignItems: "flex-end",
@@ -127,9 +158,6 @@ const style = StyleSheet.create({
         flex: 1,
         paddingTop: StatusBar.currentHeight,
     },
-    scrollView: {
-        marginHorizontal: 2,
-    },
     web: {
         width: '100vw'
     },
@@ -139,8 +167,7 @@ const style = StyleSheet.create({
         elevation: 2,
         width: 150,
         marginBottom: 10,
-        marginTop: 20,
-        backgroundColor: 'blue'
+        marginTop: 20
     },
     textStyle: {
         color: "white",

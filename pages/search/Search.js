@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Alert, StyleSheet, Text, Pressable, View, TextInput, ToastAndroid } from "react-native";
 import { typeDevice } from "../../utils/Index";
+import { useTheme } from '@react-navigation/native';
 
 
 export default function Search(props) {
     const [text, setText] = useState('');
+    const { colors, dark } = useTheme();
+
 
     const searchMusic = () => {
         let message = 'Digite o nome da música para buscar'
@@ -12,24 +15,33 @@ export default function Search(props) {
             if (typeDevice.Android())
                 return ToastAndroid.show(message, ToastAndroid.SHORT);
         if (typeDevice.iOS())
-            return Alert.alert('Hm...',message, [{
+            return Alert.alert('Hm...', message, [{
                 text: 'Fechar'
-            }
-            ])
+            }])
     }
 
     return (
-        <View style={styles.centeredView}>
+        <View style={[styles.centeredView,[{color: colors.text}]]}>
             <TextInput
-                style={styles.input}
+                style={[styles.input,[{color: colors.text}]]}
                 placeholder={"Digite para buscar uma música"}
+                placeholderTextColor={dark ? '#5a5a5a' : '#c0c0c0'}
                 onChangeText={text => setText(text)}
             />
             <Pressable
-                style={[styles.button, styles.buttonOpen]}
+                style={
+                    ({ pressed }) => [
+                        {
+                            backgroundColor: pressed
+                                ? '#24b1ec'
+                                : '#5bc8f5'
+                        },
+                        styles.button
+                    ]
+                }
                 onPress={() => searchMusic()}
             >
-                <Text style={styles.textStyle}>Buscar Música</Text>
+                <Text style={[styles.textStyle]}>Buscar Música</Text>
             </Pressable>
         </View>
     )
@@ -50,9 +62,6 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         marginTop: 10
     },
-    buttonOpen: {
-        backgroundColor: "tomato",
-    },
     textStyle: {
         color: "white",
         fontWeight: "bold",
@@ -61,10 +70,10 @@ const styles = StyleSheet.create({
     input: {
         borderWidth: 2,
         borderRadius: 20,
-        borderColor: "tomato",
+        borderColor: "#5bc8f5",
         height: 40,
-        padding: 5,
+        padding: 10,
         marginBottom: 10,
-        width: 300
+        width: 300,
     },
 });
