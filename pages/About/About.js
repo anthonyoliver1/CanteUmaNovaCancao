@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Image, Platform, Pressable, SafeAreaView, ScrollView, Share, StatusBar, StyleSheet, Text, View } from "react-native";
+import { Alert, Image, Linking, Platform, Pressable, SafeAreaView, ScrollView, Share, StatusBar, StyleSheet, Text, ToastAndroid, View } from "react-native";
 import { typeDevice } from "../../utils/Index";
 import appleBadge from "../../assets/app-store-badge.svg";
 import { useTheme } from '@react-navigation/native';
 import * as WebBrowser from 'expo-web-browser';
+import qs from 'qs';
 
 
 export default function About() {
@@ -64,11 +65,38 @@ export default function About() {
         await WebBrowser.openBrowserAsync('https://www.icisp.org.br/')
     }
 
+    async function sendEmail() {
+        const to = 'teste@teste.com'
+        
+        const query = qs.stringify({
+            subject: '',
+            body: '',
+            cc: '',
+            bcc: ''
+        });
+
+        let url = `mailto:${to}?${query}`;
+
+        const canOpen = await Linking.canOpenURL(url);
+    
+        if (!canOpen) {
+            typeDevice.iOS() ?
+                Alert.alert('Houve um erro','Não foi possível abrir o seu app de email',[
+                    {
+                        text: 'Fechar'
+                    }
+                ])
+            : ToastAndroid.show('Não foi possível abrir o seu app de Email', ToastAndroid.LONG)
+        }
+    
+        return Linking.openURL(url);
+    }
+    
     return (
         <SafeAreaView style={style.container}>
             <ScrollView style={typeStyle}>
                 <View style={[style.view]}>
-                    <Text style={{ color: colors.text }}>
+                    <Text style={{ color: colors.text, marginBottom: 10 }}>
                         Seja bem-vindo ao app Cante Uma Nova Canção!{"\n\n"}
                         Ficamos muito felizes em ver você usando esse App para adorar a Deus junto com a gente 😊 {"\n\n"}
                         Espero que você goste de usar e nos envie feedback para sempre melhorarmos!!
@@ -93,34 +121,62 @@ export default function About() {
                                 </Pressable>
 
                                 <Pressable style={
-                                ({ pressed }) => [
-                                    {
-                                        backgroundColor: pressed
-                                            ? '#24b1ec'
-                                            : '#5bc8f5'
-                                    },
-                                    style.button
-                                ]
-                            }
-                                onPress={() => goToWebsite()}
-                            >
-                                <Text style={[style.textStyle]}>Visite nossa Igreja!</Text>
-                            </Pressable>
-                            </View>
-                            :
-                            <View style={[style.viewBadges]}>
-                                <Pressable onPress={() => goToStore('apple')}>
-                                    <Image
-                                        style={style.badgeApple}
-                                        source={{ uri: appleBadge }}
-                                    />
+                                    ({ pressed }) => [
+                                        {
+                                            backgroundColor: pressed
+                                                ? '#24b1ec'
+                                                : '#5bc8f5'
+                                        },
+                                        style.button
+                                    ]
+                                }
+                                    onPress={() => goToWebsite()}
+                                >
+                                    <Text style={[style.textStyle]}>Visite nossa Igreja!</Text>
                                 </Pressable>
 
-                                <Pressable onPress={() => goToStore('google')}>
-                                    <Image
-                                        style={style.badgeGoogle}
-                                        source={require('../../assets/google-play-badge.png')}
-                                    />
+                                <Pressable style={
+                                    ({ pressed }) => [
+                                        {
+                                            backgroundColor: pressed
+                                                ? '#24b1ec'
+                                                : '#5bc8f5'
+                                        },
+                                        style.button
+                                    ]
+                                } onPress={() => sendEmail()}>
+                                    <Text style={[style.textStyle]}>Contato</Text>
+                                </Pressable>
+                            </View>
+                            : // Web
+                            <View style={[style.fieldButtons]}>
+                                <View style={[style.viewBadges]}>
+                                    <Pressable onPress={() => goToStore('apple')}>
+                                        <Image
+                                            style={style.badgeApple}
+                                            source={{ uri: appleBadge }}
+                                        />
+                                    </Pressable>
+
+                                    <Pressable onPress={() => goToStore('google')}>
+                                        <Image
+                                            style={style.badgeGoogle}
+                                            source={require('../../assets/google-play-badge.png')}
+                                        />
+                                    </Pressable>
+                                </View>
+                                
+                                 <Pressable style={
+                                    ({ pressed }) => [
+                                        {
+                                            backgroundColor: pressed
+                                                ? '#24b1ec'
+                                                : '#5bc8f5'
+                                        },
+                                        style.button
+                                    ]
+                                } onPress={() => sendEmail()}>
+                                    <Text style={[style.textStyle]}>Contato</Text>
                                 </Pressable>
                             </View>
                     }
@@ -165,9 +221,8 @@ const style = StyleSheet.create({
         borderRadius: 20,
         padding: 10,
         elevation: 2,
-        width: 150,
+        width: 160,
         marginBottom: 10,
-        marginTop: 20
     },
     textStyle: {
         color: "white",
@@ -187,7 +242,11 @@ const style = StyleSheet.create({
         justifyContent: 'space-between',
         flexDirection: 'row',
         alignItems: 'center',
-        top: 30,
-    }
-
+        marginTop: 20,
+    },
+    fieldButtons: {
+        flex: 1,
+        display: 'flex',
+        alignItems: 'center'
+    },
 })
