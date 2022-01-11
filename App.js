@@ -25,7 +25,7 @@ function CipherScreen({ navigation }) {
   Alert.alert('Em breve!', 'Logo logo teremos cifras 🎉', [
     {
       text: 'Fechar',
-      onPress: () => navigation.navigate('Música')
+      onPress: () => navigation.navigate('Music')
 
     }
   ])
@@ -33,7 +33,7 @@ function CipherScreen({ navigation }) {
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
       <Pressable
-        onPress={() => navigation.navigate('Música')}
+        onPress={() => navigation.navigate('Music')}
         style={
           ({ pressed }) => [
             {
@@ -79,16 +79,15 @@ export default function App() {
           screenOptions={({ route }) => ({
             tabBarIcon: ({ focused, color, size }) => {
               let iconName;
-
-              if (route.name === 'Música') {
+              if (route.name === 'Music') {
                 iconName = focused
                   ? 'musical-notes'
                   : 'musical-notes-outline';
-              } else if (route.name === 'Cifras') {
+              } else if (route.name === 'Cipher') {
                 iconName = focused ? 'book' : 'book-outline';
-              } else if (route.name === 'Buscar') {
+              } else if (route.name === 'Search') {
                 iconName = focused ? 'md-search' : 'md-search-outline'
-              } else if (route.name === 'Sobre') {
+              } else if (route.name === 'About') {
                 iconName = focused ? 'menu' : 'menu-outline'
               }
 
@@ -96,12 +95,13 @@ export default function App() {
             },
             tabBarActiveTintColor: '#5bc8f5',
             tabBarInactiveTintColor: 'gray',
+            tabBarStyle: { paddingBottom: 5, height: 55 }
           })}
         >
-          <Tab.Screen name="Música" component={HomeScreen} />
-          <Tab.Screen name="Cifras" component={CipherScreen} />
-          <Tab.Screen name="Buscar" component={SearchScreen} />
-          <Tab.Screen name="Sobre" component={AboutScreen}  options={{title: 'Mais'}} />
+          <Tab.Screen name="Music" component={HomeScreen} options={{title: 'Música'}}/>
+          <Tab.Screen name="Cipher" component={CipherScreen} options={{title: 'Cifras'}}/>
+          <Tab.Screen name="Search" component={SearchScreen} options={{title: 'Buscar'}}/>
+          <Tab.Screen name="About" component={AboutScreen}  options={{title: 'Mais'}} />
         </Tab.Navigator>
       </NavigationContainer>
     </AppearanceProvider>
