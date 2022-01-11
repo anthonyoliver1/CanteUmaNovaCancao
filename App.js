@@ -24,7 +24,7 @@ function HomeScreen({ navigation }) {
 function CipherScreen({ navigation }) {
   Alert.alert('Em breve!', 'Logo logo teremos cifras 🎉', [
     {
-      title: 'Ok',
+      text: 'Fechar',
       onPress: () => navigation.navigate('Música')
 
     }
@@ -89,7 +89,7 @@ export default function App() {
               } else if (route.name === 'Buscar') {
                 iconName = focused ? 'md-search' : 'md-search-outline'
               } else if (route.name === 'Sobre') {
-                iconName = focused ? 'alert-circle' : 'alert-circle-outline'
+                iconName = focused ? 'menu' : 'menu-outline'
               }
 
               return <Ionicons name={iconName} size={size} color={color} />;
@@ -101,7 +101,7 @@ export default function App() {
           <Tab.Screen name="Música" component={HomeScreen} />
           <Tab.Screen name="Cifras" component={CipherScreen} />
           <Tab.Screen name="Buscar" component={SearchScreen} />
-          <Tab.Screen name="Sobre" component={AboutScreen} />
+          <Tab.Screen name="Sobre" component={AboutScreen}  options={{title: 'Mais'}} />
         </Tab.Navigator>
       </NavigationContainer>
     </AppearanceProvider>
