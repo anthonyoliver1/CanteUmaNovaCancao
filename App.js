@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View, Alert, Pressable, Text, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -12,6 +12,8 @@ import { AppearanceProvider, useColorScheme } from 'react-native-appearance';
 import { DefaultTheme, DarkTheme } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
 import Music from './components/Music/Music';
+import * as NavigationBar from 'expo-navigation-bar';
+import { typeDevice } from './utils/Index';
 
 
 const Tab = createBottomTabNavigator();
@@ -91,7 +93,15 @@ function HomeStackMusic({ navigation, route }) {
 
 export default function App() {
   const scheme = useColorScheme();
-
+  useEffect(() => {
+    if (typeDevice.Android()) {
+      (scheme === 'dark')
+        ?
+        NavigationBar.setBackgroundColorAsync("#121212")
+        :
+        NavigationBar.setBackgroundColorAsync("#FFF");
+    }
+  }, [scheme])
   return (
     <AppearanceProvider>
       <StatusBar />
