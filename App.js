@@ -93,15 +93,17 @@ function HomeStackMusic({ navigation, route }) {
 
 export default function App() {
   const scheme = useColorScheme();
+
   useEffect(() => {
     if (typeDevice.Android()) {
       (scheme === 'dark')
         ?
         NavigationBar.setBackgroundColorAsync("#121212")
         :
-        NavigationBar.setBackgroundColorAsync("#FFF");
+        NavigationBar.setBackgroundColorAsync("#FFFFFF");
     }
   }, [scheme])
+  
   return (
     <AppearanceProvider>
       <StatusBar />
