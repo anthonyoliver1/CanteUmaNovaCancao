@@ -6,9 +6,21 @@ import mockMusicData from '../../utils/mockMusicData.json';
 export default function Lyrics({ navigation }) {
     const { colors } = useTheme();
 
-    const gotToMusicText = ({ number, title, music }) => {
-        const { text } = music;
-        navigation.navigate('Home', { screen: 'MusicLetter', params: { numMusic: number, musicTxt: text, musicTitle: title } })
+    const gotToMusicText = ({ number, title, music, author }) => {
+        const { text, audio } = music;
+        navigation.navigate(
+            'Home',
+            {
+                screen: 'MusicLetter',
+                params: {
+                    numMusic: number,
+                    musicTxt: text,
+                    musicTitle: title,
+                    audio: audio,
+                    author: author
+                }
+            }
+        )
     }
 
     return (
