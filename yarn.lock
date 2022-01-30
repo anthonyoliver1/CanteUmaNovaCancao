@@ -2628,6 +2628,13 @@
     "path-browserify" "^1.0.0"
     "url-parse" "^1.4.4"
 
+"expo-av@~10.2.0":
+  "integrity" "sha512-jo7Nv3IgJPAiOerKRwlL4guKkULZfvE5KIRZmgLurgPvJFHHAye4pFe2IlqQftKd66NHo1vq2zIGF3B3fsTPmw=="
+  "resolved" "https://registry.npmjs.org/expo-av/-/expo-av-10.2.0.tgz"
+  "version" "10.2.0"
+  dependencies:
+    "@expo/config-plugins" "^4.0.2"
+
 "expo-constants@~13.0.0":
   "integrity" "sha512-DwElzs1k6KljlZln/X2O9b5K4bXlDk8nzF5nzSLgI+Ibg/xUoIL5QKM41Y9RDJfTzlDlV7nmeS/Xar+nP5KjMA=="
   "resolved" "https://registry.npmjs.org/expo-constants/-/expo-constants-13.0.0.tgz"
@@ -2641,10 +2648,10 @@
   "resolved" "https://registry.npmjs.org/expo-error-recovery/-/expo-error-recovery-3.0.4.tgz"
   "version" "3.0.4"
 
-"expo-file-system@~13.1.0":
-  "integrity" "sha512-Hd+aBfcZfiD9p2qOEMvcUJuEnQk5NEostZjT5gVkQmRoITUxf9wGgrX1tSAzF8JQAtOJVjfWYOwTMHq2H9M8AA=="
-  "resolved" "https://registry.npmjs.org/expo-file-system/-/expo-file-system-13.1.0.tgz"
-  "version" "13.1.0"
+"expo-file-system@~13.1.0", "expo-file-system@~13.1.2":
+  "integrity" "sha512-TA0LZTi8ZlnmyB2q6rEuTEo7b63e2luBzNhR5h/ow2J55xxRTXQLeaoK9m69XgazLVq6Ys7wiJma/q+Hg38hrQ=="
+  "resolved" "https://registry.npmjs.org/expo-file-system/-/expo-file-system-13.1.2.tgz"
+  "version" "13.1.2"
   dependencies:
     "@expo/config-plugins" "^4.0.2"
     "uuid" "^3.4.0"

@@ -5,7 +5,12 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { Modalize } from 'react-native-modalize';
 import Slider from '@react-native-community/slider';
 import { useColorScheme } from 'react-native-appearance';
+import { Audio } from 'expo-av';
+import * as FileSystem from 'expo-file-system';
+import music from '../../assets/music/O Sonho.mp3'
+import { typeDevice } from '../../utils/Index';
 
+const myAudio = new Audio.Sound()
 
 export default function Music({ route, navigation }) {
     const { musicTxt, audio, author, musicTitle } = route.params;
@@ -20,6 +25,49 @@ export default function Music({ route, navigation }) {
     const [typeIcon, setTypeIcon] = useState('play-arrow')
     const [minValue, setMinValue] = useState(0)
     const [maxValue, setMaxValue] = useState(100)
+    const [musicStarted, setMusicStarted] = useState(false)
+    const [sound, setSound] = useState();
+
+    async function playOrPauseSound(params) {
+        if (musicStarted) {
+            params.includes('play') ? myAudio.playAsync() : myAudio.pauseAsync()
+            return
+        }
+
+        try {
+            console.log('Loading Sound')
+            const sound = await myAudio.loadAsync(require('../../assets/music/O Sonho.mp3')); // usar {uri: audio}
+            setSound(sound);
+
+            console.log('Sound', sound)
+            await myAudio.playAsync();
+            setMusicStarted(true)
+        } catch (error) {
+            console.log('Deu erro: ', error)
+        }
+        return
+    }
+
+    // Esse useEffect esta fazendo unload do audio carregado
+    useEffect(() => {
+        return sound
+            ? () => {
+                myAudio.unloadAsync();
+            }
+            : undefined;
+    }, [sound]);
+
+    const checkFile = async () => {
+        if (typeDevice.mobile()) {
+            const file = FileSystem.documentDirectory + 'O Sonho.mp3'
+            const audio = await FileSystem.getInfoAsync(file)
+            console.log(audio)
+        }
+    }
+
+    useEffect(() => {
+        checkFile()
+    })
 
     useEffect(() => {
         scheme === 'dark' ? setTheme('#222') : setTheme('#fff')
@@ -35,7 +83,14 @@ export default function Music({ route, navigation }) {
     }
 
     const playOrPause = () => {
-        typeIcon === 'play-arrow' ? setTypeIcon('pause') : setTypeIcon('play-arrow')
+        if (typeIcon === 'play-arrow') {
+            setTypeIcon('pause')
+            playOrPauseSound('play')
+        }
+        else {
+            setTypeIcon('play-arrow')
+            playOrPauseSound('pause')
+        }
     }
 
     const forwardButton = () => {
