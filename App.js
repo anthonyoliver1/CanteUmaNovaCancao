@@ -18,6 +18,7 @@ import { typeDevice } from './utils/Index';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
+let userTheme = 'light';
 
 function HomeScreen({ navigation }) {
   return (
@@ -65,10 +66,12 @@ function SearchScreen({ navigation }) {
   );
 }
 
-function AboutScreen({ navigation }) {
+function AboutScreen({ navigation, route }) {
+  userTheme = route.params?.themeColor
+
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <About />
+      <About navigation={navigation} />
     </View>
   );
 }
@@ -103,7 +106,7 @@ export default function App() {
         NavigationBar.setBackgroundColorAsync("#FFFFFF");
     }
   }, [scheme])
-  
+
   return (
     <AppearanceProvider>
       <StatusBar />

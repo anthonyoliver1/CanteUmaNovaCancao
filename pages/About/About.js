@@ -1,19 +1,30 @@
 import React, { useEffect, useState } from "react";
-import { Alert, Image, Linking, Platform, Pressable, SafeAreaView, ScrollView, Share, StatusBar, StyleSheet, Text, ToastAndroid, View } from "react-native";
+import { Alert, Image, Linking, Modal, Platform, Pressable, SafeAreaView, ScrollView, Share, StatusBar, StyleSheet, Text, ToastAndroid, View } from "react-native";
 import { typeDevice } from "../../utils/Index";
 import appleBadge from "../../assets/app-store-badge.svg";
 import { useTheme } from '@react-navigation/native';
 import * as WebBrowser from 'expo-web-browser';
 import qs from 'qs';
+import { RadioButton } from 'react-native-paper';
+import { useColorScheme } from 'react-native-appearance';
+import Constants from 'expo-constants';
 
 
-export default function About() {
+
+export default function About({ navigation }) {
     const { colors } = useTheme();
+    const scheme = useColorScheme();
 
     const [typeStyle, setTypeStyle] = useState([]);
     const [OS, setOS] = useState('')
+    const [modalVisible, setModalVisible] = useState(false);
+    const [valueTheme, setValueTheme] = useState('no-preference');
+    const [themeModal, setThemeModal] = useState('')
+
 
     useEffect(() => {
+        scheme === 'dark' ? setThemeModal('#222') : setThemeModal('#fff')
+
         switch (Platform.OS) {
             case 'android': setOS('Android')
                 break;
@@ -67,7 +78,7 @@ export default function About() {
 
     async function sendEmail() {
         const to = 'teste@teste.com'
-        
+
         const query = qs.stringify({
             subject: '',
             body: '',
@@ -78,20 +89,31 @@ export default function About() {
         let url = `mailto:${to}?${query}`;
 
         const canOpen = await Linking.canOpenURL(url);
-    
+
         if (!canOpen) {
             typeDevice.iOS() ?
-                Alert.alert('Houve um erro','Não foi possível abrir o seu app de email',[
+                Alert.alert('Houve um erro', 'Não foi possível abrir o seu app de email', [
                     {
                         text: 'Fechar'
                     }
                 ])
-            : ToastAndroid.show('Não foi possível abrir o seu app de Email', ToastAndroid.LONG)
+                : ToastAndroid.show('Não foi possível abrir o seu app de Email', ToastAndroid.LONG)
         }
-    
+
         return Linking.openURL(url);
     }
-    
+
+    const changeTheme = (themeSelected) => {
+        navigation.navigate(
+            'About',
+            {
+                screen: 'About',
+                themeColor: themeSelected,
+            }
+        )
+        setValueTheme(themeSelected)
+    }
+
     return (
         <SafeAreaView style={style.container}>
             <ScrollView style={typeStyle}>
@@ -165,8 +187,8 @@ export default function About() {
                                         />
                                     </Pressable>
                                 </View>
-                                
-                                 <Pressable style={
+
+                                <Pressable style={
                                     ({ pressed }) => [
                                         {
                                             backgroundColor: pressed
@@ -180,6 +202,53 @@ export default function About() {
                                 </Pressable>
                             </View>
                     }
+
+                    <Modal
+                        animationType="fade"
+                        transparent={true}
+                        visible={modalVisible}
+                    >
+                        <View style={style.centeredView}>
+                            <View style={[style.modalView, { backgroundColor: themeModal }]}>
+                                <Text style={[style.modalTitle, { color: colors.text }]}>Tema:</Text>
+                                <View style={[style.contentModal]}>
+                                    <RadioButton.Group onValueChange={newValue => changeTheme(newValue)} value={valueTheme}>
+                                        {/* <RadioButton.Item label="Claro" value="light" mode="ios" labelStyle={{ color: colors.text }} /> */}
+                                        {/* <RadioButton.Item label="Escuro" value="dark" mode="ios" labelStyle={{ color: colors.text }} /> */}
+                                        <RadioButton.Item label="Automático (Sistema)" value="no-preference" mode="ios" labelStyle={{ color: colors.text }} />
+                                    </RadioButton.Group>
+                                </View>
+                                <Pressable
+                                    style={({ pressed }) => [
+                                        {
+                                            backgroundColor: pressed
+                                                ? '#24b1ec'
+                                                : '#5bc8f5'
+                                        },
+                                        style.button
+                                    ]}
+                                    onPress={() => setModalVisible(!modalVisible)}
+                                >
+                                    <Text style={style.textStyle}>Ok</Text>
+                                </Pressable>
+                            </View>
+                        </View>
+                    </Modal>
+
+                    <Pressable
+                        style={({ pressed }) => [
+                            {
+                                backgroundColor: pressed
+                                    ? '#24b1ec'
+                                    : '#5bc8f5'
+                            },
+                            style.button
+                        ]}
+                        onPress={() => setModalVisible(true)}
+                    >
+                        <Text style={style.textStyle}>Tema</Text>
+                    </Pressable>
+
                     <Text style={[style.viewVersion]}>Versão 1.0.0 {"\n"}
                         OS: {OS + "\n\n"}
                         Densenvolvido por:{"\n"}
@@ -249,4 +318,43 @@ const style = StyleSheet.create({
         display: 'flex',
         alignItems: 'center'
     },
+    centeredView: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#00000096'
+    },
+    modalView: {
+        margin: 20,
+        backgroundColor: 'black',
+        borderRadius: 20,
+        padding: 35,
+        alignItems: 'center',
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
+        minWidth: typeDevice.web() ? "30vw" : "80%",
+    },
+    modalTitle: {
+        marginBottom: 15,
+        textAlign: 'center',
+        fontSize: 18,
+        fontWeight: "700",
+    },
+    contentModal: {
+        display: "flex",
+        alignItems: "stretch",
+        flexDirection: "column",
+    },
+    radioButton: {
+        display: "flex",
+        flexDirection: "row",
+        alignItems: "center",
+
+    }
 })
