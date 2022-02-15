@@ -122,7 +122,7 @@ export default function Search({ navigation }) {
             <View style={[styles.containerList]}>
                 <FlatList
                     data={dataMusic}
-                    renderItem={({ item, separators }) => (
+                    renderItem={({ item, index,  separators }) => (
                         <TouchableOpacity
                             key={item.number}
                             onPress={() => gotToMusicText(item)}
@@ -130,7 +130,7 @@ export default function Search({ navigation }) {
                             onHideUnderlay={separators.unhighlight}
                             activeOpacity={0.4}
                         >
-                            <View style={[styles.item]}>
+                            <View style={[styles.item,{backgroundColor: index % 2 === 0 ? '#c1c1c13b' : ''}]}>
                                 <View>
                                     <Text style={[styles.title, { color: colors.text }]}>{item.title}</Text>
                                     <Text style={[styles.author]}>{item.author}</Text>

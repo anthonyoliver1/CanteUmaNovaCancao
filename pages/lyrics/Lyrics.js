@@ -24,33 +24,35 @@ export default function Lyrics({ navigation }) {
     }
 
     return (
-        <SafeAreaView style={styles.container}>
-            <FlatList
-                data={mockMusicData}
-                renderItem={({ item, index, separators }) => (
-                    <TouchableOpacity
-                        key={item.number}
-                        onPress={() => gotToMusicText(item)}
-                        onShowUnderlay={separators.highlight}
-                        onHideUnderlay={separators.unhighlight}
-                        activeOpacity={0.4}
-                    >
-                        <View style={[styles.item]}>
-                            <View>
-                                <Text style={[styles.title, { color: colors.text }]}>{item.title}</Text>
-                                <Text style={[styles.author]}>{item.author}</Text>
+        <SafeAreaView style={styles.container} contentContainerStyle={{backgroundColor: 'red'}}>
+            <View style={styles.list}>
+                <FlatList
+                    data={mockMusicData}
+                    renderItem={({ item, index, separators }) => (
+                        <TouchableOpacity
+                            key={item.number}
+                            onPress={() => gotToMusicText(item)}
+                            onShowUnderlay={separators.highlight}
+                            onHideUnderlay={separators.unhighlight}
+                            activeOpacity={0.4}
+                        >
+                            <View style={[styles.item, {backgroundColor: index % 2 === 0 ? '#c1c1c13b' : ''}]}>
+                                <View>
+                                    <Text style={[styles.title, { color: colors.text }]}>{item.title}</Text>
+                                    <Text style={[styles.author]}>{item.author}</Text>
+                                </View>
+                                <>
+                                    {item.kids ?
+                                        <Text style={{ color: '#5bc8f5', fontSize: 16 }}>kids</Text>
+                                        : null
+                                    }
+                                </>
                             </View>
-                            <>
-                                {item.kids ?
-                                    <Text style={{ color: '#5bc8f5', fontSize: 16 }}>kids</Text>
-                                    : null
-                                }
-                            </>
-                        </View>
-                    </TouchableOpacity>
-                )}
-                keyExtractor={item => item.number}
-            />
+                        </TouchableOpacity>
+                    )}
+                    keyExtractor={item => item.number}
+                />
+            </View>
         </SafeAreaView>
     );
 };
@@ -59,6 +61,12 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         width: '100%',
+        // backgroundColor: 'red'
+    },
+    list: {
+        // backgroundColor: 'yellow',
+        width: '100%',
+        flex: 1,
     },
     item: {
         padding: 15,
