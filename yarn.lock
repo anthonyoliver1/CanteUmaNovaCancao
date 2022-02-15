@@ -2665,10 +2665,10 @@
   "resolved" "https://registry.npmjs.org/expo-error-recovery/-/expo-error-recovery-3.0.4.tgz"
   "version" "3.0.4"
 
-"expo-file-system@~13.1.0", "expo-file-system@~13.1.2":
-  "integrity" "sha512-TA0LZTi8ZlnmyB2q6rEuTEo7b63e2luBzNhR5h/ow2J55xxRTXQLeaoK9m69XgazLVq6Ys7wiJma/q+Hg38hrQ=="
-  "resolved" "https://registry.npmjs.org/expo-file-system/-/expo-file-system-13.1.2.tgz"
-  "version" "13.1.2"
+"expo-file-system@~13.1.0", "expo-file-system@~13.1.4":
+  "integrity" "sha512-/C2FKCzrdWuEt4m8Pzl9J4MhKgfU0denVLbqoKjidv8DnsLQrscFNlLhXuiooqWwsxB2OWAtGEVnPGJBWVuNEQ=="
+  "resolved" "https://registry.npmjs.org/expo-file-system/-/expo-file-system-13.1.4.tgz"
+  "version" "13.1.4"
   dependencies:
     "@expo/config-plugins" "^4.0.2"
     "uuid" "^3.4.0"
@@ -3000,11 +3000,6 @@
   "integrity" "sha1-FQStJSMVjKpA20onh8sBQRmU6k8="
   "resolved" "https://registry.npmjs.org/fs.realpath/-/fs.realpath-1.0.0.tgz"
   "version" "1.0.0"
-
-"fsevents@^2.1.2":
-  "integrity" "sha512-xiqMQR4xAeHTuB9uWm+fFRcIOgKBMiOBP+eXiyT7jsgVCq1bkVygt00oASowB7EdtpOHaaPgKt812P9ab+DDKA=="
-  "resolved" "https://registry.npmjs.org/fsevents/-/fsevents-2.3.2.tgz"
-  "version" "2.3.2"
 
 "function-bind@^1.1.1":
   "integrity" "sha512-yIovAzMX49sF8Yl58fSCWJ5svSLuaibPxXQJFLmBObTuCr0Mf1KiPopGM9NiFjiYBCbfaa2Fh6breQ6ANVTI0A=="
@@ -4799,6 +4794,11 @@
   "integrity" "sha512-lKBVG1McWOBeeJRFo47yx5HXPkRYdMXFa05gsAqF7N6kx1rawQXHkkt+eO+wrFDAxWOMPn7mSjIi9IKhf11Vow=="
   "resolved" "https://registry.npmjs.org/react-native-select-dropdown/-/react-native-select-dropdown-1.6.0.tgz"
   "version" "1.6.0"
+
+"react-native-toast-notifications@^3.2.3":
+  "integrity" "sha512-fxIQNAp6xN7inGRb/apE71EyqrW9pPIxnzZ7Cacv1XwLtz0bP1zkC4WvPfpxijZg73fhGi0vHMR/7WJez7PYyw=="
+  "resolved" "https://registry.npmjs.org/react-native-toast-notifications/-/react-native-toast-notifications-3.2.3.tgz"
+  "version" "3.2.3"
 
 "react-native-vector-icons@*":
   "integrity" "sha512-qKX5d5/TafHmI4B7UOSZCL3BAGh7ZfF30iLwRgxBkKfZl2lKSuHp8Ottj9OyWh9b5fFtlg+LtyvZrns3g2kh+w=="

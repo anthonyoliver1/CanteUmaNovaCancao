@@ -14,7 +14,7 @@ import { StatusBar } from 'expo-status-bar';
 import Music from './components/Music/Music';
 import * as NavigationBar from 'expo-navigation-bar';
 import { typeDevice } from './utils/Index';
-
+import { ToastProvider } from 'react-native-toast-notifications'
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -61,7 +61,7 @@ function CipherScreen({ navigation }) {
 function SearchScreen({ navigation }) {
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Search navigation={navigation}/>
+      <Search navigation={navigation} />
     </View>
   );
 }
@@ -108,41 +108,43 @@ export default function App() {
   }, [scheme])
 
   return (
-    <AppearanceProvider>
-      <StatusBar />
-      <NavigationContainer theme={scheme === 'dark' ? DarkTheme : DefaultTheme}>
-        <Tab.Navigator
-          screenOptions={({ route }) => ({
-            tabBarIcon: ({ focused, color, size }) => {
-              let iconName;
-              if (route.name === 'Home') {
-                iconName = focused
-                  ? 'musical-notes'
-                  : 'musical-notes-outline';
-              } else if (route.name === 'Cipher') {
-                iconName = focused ? 'book' : 'book-outline';
-              } else if (route.name === 'Search') {
-                iconName = focused ? 'md-search' : 'md-search-outline'
-              } else if (route.name === 'About') {
-                iconName = focused ? 'menu' : 'menu-outline'
-              }
+    <ToastProvider>
+      <AppearanceProvider>
+        <StatusBar />
+        <NavigationContainer theme={scheme === 'dark' ? DarkTheme : DefaultTheme}>
+          <Tab.Navigator
+            screenOptions={({ route }) => ({
+              tabBarIcon: ({ focused, color, size }) => {
+                let iconName;
+                if (route.name === 'Home') {
+                  iconName = focused
+                    ? 'musical-notes'
+                    : 'musical-notes-outline';
+                } else if (route.name === 'Cipher') {
+                  iconName = focused ? 'book' : 'book-outline';
+                } else if (route.name === 'Search') {
+                  iconName = focused ? 'md-search' : 'md-search-outline'
+                } else if (route.name === 'About') {
+                  iconName = focused ? 'menu' : 'menu-outline'
+                }
 
-              return <Ionicons name={iconName} size={size} color={color} />;
-            },
-            tabBarActiveTintColor: '#5bc8f5',
-            tabBarInactiveTintColor: 'gray',
-            tabBarStyle: {
-              overflow: 'hidden'
-            },
-          })}
-        >
-          <Tab.Screen name="Home" component={HomeStackMusic} options={{ headerShown: false, title: 'Música' }} />
-          <Tab.Screen name="Cipher" component={CipherScreen} options={{ title: 'Cifras' }} />
-          <Tab.Screen name="Search" component={SearchScreen} options={{ title: 'Buscar' }} />
-          <Tab.Screen name="About" component={AboutScreen} options={{ title: 'Mais' }} />
-        </Tab.Navigator>
-      </NavigationContainer>
-    </AppearanceProvider>
+                return <Ionicons name={iconName} size={size} color={color} />;
+              },
+              tabBarActiveTintColor: '#5bc8f5',
+              tabBarInactiveTintColor: 'gray',
+              tabBarStyle: {
+                overflow: 'hidden'
+              },
+            })}
+          >
+            <Tab.Screen name="Home" component={HomeStackMusic} options={{ headerShown: false, title: 'Música' }} />
+            <Tab.Screen name="Cipher" component={CipherScreen} options={{ title: 'Cifras' }} />
+            <Tab.Screen name="Search" component={SearchScreen} options={{ title: 'Buscar' }} />
+            <Tab.Screen name="About" component={AboutScreen} options={{ title: 'Mais' }} />
+          </Tab.Navigator>
+        </NavigationContainer>
+      </AppearanceProvider>
+    </ToastProvider>
   );
 }
 

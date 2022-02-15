@@ -3,9 +3,11 @@ import { Alert, StyleSheet, Text, Pressable, View, TextInput, ToastAndroid, Flat
 import { typeDevice } from "../../utils/Index";
 import { useTheme } from '@react-navigation/native';
 import mockMusicData from '../../utils/mockMusicData.json';
+import { useToast } from "react-native-toast-notifications";
 
 
 export default function Search({ navigation }) {
+    const toast = useToast();
     const [textSearch, setTextSearch] = useState('');
     const { colors, dark } = useTheme();
     const [dataMusic, setDataMusic] = useState([]);
@@ -30,6 +32,16 @@ export default function Search({ navigation }) {
                     ]
                 );
 
+            return toast.show(message, 
+                {
+                    type: "danger",
+                    placement: "top",
+                    duration: 3000,
+                    offset: 30,
+                    animationType: "zoom-in"
+                }
+            )
+
         }
 
         if (dataMusicTemp.length <= 0) {
@@ -44,6 +56,16 @@ export default function Search({ navigation }) {
                         }
                     ]
                 );
+
+            return toast.show(notFoundMessage, 
+                {
+                    type: "warning",
+                    placement: "top",
+                    duration: 3000,
+                    offset: 30,
+                    animationType: "zoom-in"
+                }
+            )
         }
 
     }
