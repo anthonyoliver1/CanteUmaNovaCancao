@@ -99,11 +99,15 @@ export default function App() {
 
   useEffect(() => {
     if (typeDevice.Android()) {
-      (scheme === 'dark')
-        ?
-        NavigationBar.setBackgroundColorAsync("#121212")
-        :
-        NavigationBar.setBackgroundColorAsync("#FFFFFF");
+      if (scheme === 'dark') {
+        NavigationBar.setBackgroundColorAsync("#121212");
+        NavigationBar.setButtonStyleAsync("light");
+        return;
+      }
+
+      NavigationBar.setBackgroundColorAsync("#FFFFFF");
+      NavigationBar.setButtonStyleAsync("dark");
+      return;
     }
   }, [scheme])
 

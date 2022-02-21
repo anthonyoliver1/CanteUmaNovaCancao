@@ -161,9 +161,9 @@ export default function Music({ route, navigation }) {
                 <View style={style.progressConstainer}>
                     <View>
                         <Slider
-                            value={0}
+                            value={0} //se moviementa pegando a posicao do audio incial
                             minimumValue={0}
-                            maximumValue={1}
+                            maximumValue={1} //pegar o valor maximo dso audio
                             maximumTrackTintColor='gray'
                             minimumTrackTintColor='#5bc8f5'
                             thumbTintColor='#5bc8f5'
