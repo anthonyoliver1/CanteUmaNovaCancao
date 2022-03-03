@@ -187,7 +187,6 @@ const styles = StyleSheet.create({
     item: {
         padding: 15,
         marginVertical: 3,
-        marginHorizontal: 16,
         borderBottomColor: '#5bc8f5',
         borderBottomWidth: 1,
         display: 'flex',

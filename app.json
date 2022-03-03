@@ -25,7 +25,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/icon-icoc2.png",
         "backgroundColor": "#000000"
-      }
+      },
+      "package": "com.anthony.dev.AnthonyOliveira"
     },
     "web": {
       "favicon": "./assets/icon-icoc2.png"
