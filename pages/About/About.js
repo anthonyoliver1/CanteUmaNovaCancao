@@ -67,7 +67,7 @@ export default function About({ navigation }) {
 
     function goToStore(store) {
         if (store === 'google')
-            return window.open('https://google.com.br/', '_blank')
+            return window.open('https://play.google.com/store/apps/details?id=br.org.icoc.novacancao&hl=pt-BR', '_blank')
 
         return window.open('https://apple.com/br', '_blank')
     }
@@ -118,7 +118,11 @@ export default function About({ navigation }) {
         <SafeAreaView style={style.container}>
             <ScrollView style={typeStyle}>
                 <View style={[style.view]}>
-                    <Text style={{ color: colors.text, marginBottom: 10 }}>
+                    <Image
+                        style={style.logoTop}
+                        source={require('../../assets/top_logo.png')}
+                    />
+                    <Text style={[style.viewText, {color: colors.text}]}>
                         Seja bem-vindo ao app Cante Uma Nova Canção!{"\n\n"}
                         Ficamos muito felizes em ver você usando esse App para adorar a Deus junto com a gente 😊 {"\n\n"}
                         Espero que você goste de usar e nos envie feedback para sempre melhorarmos!!
@@ -139,7 +143,7 @@ export default function About({ navigation }) {
                                 }
                                     onPress={() => share()}
                                 >
-                                    <Text style={[style.textStyle]}>Compartilhe!</Text>
+                                    <Text style={[style.textStyle]}>Compartilhe</Text>
                                 </Pressable>
 
                                 <Pressable style={
@@ -154,7 +158,7 @@ export default function About({ navigation }) {
                                 }
                                     onPress={() => goToWebsite()}
                                 >
-                                    <Text style={[style.textStyle]}>Visite nossa Igreja!</Text>
+                                    <Text style={[style.textStyle]}>Visite nossa Igreja</Text>
                                 </Pressable>
 
                                 <Pressable style={
@@ -249,11 +253,10 @@ export default function About({ navigation }) {
                         <Text style={style.textStyle}>Tema</Text>
                     </Pressable>
 
-                    <Text style={[style.viewVersion]}>Versão 1.0.0 {"\n"}
-                        OS: {OS + "\n\n"}
-                        Densenvolvido por:{"\n"}
-                        Anthony Oliveira{"\n"}
-                        Fabio Ferreira
+                    <Text style={[style.viewVersion]}>
+                        Versão 1.0.0 {"\n"}
+                        OS: {OS}{"\n\n"}
+                        Beta
                     </Text>
                 </View>
             </ScrollView >
@@ -266,7 +269,10 @@ const style = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         padding: 10,
-        minWidth: '100%'
+        minWidth: '100%',
+    },
+    viewText: {
+        marginBottom: typeDevice.mobile() ? 30 : 10, 
     },
     viewVersion: {
         alignItems: "flex-end",
@@ -281,7 +287,7 @@ const style = StyleSheet.create({
     },
     container: {
         flex: 1,
-        paddingTop: StatusBar.currentHeight,
+        width: '100%',
     },
     web: {
         width: '100vw'
@@ -305,6 +311,10 @@ const style = StyleSheet.create({
     badgeGoogle: {
         width: 200,
         height: 87,
+    },
+    logoTop:{
+        width: typeDevice.mobile() ? 200 : 380,
+        height: typeDevice.mobile() ? 200 : 380
     },
     viewBadges: {
         display: 'flex',
