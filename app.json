@@ -4,11 +4,10 @@
     "slug": "AnthonyOliveira",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon-icoc2.png",
+    "icon": "./assets/note_logo.png",
     "splash": {
-      "image": "./assets/icon-icoc.png",
-      "resizeMode": "cover",
-      "backgroundColor": "#000000"
+      "image": "./assets/splash_logo.png",
+      "resizeMode": "cover"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -23,13 +22,12 @@
     "android": {
       "userInterfaceStyle": "automatic",
       "adaptiveIcon": {
-        "foregroundImage": "./assets/icon-icoc2.png",
-        "backgroundColor": "#000000"
+        "foregroundImage": "./assets/note_logo.png"
       },
       "package": "com.anthony.dev.AnthonyOliveira"
     },
     "web": {
-      "favicon": "./assets/icon-icoc2.png"
+      "favicon": "./assets/note_logo.png"
     }
   }
 }
