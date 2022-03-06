@@ -130,7 +130,7 @@ export default function Search({ navigation }) {
                             onHideUnderlay={separators.unhighlight}
                             activeOpacity={0.4}
                         >
-                            <View style={[styles.item,{backgroundColor: index % 2 === 0 ? '#c1c1c13b' : ''}]}>
+                            <View style={[styles.item]}>
                                 <View>
                                     <Text style={[styles.title, { color: colors.text }]}>{item.title}</Text>
                                     <Text style={[styles.author]}>{item.author}</Text>
