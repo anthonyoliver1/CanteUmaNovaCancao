@@ -24,7 +24,7 @@ export default function Lyrics({ navigation }) {
     }
 
     return (
-        <SafeAreaView style={styles.container} contentContainerStyle={{backgroundColor: 'red'}}>
+        <SafeAreaView style={styles.container}>
             <View style={styles.list}>
                 <FlatList
                     data={mockMusicData}
@@ -36,7 +36,7 @@ export default function Lyrics({ navigation }) {
                             onHideUnderlay={separators.unhighlight}
                             activeOpacity={0.4}
                         >
-                            <View style={[styles.item, {backgroundColor: index % 2 === 0 ? '#c1c1c13b' : ''}]}>
+                            <View style={[styles.item]}>
                                 <View>
                                     <Text style={[styles.title, { color: colors.text }]}>{item.title}</Text>
                                     <Text style={[styles.author]}>{item.author}</Text>
