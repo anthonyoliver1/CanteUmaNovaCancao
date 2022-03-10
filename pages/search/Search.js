@@ -102,6 +102,7 @@ export default function Search({ navigation }) {
                 placeholder={"Pesquisar música ..."}
                 placeholderTextColor={dark ? '#5a5a5a' : '#c0c0c0'}
                 onChangeText={text => searcMusicTemp(text)}
+                onSubmitEditing={searchMusic}
             />
             <Pressable
                 style={
