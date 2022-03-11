@@ -123,10 +123,9 @@ export default function About({ navigation }) {
                         source={require('../../assets/top_logo.png')}
                     />
                     <Text style={[style.viewText, {color: colors.text}]}>
-                        Seja bem-vindo ao app Cante Uma Nova Canção!{"\n\n"}
-                        Ficamos muito felizes em ver você usando esse App para adorar a Deus junto com a gente 😊 {"\n\n"}
-                        Espero que você goste de usar e nos envie feedback para sempre melhorarmos!!
-                    </Text>
+                        Seja bem-vindo ao app Cante Uma Nova Canção.{"\n\n"}
+                        Estamos muito felizes em ter você por aqui para adorarmos juntos o nosso Deus 😊 {"\n\n"}
+                        Esperamos que tenha uma ótima experiência com nosso app! E para que possamos continuar melhorando e evoluindo contamos com seu feedback!                    </Text>
 
                     {
                         typeDevice.mobile() ?
@@ -272,7 +271,9 @@ const style = StyleSheet.create({
         minWidth: '100%',
     },
     viewText: {
-        marginBottom: typeDevice.mobile() ? 30 : 10, 
+        marginBottom: typeDevice.mobile() ? 30 : 10,
+        textAlign: "justify",
+        padding: 25
     },
     viewVersion: {
         alignItems: "flex-end",
