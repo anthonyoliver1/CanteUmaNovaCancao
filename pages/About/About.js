@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { Alert, Image, Linking, Modal, Platform, Pressable, SafeAreaView, ScrollView, Share, StatusBar, StyleSheet, Text, ToastAndroid, View } from "react-native";
+import { Alert, Image, Linking, Modal, Platform, Pressable, SafeAreaView, ScrollView, Share, StyleSheet, Text, ToastAndroid, View } from "react-native";
 import { typeDevice } from "../../utils/Index";
-import appleBadge from "../../assets/app-store-badge.svg";
 import { useTheme } from '@react-navigation/native';
 import * as WebBrowser from 'expo-web-browser';
 import qs from 'qs';
 import { RadioButton } from 'react-native-paper';
 import { useColorScheme } from 'react-native-appearance';
 import Constants from 'expo-constants';
+import { useToast } from "react-native-toast-notifications";
 
 
 
 export default function About({ navigation }) {
+    const toast = useToast();
     const { colors } = useTheme();
     const scheme = useColorScheme();
 
@@ -69,7 +70,17 @@ export default function About({ navigation }) {
         if (store === 'google')
             return window.open('https://play.google.com/store/apps/details?id=br.org.icoc.novacancao&hl=pt-BR', '_blank')
 
-        return window.open('https://apple.com/br', '_blank')
+        // return window.open('https://apple.com/br', '_blank')
+        const message = 'Disponível em breve!'
+        return toast.show(message,
+            {
+                type: "success",
+                placement: "top",
+                duration: 3000,
+                offset: 30,
+                animationType: "zoom-in"
+            }
+        )
     }
 
     const goToWebsite = async () => {
@@ -122,7 +133,7 @@ export default function About({ navigation }) {
                         style={style.logoTop}
                         source={require('../../assets/top_logo.png')}
                     />
-                    <Text style={[style.viewText, {color: colors.text}]}>
+                    <Text style={[style.viewText, { color: colors.text }]}>
                         Seja bem-vindo ao app Cante Uma Nova Canção.{"\n\n"}
                         Estamos muito felizes em ter você por aqui para adorarmos juntos o nosso Deus 😊 {"\n\n"}
                         Esperamos que tenha uma ótima experiência com nosso app! E para que possamos continuar melhorando e evoluindo contamos com seu feedback!                    </Text>
@@ -179,14 +190,14 @@ export default function About({ navigation }) {
                                     <Pressable onPress={() => goToStore('apple')}>
                                         <Image
                                             style={style.badgeApple}
-                                            source={{ uri: appleBadge }}
+                                            source={require('../../assets/badge-apple.png')}
                                         />
                                     </Pressable>
 
                                     <Pressable onPress={() => goToStore('google')}>
                                         <Image
                                             style={style.badgeGoogle}
-                                            source={require('../../assets/google-play-badge.png')}
+                                            source={require('../../assets/badge-google.png')}
                                         />
                                     </Pressable>
                                 </View>
@@ -306,14 +317,15 @@ const style = StyleSheet.create({
         textAlign: "center"
     },
     badgeApple: {
-        width: 180,
-        height: 60,
+        width: 200,
+        height: 59,
+        marginRight: 5
     },
     badgeGoogle: {
         width: 200,
-        height: 87,
+        height: 59,
     },
-    logoTop:{
+    logoTop: {
         width: typeDevice.mobile() ? 200 : 380,
         height: typeDevice.mobile() ? 200 : 380
     },
@@ -323,6 +335,7 @@ const style = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         marginTop: 20,
+        marginBottom: 20
     },
     fieldButtons: {
         flex: 1,
@@ -333,7 +346,8 @@ const style = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#00000096'
+        backgroundColor: '#00000052',
+        marginTop: typeDevice.iOS() ? Constants.statusBarHeight : 0
     },
     modalView: {
         margin: 20,
