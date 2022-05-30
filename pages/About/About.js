@@ -1,44 +1,26 @@
 import React, { useEffect, useState } from "react";
-import { Alert, Image, Linking, Modal, Platform, Pressable, SafeAreaView, ScrollView, Share, StyleSheet, Text, ToastAndroid, View } from "react-native";
+import { Alert, Image, Linking, Modal, Platform, ScrollView, Share, ToastAndroid, View } from "react-native";
 import { typeDevice } from "../../utils/Index";
-import { useTheme } from '@react-navigation/native';
 import * as WebBrowser from 'expo-web-browser';
 import qs from 'qs';
 import { RadioButton } from 'react-native-paper';
-import { useColorScheme } from 'react-native-appearance';
-import Constants from 'expo-constants';
-import { useToast } from "react-native-toast-notifications";
-
-
+import { AboutButton, Container, ContainerModal, Description, ModalContent, ModalTitle, ModalWrapper, VersionApp, Wrapper } from "../../style/AboutStyle";
+import { ButtonTitle } from "../../style";
+import themes from "../../style/themes";
 
 export default function About({ navigation }) {
-    const toast = useToast();
-    const { colors } = useTheme();
-    const scheme = useColorScheme();
 
-    const [typeStyle, setTypeStyle] = useState([]);
     const [OS, setOS] = useState('')
     const [modalVisible, setModalVisible] = useState(false);
     const [valueTheme, setValueTheme] = useState('no-preference');
-    const [themeModal, setThemeModal] = useState('')
-
 
     useEffect(() => {
-        scheme === 'dark' ? setThemeModal('#222') : setThemeModal('#fff')
-
         switch (Platform.OS) {
             case 'android': setOS('Android')
                 break;
-            case 'ios': setOS('iOS')
-                break
-            default: setOS('Web')
+            default: setOS('iOS')
                 break
         }
-
-
-        if (typeDevice.web())
-            return setTypeStyle(style.web);
-
     }, [])
 
     const share = async () => {
@@ -64,23 +46,6 @@ export default function About({ navigation }) {
         } catch (error) {
             alert(error.message);
         }
-    }
-
-    function goToStore(store) {
-        if (store === 'google')
-            return window.open('https://play.google.com/store/apps/details?id=br.org.icoc.novacancao&hl=pt-BR', '_blank')
-
-        // return window.open('https://apple.com/br', '_blank')
-        const message = 'Disponível em breve!'
-        return toast.show(message,
-            {
-                type: "success",
-                placement: "top",
-                duration: 3000,
-                offset: 30,
-                animationType: "zoom-in"
-            }
-        )
     }
 
     const goToWebsite = async () => {
@@ -126,260 +91,113 @@ export default function About({ navigation }) {
     }
 
     return (
-        <SafeAreaView style={style.container}>
-            <ScrollView style={typeStyle}>
-                <View style={[style.view]}>
+        <Container>
+            <ScrollView>
+                <Wrapper>
                     <Image
-                        style={style.logoTop}
+                        style={{ width: 200, height: 200 }}
                         source={require('../../assets/top_logo.png')}
                     />
-                    <Text style={[style.viewText, { color: colors.text }]}>
+                    <Description>
                         Seja bem-vindo ao app Cante Uma Nova Canção.{"\n\n"}
                         Estamos muito felizes em ter você por aqui para adorarmos juntos o nosso Deus 😊 {"\n\n"}
-                        Esperamos que tenha uma ótima experiência com nosso app! E para que possamos continuar melhorando e evoluindo contamos com seu feedback!                    </Text>
+                        Esperamos que tenha uma ótima experiência com nosso app! E para que possamos continuar melhorando e evoluindo contamos com seu feedback!
+                    </Description>
 
-                    {
-                        typeDevice.mobile() ?
-                            <View>
-                                <Pressable style={
-                                    ({ pressed }) => [
-                                        {
-                                            backgroundColor: pressed
-                                                ? '#24b1ec'
-                                                : '#5bc8f5'
-                                        },
-                                        style.button
-                                    ]
+                    <View>
+                        <AboutButton style={
+                            ({ pressed }) => [
+                                {
+                                    backgroundColor: pressed
+                                        ? '#24b1ec'
+                                        : '#5bc8f5'
                                 }
-                                    onPress={() => share()}
-                                >
-                                    <Text style={[style.textStyle]}>Compartilhe</Text>
-                                </Pressable>
+                            ]
+                        }
+                            onPress={() => share()}
+                        >
+                            <ButtonTitle>Compartilhe</ButtonTitle>
+                        </AboutButton>
 
-                                <Pressable style={
-                                    ({ pressed }) => [
-                                        {
-                                            backgroundColor: pressed
-                                                ? '#24b1ec'
-                                                : '#5bc8f5'
-                                        },
-                                        style.button
-                                    ]
+                        <AboutButton style={
+                            ({ pressed }) => [
+                                {
+                                    backgroundColor: pressed
+                                        ? '#24b1ec'
+                                        : '#5bc8f5'
                                 }
-                                    onPress={() => goToWebsite()}
-                                >
-                                    <Text style={[style.textStyle]}>Visite nossa Igreja</Text>
-                                </Pressable>
+                            ]
+                        }
+                            onPress={() => goToWebsite()}
+                        >
+                            <ButtonTitle>Visite nossa Igreja</ButtonTitle>
+                        </AboutButton>
 
-                                <Pressable style={
-                                    ({ pressed }) => [
-                                        {
-                                            backgroundColor: pressed
-                                                ? '#24b1ec'
-                                                : '#5bc8f5'
-                                        },
-                                        style.button
-                                    ]
-                                } onPress={() => sendEmail()}>
-                                    <Text style={[style.textStyle]}>Contato</Text>
-                                </Pressable>
-                            </View>
-                            : // Web
-                            <View style={[style.fieldButtons]}>
-                                <View style={[style.viewBadges]}>
-                                    <Pressable onPress={() => goToStore('apple')}>
-                                        <Image
-                                            style={style.badgeApple}
-                                            source={require('../../assets/badge-apple.png')}
-                                        />
-                                    </Pressable>
-
-                                    <Pressable onPress={() => goToStore('google')}>
-                                        <Image
-                                            style={style.badgeGoogle}
-                                            source={require('../../assets/badge-google.png')}
-                                        />
-                                    </Pressable>
-                                </View>
-
-                                <Pressable style={
-                                    ({ pressed }) => [
-                                        {
-                                            backgroundColor: pressed
-                                                ? '#24b1ec'
-                                                : '#5bc8f5'
-                                        },
-                                        style.button
-                                    ]
-                                } onPress={() => sendEmail()}>
-                                    <Text style={[style.textStyle]}>Contato</Text>
-                                </Pressable>
-                            </View>
-                    }
+                        <AboutButton style={
+                            ({ pressed }) => [
+                                {
+                                    backgroundColor: pressed
+                                        ? '#24b1ec'
+                                        : '#5bc8f5'
+                                }
+                            ]
+                        } onPress={() => sendEmail()}>
+                            <ButtonTitle>Contato</ButtonTitle>
+                        </AboutButton>
+                    </View>
 
                     <Modal
                         animationType="fade"
                         transparent={true}
                         visible={modalVisible}
                     >
-                        <View style={style.centeredView}>
-                            <View style={[style.modalView, { backgroundColor: themeModal }]}>
-                                <Text style={[style.modalTitle, { color: colors.text }]}>Tema:</Text>
-                                <View style={[style.contentModal]}>
+                        <ContainerModal>
+                            <ModalWrapper>
+                                <ModalTitle>Tema:</ModalTitle>
+                                <ModalContent>
                                     <RadioButton.Group onValueChange={newValue => changeTheme(newValue)} value={valueTheme}>
-                                        {/* <RadioButton.Item label="Claro" value="light" mode="ios" labelStyle={{ color: colors.text }} /> */}
-                                        {/* <RadioButton.Item label="Escuro" value="dark" mode="ios" labelStyle={{ color: colors.text }} /> */}
-                                        <RadioButton.Item label="Automático (Sistema)" value="no-preference" mode="ios" labelStyle={{ color: colors.text }} />
+                                        <RadioButton.Item label="Claro" value="light" mode="ios" labelStyle={{ color: '#ffff' }} />
+                                        <RadioButton.Item label="Escuro" value="dark" mode="ios" labelStyle={{ color: '#ffff' }} />
+                                        <RadioButton.Item label="Automático (Sistema)" value="no-preference" mode="ios" labelStyle={{ color: '#ffff' }} />
                                     </RadioButton.Group>
-                                </View>
-                                <Pressable
+                                </ModalContent>
+
+                                <AboutButton
                                     style={({ pressed }) => [
                                         {
                                             backgroundColor: pressed
                                                 ? '#24b1ec'
                                                 : '#5bc8f5'
-                                        },
-                                        style.button
+                                        }
                                     ]}
                                     onPress={() => setModalVisible(!modalVisible)}
                                 >
-                                    <Text style={style.textStyle}>Ok</Text>
-                                </Pressable>
-                            </View>
-                        </View>
+                                    <ButtonTitle>Ok</ButtonTitle>
+                                </AboutButton>
+                            </ModalWrapper>
+                        </ContainerModal>
                     </Modal>
 
-                    <Pressable
+                    <AboutButton
                         style={({ pressed }) => [
                             {
                                 backgroundColor: pressed
                                     ? '#24b1ec'
                                     : '#5bc8f5'
-                            },
-                            style.button
+                            }
                         ]}
                         onPress={() => setModalVisible(true)}
                     >
-                        <Text style={style.textStyle}>Tema</Text>
-                    </Pressable>
+                        <ButtonTitle>Tema</ButtonTitle>
+                    </AboutButton>
 
-                    <Text style={[style.viewVersion]}>
+                    <VersionApp>
                         Versão 1.0.0 {"\n"}
                         OS: {OS}{"\n\n"}
                         Beta
-                    </Text>
-                </View>
+                    </VersionApp>
+                </Wrapper>
             </ScrollView >
-        </SafeAreaView>
+        </Container>
     );
 }
-
-const style = StyleSheet.create({
-    view: {
-        flex: 1,
-        alignItems: 'center',
-        padding: 10,
-        minWidth: '100%',
-    },
-    viewText: {
-        marginBottom: typeDevice.mobile() ? 30 : 10,
-        textAlign: "justify",
-        padding: 25
-    },
-    viewVersion: {
-        alignItems: "flex-end",
-        color: '#ffff',
-        textAlign: "center",
-        padding: 20,
-        marginTop: 60,
-        backgroundColor: 'darkgray',
-        borderRadius: 20,
-        elevation: 2,
-        overflow: "hidden"
-    },
-    container: {
-        flex: 1,
-        width: '100%',
-    },
-    web: {
-        width: '100vw'
-    },
-    button: {
-        borderRadius: 20,
-        padding: 10,
-        elevation: 2,
-        width: 160,
-        marginBottom: 10,
-    },
-    textStyle: {
-        color: "white",
-        fontWeight: "bold",
-        textAlign: "center"
-    },
-    badgeApple: {
-        width: 200,
-        height: 59,
-        marginRight: 5
-    },
-    badgeGoogle: {
-        width: 200,
-        height: 59,
-    },
-    logoTop: {
-        width: typeDevice.mobile() ? 200 : 380,
-        height: typeDevice.mobile() ? 200 : 380
-    },
-    viewBadges: {
-        display: 'flex',
-        justifyContent: 'space-between',
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginTop: 20,
-        marginBottom: 20
-    },
-    fieldButtons: {
-        flex: 1,
-        display: 'flex',
-        alignItems: 'center'
-    },
-    centeredView: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#00000052',
-        marginTop: typeDevice.iOS() ? Constants.statusBarHeight : 0
-    },
-    modalView: {
-        margin: 20,
-        backgroundColor: 'black',
-        borderRadius: 20,
-        padding: 35,
-        alignItems: 'center',
-        shadowColor: '#000',
-        shadowOffset: {
-            width: 0,
-            height: 2,
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 4,
-        elevation: 5,
-        minWidth: typeDevice.web() ? "30vw" : "80%",
-    },
-    modalTitle: {
-        marginBottom: 15,
-        textAlign: 'center',
-        fontSize: 18,
-        fontWeight: "700",
-    },
-    contentModal: {
-        display: "flex",
-        alignItems: "stretch",
-        flexDirection: "column",
-    },
-    radioButton: {
-        display: "flex",
-        flexDirection: "row",
-        alignItems: "center",
-
-    }
-})
