@@ -1,14 +1,13 @@
 import React from 'react';
 import { Text, View } from 'react-native';
-import { useTheme } from '@react-navigation/native';
+import { Title } from '../../style';
 
 
 export default function Cipher() {
-    const { colors } = useTheme();
 
     return(
         <View>
-            <Text style={{color: colors.text}}>As Cifras apareceram aqui!</Text>
+            <Title>As Cifras apareceram aqui!</Title>
         </View>
     ) 
 };
