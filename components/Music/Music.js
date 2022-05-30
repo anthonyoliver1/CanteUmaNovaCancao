@@ -1,20 +1,26 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Dimensions, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { useTheme } from '@react-navigation/native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { Modalize } from 'react-native-modalize';
 import Slider from '@react-native-community/slider';
 import { useColorScheme } from 'react-native-appearance';
 import { Audio } from 'expo-av';
 import * as FileSystem from 'expo-file-system';
-import music from '../../assets/music/O Sonho.mp3'
-import { typeDevice } from '../../utils/Index';
-
-const myAudio = new Audio.Sound()
+import {
+    AuthorMusic,
+    Container,
+    ContentHeader,
+    MusicControl,
+    MusicLetter,
+    MusicName,
+    ProgressConstainer,
+    ProgressNummber,
+    Time
+} from '../../style/MusicStyle';
+import { Wrapper } from '../../style';
 
 export default function Music({ route, navigation }) {
     const { musicTxt, audio, author, musicTitle } = route.params;
-    const { colors } = useTheme();
     const scheme = useColorScheme();
 
     const modalizeRef = useRef(null);
@@ -30,44 +36,44 @@ export default function Music({ route, navigation }) {
 
     async function playOrPauseSound(params) {
         if (musicStarted) {
-            params.includes('play') ? myAudio.playAsync() : myAudio.pauseAsync()
-            return
+            params.includes('play') ? sound.playAsync() : sound.pauseAsync();
+            return;
         }
 
         try {
-            console.log('Loading Sound')
-            const sound = await myAudio.loadAsync(require('../../assets/music/O Sonho.mp3')); // usar {uri: audio}
+            const { sound } = await Audio.Sound.createAsync(
+                require('../../assets/music/O Sonho.mp3')
+            );
             setSound(sound);
 
-            console.log('Sound', sound)
-            await myAudio.playAsync();
-            setMusicStarted(true)
+            await sound.playAsync();
+
+            setMusicStarted(true);
         } catch (error) {
             console.log('Deu erro: ', error)
         }
-        return
+        return;
     }
 
-    // Esse useEffect esta fazendo unload do audio carregado
     useEffect(() => {
         return sound
             ? () => {
-                myAudio.unloadAsync();
+                sound.unloadAsync();
             }
             : undefined;
     }, [sound]);
 
-    const checkFile = async () => {
-        if (typeDevice.mobile()) {
-            const file = FileSystem.documentDirectory + 'O Sonho.mp3'
-            const audio = await FileSystem.getInfoAsync(file)
-            console.log(audio)
-        }
-    }
+    // const checkFile = async () => {
+    //     if (typeDevice.mobile()) {
+    //         const file = FileSystem.documentDirectory + 'O Sonho.mp3'
+    //         const audio = await FileSystem.getInfoAsync(file)
+    //         console.log(audio)
+    //     }
+    // }
 
-    useEffect(() => {
-        checkFile()
-    })
+    // useEffect(() => {
+    //     checkFile()
+    // })
 
     useEffect(() => {
         scheme === 'dark' ? setTheme('#222') : setTheme('#fff')
@@ -107,23 +113,13 @@ export default function Music({ route, navigation }) {
     }
 
     return (
-        <>
+        <Wrapper>
             <ScrollView>
-                <View style={[style.container, style.view]}>
-                    <Text
-                        style={
-                            [
-                                style.music,
-                                {
-                                    color: colors.text,
-                                    marginBottom: marginText
-                                }
-                            ]
-                        }
-                    >
+                <Container height={Dimensions.get('window').height}>
+                    <MusicLetter margin={marginText}>
                         {musicTxt}
-                    </Text>
-                </View>
+                    </MusicLetter>
+                </Container>
             </ScrollView>
 
             {showButtonPlay ?
@@ -145,20 +141,16 @@ export default function Music({ route, navigation }) {
                 onOpened={() => setMarginText(270)}
                 onClosed={() => setMarginText(60)}
             >
-                <View style={style.musicContainerTitleAndAuthor}>
-                    <Text
-                        style={[style.musicName, { color: colors.text }]}
-                    >
+                <ContentHeader>
+                    <MusicName>
                         {musicTitle}
-                    </Text>
-                    <Text
-                        style={[style.authorMusic, { color: colors.text }]}
-                    >
+                    </MusicName>
+                    <AuthorMusic>
                         {author}
-                    </Text>
-                </View>
+                    </AuthorMusic>
+                </ContentHeader>
 
-                <View style={style.progressConstainer}>
+                <ProgressConstainer>
                     <View>
                         <Slider
                             value={0} //se moviementa pegando a posicao do audio incial
@@ -174,19 +166,12 @@ export default function Music({ route, navigation }) {
                         />
                     </View>
 
-                    <View style={style.progressNumberContainer}>
-                        <Text
-                            style={[style.progressTimeMusicText, { color: colors.text }]}
-                        >
-                            {minValue}
-                        </Text>
-                        <Text
-                            style={[style.progressTimeMusicText, { color: colors.text }]}
-                        >
-                            {maxValue}
-                        </Text>
-                    </View>
-                    <View style={style.buttonsMusicControl}>
+                    <ProgressNummber>
+                        <Time> {minValue} </Time>
+                        <Time> {maxValue} </Time>
+                    </ProgressNummber>
+
+                    <MusicControl>
                         <TouchableOpacity onPress={backwardButton}>
                             <MaterialIcons name="replay-30" size={35} color={colorButton} />
                         </TouchableOpacity>
@@ -198,29 +183,14 @@ export default function Music({ route, navigation }) {
                         <TouchableOpacity onPress={forwardButton}>
                             <MaterialIcons name="forward-30" size={35} color={colorButton} />
                         </TouchableOpacity>
-                    </View>
-                </View>
+                    </MusicControl>
+                </ProgressConstainer>
             </Modalize>
-        </>
+        </Wrapper>
     );
 }
 
 const style = StyleSheet.create({
-    container: {
-        flex: 1,
-        padding: 10
-    },
-    music: {
-        textAlign: 'center',
-        lineHeight: 25,
-        fontSize: 16
-    },
-    view: {
-        flex: 1,
-        alignItems: 'center',
-        minWidth: '100%',
-        minHeight: Dimensions.get('window').height
-    },
     floatButtom: {
         position: 'absolute',
         width: 50,
@@ -242,38 +212,4 @@ const style = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center'
     },
-    musicContainerTitleAndAuthor: {
-        alignItems: 'center',
-        justifyContent: 'center',
-        marginBottom: 15,
-    },
-    buttonsMusicControl: {
-        flexDirection: 'row',
-        justifyContent: 'space-around',
-        alignItems: 'center',
-        top: 10,
-        height: 100
-    },
-    musicName: {
-        fontSize: 20,
-        fontWeight: '700'
-    },
-    authorMusic: {
-        fontSize: 15,
-        fontWeight: '200'
-    },
-    progressConstainer: {
-        width: '100%',
-        justifyContent: 'center',
-    },
-    progressNumberContainer: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        paddingLeft: 15,
-        paddingRight: 15,
-        bottom: 5,
-    },
-    progressTimeMusicText: {
-        fontSize: 13
-    }
 });
