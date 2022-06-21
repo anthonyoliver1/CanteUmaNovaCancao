@@ -1,20 +1,20 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Alert, Pressable, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
-import { DarkTheme, NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer } from '@react-navigation/native';
 import Lyrics from './pages/lyrics/Lyrics';
 import Cipher from './pages/cipher/Cipher';
 import Search from './pages/search/Search';
 import About from './pages/About/About';
-import { AppearanceProvider, useColorScheme } from 'react-native-appearance';
+import { AppearanceProvider } from 'react-native-appearance';
 import { StatusBar } from 'expo-status-bar';
 import Music from './components/Music/Music';
 import * as NavigationBar from 'expo-navigation-bar';
 import { typeDevice } from './utils/Index';
 import { ToastProvider } from 'react-native-toast-notifications'
-import { ButtonTitle, Title, Wrapper } from './style';
+import { ButtonTitle, Wrapper } from './style';
 import { ThemeProvider } from 'styled-components';
 import themes from './style/themes';
 
@@ -66,8 +66,7 @@ function SearchScreen({ navigation }) {
     </Wrapper>
   );
 }
-function AboutScreen({ navigation, route }) {
-  // userTheme = route.params?.themeColor
+function AboutScreen({ navigation }) {
   return (
     <Wrapper>
       <About navigation={navigation} />
@@ -75,7 +74,7 @@ function AboutScreen({ navigation, route }) {
   );
 }
 
-function HomeStackMusic({ navigation, route }) {
+function HomeStackMusic({ route }) {
   return (
     <Stack.Navigator screenOptions={{ headerShown: true }}>
       <Stack.Screen name="Music" component={HomeScreen} options={{ title: 'Música' }} />
@@ -94,30 +93,20 @@ function HomeStackMusic({ navigation, route }) {
 }
 
 export default function App() {
-  const scheme = useColorScheme();
-  const myTheme = themes[scheme] || themes.dark;
 
-  useEffect(() => {
-    if (typeDevice.Android()) {
-      if (scheme === 'dark') {
-        NavigationBar.setBackgroundColorAsync("#121212");
-        NavigationBar.setButtonStyleAsync("light");
-        return;
-      }
-
-      NavigationBar.setBackgroundColorAsync("#FFFFFF");
-      NavigationBar.setButtonStyleAsync("dark");
-      return;
-    }
-  }, [scheme])
+  if (typeDevice.Android()) {
+    NavigationBar.setBackgroundColorAsync("#121212");
+    NavigationBar.setButtonStyleAsync("light");
+  }
 
   return (
-    <ThemeProvider theme={myTheme}>
+    <ThemeProvider theme={themes.dark}>
       <ToastProvider>
         <AppearanceProvider>
-          <StatusBar translucent={true} style={myTheme.barColor} />
-          <NavigationContainer theme={myTheme}>
+          <StatusBar translucent={true} style={themes.dark.barColor} />
+          <NavigationContainer theme={themes.dark}>
             <Tab.Navigator
+              sceneContainerStyle={{ backgroundColor: themes.dark.background }}
               screenOptions={({ route }) => ({
                 tabBarIcon: ({ focused, color, size }) => {
                   let iconName;
