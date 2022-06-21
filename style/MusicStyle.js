@@ -5,7 +5,7 @@ export const Container = styled.View`
     padding: 10px;
     align-items: center;
     min-width: 100%;
-    min-height: ${props => props.height+'px'};
+    height:100%;
 `;
 
 export const MusicLetter = styled.Text`
