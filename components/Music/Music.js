@@ -27,7 +27,7 @@ export default function Music({ route, navigation }) {
     const [showButtonPlay, setShowButtonPlay] = useState(undefined)
     const [theme, setTheme] = useState('')
     const [colorButton, setColorButton] = useState('')
-    const [marginText, setMarginText] = useState(60)
+    const [marginText, setMarginText] = useState('60px')
     const [typeIcon, setTypeIcon] = useState('play-arrow')
     const [minValue, setMinValue] = useState(0)
     const [maxValue, setMaxValue] = useState(100)
@@ -115,7 +115,7 @@ export default function Music({ route, navigation }) {
     return (
         <Wrapper>
             <ScrollView>
-                <Container height={Dimensions.get('window').height}>
+                <Container>
                     <MusicLetter margin={marginText}>
                         {musicTxt}
                     </MusicLetter>
@@ -132,14 +132,14 @@ export default function Music({ route, navigation }) {
             <Modalize ref={modalizeRef}
                 // snapPoint={330}
                 modalHeight={270}
-                modalStyle={{ backgroundColor: theme, padding: 30 }}
+                modalStyle={{ backgroundColor: '#1A1A1A', padding: 30 }}
                 handleStyle={{ backgroundColor: "gray" }}
                 handlePosition='inside'
                 withOverlay={false}
                 disableScrollIfPossible={true}
                 velocity={2000}
-                onOpened={() => setMarginText(270)}
-                onClosed={() => setMarginText(60)}
+                onOpened={() => setMarginText('270px')}
+                onClosed={() => setMarginText('60px')}
             >
                 <ContentHeader>
                     <MusicName>
@@ -157,8 +157,8 @@ export default function Music({ route, navigation }) {
                             minimumValue={0}
                             maximumValue={1} //pegar o valor maximo dso audio
                             maximumTrackTintColor='gray'
-                            minimumTrackTintColor='#5bc8f5'
-                            thumbTintColor='#5bc8f5'
+                            minimumTrackTintColor='#0B97D3'
+                            thumbTintColor='#0B97D3'
                             onValueChange={value => timeMusic(parseInt(value * 100))}
                             animateTransitions={true}
                         // onSlidingStart={() => setMinValue(0)}
@@ -200,12 +200,12 @@ const style = StyleSheet.create({
         right: 30,
         bottom: 30,
         borderRadius: 30,
-        backgroundColor: '#5bc8f5c3',
+        backgroundColor: '#0B97D3c3',
         display: 'flex',
         flexDirection: 'row'
     },
     playAndPause: {
-        backgroundColor: '#5bc8f5',
+        backgroundColor: '#0B97D3',
         borderRadius: 30,
         width: 60,
         height: 60,

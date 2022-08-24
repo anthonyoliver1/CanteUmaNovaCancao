@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Alert, Image, Linking, Modal, Platform, ScrollView, Share, ToastAndroid, View } from "react-native";
+import { Alert, Image, Linking, Modal, Platform, ScrollView, Share, Text, ToastAndroid, View } from "react-native";
 import { typeDevice } from "../../utils/Index";
 import * as WebBrowser from 'expo-web-browser';
 import qs from 'qs';
 import { RadioButton } from 'react-native-paper';
 import { AboutButton, Container, ContainerModal, Description, ModalContent, ModalTitle, ModalWrapper, VersionApp, Wrapper } from "../../style/AboutStyle";
-import { ButtonTitle } from "../../style";
-import themes from "../../style/themes";
+import { B, ButtonTitle } from "../../style";
+import appInfo from "../../app.json";
 
 export default function About({ navigation }) {
 
@@ -110,7 +110,7 @@ export default function About({ navigation }) {
                                 {
                                     backgroundColor: pressed
                                         ? '#24b1ec'
-                                        : '#5bc8f5'
+                                        : '#0B97D3'
                                 }
                             ]
                         }
@@ -124,7 +124,7 @@ export default function About({ navigation }) {
                                 {
                                     backgroundColor: pressed
                                         ? '#24b1ec'
-                                        : '#5bc8f5'
+                                        : '#0B97D3'
                                 }
                             ]
                         }
@@ -138,7 +138,7 @@ export default function About({ navigation }) {
                                 {
                                     backgroundColor: pressed
                                         ? '#24b1ec'
-                                        : '#5bc8f5'
+                                        : '#0B97D3'
                                 }
                             ]
                         } onPress={() => sendEmail()}>
@@ -167,7 +167,7 @@ export default function About({ navigation }) {
                                         {
                                             backgroundColor: pressed
                                                 ? '#24b1ec'
-                                                : '#5bc8f5'
+                                                : '#0B97D3'
                                         }
                                     ]}
                                     onPress={() => setModalVisible(!modalVisible)}
@@ -178,23 +178,24 @@ export default function About({ navigation }) {
                         </ContainerModal>
                     </Modal>
 
-                    <AboutButton
+                    {/* <AboutButton
                         style={({ pressed }) => [
                             {
                                 backgroundColor: pressed
                                     ? '#24b1ec'
-                                    : '#5bc8f5'
+                                    : '#0B97D3'
                             }
                         ]}
                         onPress={() => setModalVisible(true)}
                     >
                         <ButtonTitle>Tema</ButtonTitle>
-                    </AboutButton>
+                    </AboutButton> */}
 
                     <VersionApp>
-                        Versão 1.0.0 {"\n"}
-                        OS: {OS}{"\n\n"}
+                        Versão: <B>{appInfo.expo.version}</B> {"\n"}
+                        OS: <B>{OS}</B>{"\n\n"}
                         Beta
+                        {/* <Text style={{fontSize: 30}}>🎧</Text> */}
                     </VersionApp>
                 </Wrapper>
             </ScrollView >

@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import { Alert, View, ToastAndroid, FlatList, TouchableOpacity } from "react-native";
+import { Alert, View, ToastAndroid, FlatList, TouchableOpacity, Image, Dimensions } from "react-native";
 import { typeDevice } from "../../utils/Index";
 import { useTheme } from '@react-navigation/native';
 import mockMusicData from '../../utils/mockMusicData.json';
 import { useToast } from "react-native-toast-notifications";
 import { Container, ListView, SearchButton, SearchInput } from "../../style/SearchStyle";
 import { Author, ButtonTitle, Kids, Title } from "../../style";
-import { List } from "../../style/LyricsStyle";
+import { InfoMusic, List } from "../../style/LyricsStyle";
 
 
 export default function Search({ navigation }) {
@@ -84,9 +84,9 @@ export default function Search({ navigation }) {
     const gotToMusicText = ({ number, title, music, author }) => {
         const { text, audio } = music;
         navigation.navigate(
-            'Home',
+            'Search',
             {
-                screen: 'MusicLetter',
+                screen: 'MusicLetterSearch',
                 params: {
                     numMusic: number,
                     musicTxt: text,
@@ -97,6 +97,8 @@ export default function Search({ navigation }) {
             }
         );
     }
+
+    const widthScreen = Dimensions.get('window').width - 15;
 
     return (
         <Container>
@@ -112,7 +114,7 @@ export default function Search({ navigation }) {
                         {
                             backgroundColor: pressed
                                 ? '#24b1ec'
-                                : '#5bc8f5'
+                                : '#0B97D3'
                         },
                     ]
                 }
@@ -132,17 +134,24 @@ export default function Search({ navigation }) {
                             onHideUnderlay={separators.unhighlight}
                             activeOpacity={0.4}
                         >
-                            <List>
-                                <View>
-                                    <Title>{item.title}</Title>
-                                    <Author>{item.author}</Author>
-                                </View>
-                                <View>
-                                    {item.kids ?
-                                        <Kids>kids</Kids>
-                                        : null
-                                    }
-                                </View>
+                            <List width={widthScreen}>
+                                <Image
+                                    source={require('../../assets/note_logo.png')}
+                                    style={{ width: 45, height: 45, borderRadius: 8, marginRight: 10 }}
+                                />
+                                <InfoMusic width={widthScreen}>
+                                    <View>
+                                        <Title>{item.title}</Title>
+                                        <Author>{item.author}</Author>
+                                    </View>
+                                    <View>
+                                        {item.kids ?
+                                            <Kids>kids</Kids>
+                                            : null
+                                        }
+                                    </View>
+                                </InfoMusic>
+
                             </List>
                         </TouchableOpacity>
                     )}

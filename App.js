@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Alert, Pressable, StyleSheet } from 'react-native';
+import { Alert, Dimensions, Pressable, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -46,7 +46,7 @@ function CipherScreen({ navigation }) {
             {
               backgroundColor: pressed
                 ? '#24b1ec'
-                : '#5bc8f5'
+                : '#0B97D3'
             },
             style.button
           ]
@@ -76,16 +76,58 @@ function AboutScreen({ navigation, route }) {
 }
 
 function HomeStackMusic({ navigation, route }) {
+  const visible = route.params?.params.musicTitle.length < 25;
+  const widthScreen = !visible ? Dimensions.get('window').width - 130 : null;
+
   return (
     <Stack.Navigator screenOptions={{ headerShown: true }}>
-      <Stack.Screen name="Music" component={HomeScreen} options={{ title: 'Música' }} />
+      <Stack.Screen name="Music" component={HomeScreen} options={{ title: 'Música', headerTitleAlign: 'center' }} />
       <Stack.Screen
         name="MusicLetter"
         component={Music}
         options={
           {
             title: route.params?.params.musicTitle,
-            headerBackTitle: 'Voltar',
+            headerBackTitleVisible: visible,
+            headerTitleAlign: 'center',
+            headerBackTitleStyle: {
+              fontSize: 13
+            },
+            headerTitleStyle: {
+              width: widthScreen,
+              textAlign: 'center',
+              alignSelf: 'center',
+            }
+          }
+        }
+      />
+    </Stack.Navigator>
+  );
+}
+
+function SearchScreenStack({ navigation, route }) {
+  const visible = route.params?.params.musicTitle.length < 25;
+  const widthScreen = !visible ? Dimensions.get('window').width - 130 : null;
+
+  return (
+    <Stack.Navigator screenOptions={{ headerShown: true }}>
+      <Stack.Screen name="SearchStack" component={SearchScreen} options={{ title: 'Buscar', headerTitleAlign: 'center' }} />
+      <Stack.Screen
+        name="MusicLetterSearch"
+        component={Music}
+        options={
+          {
+            title: route.params?.params.musicTitle,
+            headerBackTitleVisible: visible,
+            headerTitleAlign: 'center',
+            headerBackTitleStyle: {
+              fontSize: 13,
+            },
+            headerTitleStyle: {
+              width: widthScreen,
+              textAlign: 'center',
+              alignSelf: 'center',
+            }
           }
         }
       />
@@ -94,31 +136,37 @@ function HomeStackMusic({ navigation, route }) {
 }
 
 export default function App() {
-  const scheme = useColorScheme();
-  const myTheme = themes[scheme] || themes.dark;
 
-  useEffect(() => {
-    if (typeDevice.Android()) {
-      if (scheme === 'dark') {
-        NavigationBar.setBackgroundColorAsync("#121212");
-        NavigationBar.setButtonStyleAsync("light");
-        return;
-      }
+  if (typeDevice.Android()) {
+    NavigationBar.setButtonStyleAsync("light");
+    NavigationBar.setBackgroundColorAsync("#1A1A1A");
+  }
 
-      NavigationBar.setBackgroundColorAsync("#FFFFFF");
-      NavigationBar.setButtonStyleAsync("dark");
-      return;
-    }
-  }, [scheme])
+  let heightScreen = null;
+
+  if (Dimensions.get('window').height < 600) {
+    heightScreen = Dimensions.get('window').height - 510
+  }
 
   return (
-    <ThemeProvider theme={myTheme}>
+    <ThemeProvider theme={themes.dark}>
       <ToastProvider>
         <AppearanceProvider>
-          <StatusBar translucent={true} style={myTheme.barColor} />
-          <NavigationContainer theme={myTheme}>
+          <StatusBar translucent={true} style={themes.dark.barColor} />
+          <NavigationContainer theme={themes.dark}>
             <Tab.Navigator
+              backBehavior='history'
+              sceneContainerStyle={{ backgroundColor: themes.dark.background }}
               screenOptions={({ route }) => ({
+                tabBarHideOnKeyboard: true,
+                tabBarLabelStyle: {
+                  position: 'absolute',
+                  bottom: 7
+                },
+                tabBarIconStyle: {
+                  bottom: 7,
+                  position: 'relative'
+                },
                 tabBarIcon: ({ focused, color, size }) => {
                   let iconName;
                   if (route.name === 'Home') {
@@ -135,17 +183,18 @@ export default function App() {
 
                   return <Ionicons name={iconName} size={size} color={color} />;
                 },
-                tabBarActiveTintColor: '#5bc8f5',
+                tabBarActiveTintColor: '#0B97D3',
                 tabBarInactiveTintColor: 'gray',
                 tabBarStyle: {
-                  overflow: 'hidden'
+                  flex: heightScreen ? null : 0.08,
+                  height: heightScreen ? heightScreen : null
                 },
               })}
             >
               <Tab.Screen name="Home" component={HomeStackMusic} options={{ headerShown: false, title: 'Música' }} />
-              <Tab.Screen name="Cipher" component={CipherScreen} options={{ title: 'Cifras' }} />
-              <Tab.Screen name="Search" component={SearchScreen} options={{ title: 'Buscar' }} />
-              <Tab.Screen name="About" component={AboutScreen} options={{ title: 'Mais' }} />
+              <Tab.Screen name="Cipher" component={CipherScreen} options={{ title: 'Cifras', headerTitleAlign: 'center' }} />
+              <Tab.Screen name="Search" component={SearchScreenStack} options={{ headerShown: false, title: 'Buscar' }} />
+              <Tab.Screen name="About" component={AboutScreen} options={{ title: 'Mais', headerTitleAlign: 'center' }} />
             </Tab.Navigator>
           </NavigationContainer>
         </AppearanceProvider>

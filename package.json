@@ -19,6 +19,7 @@
     "expo-file-system": "~13.1.4",
     "expo-navigation-bar": "~1.1.1",
     "expo-status-bar": "~1.2.0",
+    "expo-updates": "~0.11.7",
     "expo-web-browser": "^10.1.0",
     "qs": "^6.10.2",
     "react": "17.0.1",

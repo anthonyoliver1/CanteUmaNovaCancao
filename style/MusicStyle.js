@@ -5,14 +5,14 @@ export const Container = styled.View`
     padding: 10px;
     align-items: center;
     min-width: 100%;
-    min-height: ${props => props.height+'px'};
+    height: 100%;
 `;
 
 export const MusicLetter = styled.Text`
     text-align: center;
     line-height: 25px;
     font-size: 16px;
-    margin-bottom: ${props => props.margin+'px'};
+    margin-bottom: ${props => props.margin};
     color: ${props => props.theme.color};
 `;
 

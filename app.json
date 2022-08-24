@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "Cante Uma Nova Canção",
+    "name": "C.U.N.C",
     "slug": "AnthonyOliveira",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -25,9 +25,6 @@
         "foregroundImage": "./assets/note_logo.png"
       },
       "package": "com.anthony.dev.AnthonyOliveira"
-    },
-    "web": {
-      "favicon": "./assets/note_logo.png"
     }
   }
 }
