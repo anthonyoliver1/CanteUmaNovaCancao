@@ -1,9 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Dimensions, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Dimensions, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { Modalize } from 'react-native-modalize';
 import Slider from '@react-native-community/slider';
-import { useColorScheme } from 'react-native-appearance';
 import { Audio } from 'expo-av';
 import * as FileSystem from 'expo-file-system';
 import {
@@ -18,21 +17,20 @@ import {
     Time
 } from '../../style/MusicStyle';
 import { Wrapper } from '../../style';
+import themes from '../../style/themes';
 
-export default function Music({ route, navigation }) {
+export default function Music({ route }) {
     const { musicTxt, audio, author, musicTitle } = route.params;
-    const scheme = useColorScheme();
 
     const modalizeRef = useRef(null);
     const [showButtonPlay, setShowButtonPlay] = useState(undefined)
-    const [theme, setTheme] = useState('')
-    const [colorButton, setColorButton] = useState('')
     const [marginText, setMarginText] = useState('60px')
     const [typeIcon, setTypeIcon] = useState('play-arrow')
-    const [minValue, setMinValue] = useState(0)
-    const [maxValue, setMaxValue] = useState(100)
     const [musicStarted, setMusicStarted] = useState(false)
     const [sound, setSound] = useState();
+    const [infoFile, setInfoFile] = useState({});
+    const [progress, setProgress] = useState(0);
+    const [duration, setDuration] = useState(0);
 
     async function playOrPauseSound(params) {
         if (musicStarted) {
@@ -42,18 +40,29 @@ export default function Music({ route, navigation }) {
 
         try {
             const { sound } = await Audio.Sound.createAsync(
-                require('../../assets/music/O Sonho.mp3')
+                require('../../assets/music/o_sonho.mp3')
             );
             setSound(sound);
 
-            await sound.playAsync();
+            sound.setOnPlaybackStatusUpdate(setInfoFile);
 
-            setMusicStarted(true);
+            if (params != 'open') {
+                await sound.playAsync();
+                setMusicStarted(true);
+            }
+
         } catch (error) {
             console.log('Deu erro: ', error)
         }
-        return;
     }
+
+    useEffect(() => {
+        let timeM = infoFile.positionMillis / 1000;
+        let du = infoFile.durationMillis / 1000;
+
+        (infoFile && infoFile.positionMillis) ? setProgress(timeM) : setProgress(0);
+        (infoFile && infoFile.durationMillis) ? setDuration(du) : setDuration(0);
+    }, [infoFile]);
 
     useEffect(() => {
         return sound
@@ -76,11 +85,6 @@ export default function Music({ route, navigation }) {
     // })
 
     useEffect(() => {
-        scheme === 'dark' ? setTheme('#222') : setTheme('#fff')
-        scheme === 'dark' ? setColorButton('#fff') : setColorButton('gray')
-    }, [scheme])
-
-    useEffect(() => {
         setShowButtonPlay(Boolean(audio));
     }, [audio])
 
@@ -90,26 +94,59 @@ export default function Music({ route, navigation }) {
 
     const playOrPause = () => {
         if (typeIcon === 'play-arrow') {
-            setTypeIcon('pause')
-            playOrPauseSound('play')
+            setTypeIcon('pause');
+            playOrPauseSound('play');
         }
         else {
-            setTypeIcon('play-arrow')
-            playOrPauseSound('pause')
+            setTypeIcon('play-arrow');
+            playOrPauseSound('pause');
         }
     }
 
     const forwardButton = () => {
-        console.log('FRENTE')
-    }
-    const backwardButton = () => {
-        console.log("TRAZ")
+        if (infoFile && infoFile.positionMillis) sound.setPositionAsync(infoFile.positionMillis + 30000);
     }
 
-    const timeMusic = (value) => {
-        let max = 100
-        setMinValue(value)
-        setMaxValue(value - max)
+    const backwardButton = () => {
+        if (infoFile && infoFile.positionMillis) sound.setPositionAsync(infoFile.positionMillis - 30000);
+    }
+
+    const advancedMusic = ({ status, value }) => {
+        let timeMusic = value * 1000;
+
+        if (status == 'start') {
+            playOrPauseSound('pause');
+            setTypeIcon('play-arrow');
+        }
+
+        if (status == 'completed') {
+
+            if (timeMusic >= infoFile.positionMillis) {
+                sound.setPositionAsync(timeMusic);
+                playOrPauseSound('play');
+                setTypeIcon('pause');
+                return;
+            }
+
+            if (timeMusic <= infoFile.positionMillis) {
+                sound.setPositionAsync(timeMusic);
+                playOrPauseSound('play');
+                setTypeIcon('pause');
+                setProgress(timeMusic);
+                return;
+            }
+        }
+
+    }
+
+    const formatTime = (number) => {
+        const minutes = Math.floor(number / 60);
+        const seconds = Math.floor(number % 60);
+
+        const minutesFormated = String(minutes).padStart(2, '0');
+        const secondsFormated = String(seconds).padStart(2, '0');
+
+        return `${minutesFormated}:${secondsFormated}`;
     }
 
     return (
@@ -132,14 +169,20 @@ export default function Music({ route, navigation }) {
             <Modalize ref={modalizeRef}
                 // snapPoint={330}
                 modalHeight={270}
-                modalStyle={{ backgroundColor: '#1A1A1A', padding: 30 }}
+                modalStyle={{ backgroundColor: themes.dark.colors.card, padding: 30 }}
                 handleStyle={{ backgroundColor: "gray" }}
                 handlePosition='inside'
                 withOverlay={false}
                 disableScrollIfPossible={true}
                 velocity={2000}
-                onOpened={() => setMarginText('270px')}
-                onClosed={() => setMarginText('60px')}
+                onOpened={() => {
+                    setMarginText('270px');
+                    playOrPauseSound('open');
+                }}
+                onClosed={() => {
+                    setMarginText('60px');
+                    sound.unloadAsync()
+                }}
             >
                 <ContentHeader>
                     <MusicName>
@@ -153,27 +196,25 @@ export default function Music({ route, navigation }) {
                 <ProgressConstainer>
                     <View>
                         <Slider
-                            value={0} //se moviementa pegando a posicao do audio incial
+                            value={progress}
                             minimumValue={0}
-                            maximumValue={1} //pegar o valor maximo dso audio
+                            maximumValue={duration}
                             maximumTrackTintColor='gray'
                             minimumTrackTintColor='#0B97D3'
                             thumbTintColor='#0B97D3'
-                            onValueChange={value => timeMusic(parseInt(value * 100))}
-                            animateTransitions={true}
-                        // onSlidingStart={() => setMinValue(0)}
-                        // onSlidingComplete={() => setMinValue()}
+                            onSlidingStart={value => advancedMusic({ status: 'start', value: value })}
+                            onSlidingComplete={value => advancedMusic({ status: 'completed', value: value })}
                         />
                     </View>
 
                     <ProgressNummber>
-                        <Time> {minValue} </Time>
-                        <Time> {maxValue} </Time>
+                        <Time> {formatTime(progress)} </Time>
+                        <Time> {formatTime(duration)} </Time>
                     </ProgressNummber>
 
                     <MusicControl>
                         <TouchableOpacity onPress={backwardButton}>
-                            <MaterialIcons name="replay-30" size={35} color={colorButton} />
+                            <MaterialIcons name="replay-30" size={35} color='#FFF' />
                         </TouchableOpacity>
 
                         <TouchableOpacity onPress={playOrPause} style={style.playAndPause}>
@@ -181,7 +222,7 @@ export default function Music({ route, navigation }) {
                         </TouchableOpacity>
 
                         <TouchableOpacity onPress={forwardButton}>
-                            <MaterialIcons name="forward-30" size={35} color={colorButton} />
+                            <MaterialIcons name="forward-30" size={35} color='#FFF' />
                         </TouchableOpacity>
                     </MusicControl>
                 </ProgressConstainer>

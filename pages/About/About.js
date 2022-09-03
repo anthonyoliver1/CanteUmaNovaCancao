@@ -27,20 +27,20 @@ export default function About({ navigation }) {
         try {
             if (typeDevice.mobile()) {
                 const linkShare = typeDevice.iOS() ? '' : 'https://google.com.br'
-                const result = await Share.share({
+                await Share.share({
                     message: 'Venha e Cante Uma Nova Canção com a gente!!' + `${"\n\n" + linkShare}`,
                     url: 'https://apple.com/br',
                     title: 'Cante Uma Nova Canção'
                 });
-                if (result.action === Share.sharedAction) {
-                    if (result.activityType) {
-                        // shared with activity type of result.activityType
-                    } else {
-                        // shared
-                    }
-                } else if (result.action === Share.dismissedAction) {
-                    // dismissed
-                }
+                // if (result.action === Share.sharedAction) {
+                //     if (result.activityType) {
+                //         // shared with activity type of result.activityType
+                //     } else {
+                //         // shared
+                //     }
+                // } else if (result.action === Share.dismissedAction) {
+                //     // dismissed
+                // }
                 return;
             }
         } catch (error) {
@@ -79,16 +79,16 @@ export default function About({ navigation }) {
         return Linking.openURL(url);
     }
 
-    const changeTheme = (themeSelected) => {
-        navigation.navigate(
-            'About',
-            {
-                screen: 'About',
-                themeColor: themeSelected,
-            }
-        )
-        setValueTheme(themeSelected)
-    }
+    // const changeTheme = (themeSelected) => {
+    //     navigation.navigate(
+    //         'About',
+    //         {
+    //             screen: 'About',
+    //             themeColor: themeSelected,
+    //         }
+    //     )
+    //     setValueTheme(themeSelected)
+    // }
 
     return (
         <Container>
@@ -146,7 +146,7 @@ export default function About({ navigation }) {
                         </AboutButton>
                     </View>
 
-                    <Modal
+                    {/* <Modal
                         animationType="fade"
                         transparent={true}
                         visible={modalVisible}
@@ -176,7 +176,7 @@ export default function About({ navigation }) {
                                 </AboutButton>
                             </ModalWrapper>
                         </ContainerModal>
-                    </Modal>
+                    </Modal> */}
 
                     {/* <AboutButton
                         style={({ pressed }) => [

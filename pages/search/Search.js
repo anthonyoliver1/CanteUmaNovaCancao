@@ -7,6 +7,7 @@ import { useToast } from "react-native-toast-notifications";
 import { Container, ListView, SearchButton, SearchInput } from "../../style/SearchStyle";
 import { Author, ButtonTitle, Kids, Title } from "../../style";
 import { InfoMusic, List } from "../../style/LyricsStyle";
+import themes from "../../style/themes";
 
 
 export default function Search({ navigation }) {
@@ -104,9 +105,10 @@ export default function Search({ navigation }) {
         <Container>
             <SearchInput
                 placeholder={"Pesquisar música ..."}
-                placeholderTextColor={dark ? '#5a5a5a' : '#c0c0c0'}
+                placeholderTextColor={'#c0c0c0'}
                 onChangeText={text => searcMusicTemp(text)}
                 onSubmitEditing={searchMusic}
+                selectionColor={themes.dark.colors.primary}
             />
             <SearchButton
                 style={

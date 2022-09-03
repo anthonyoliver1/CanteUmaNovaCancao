@@ -7,7 +7,8 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "eject": "expo eject"
+    "eject": "expo eject",
+    "dev": "expo start --localhost"
   },
   "dependencies": {
     "@react-native-community/slider": "^4.1.12",
