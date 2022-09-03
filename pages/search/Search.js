@@ -77,9 +77,12 @@ export default function Search({ navigation }) {
     const searcMusicTemp = (value) => {
         const textSearch = value.trim().toLocaleLowerCase();
         const mockMusic = JSON.parse(JSON.stringify(mockMusicData));
-        setTextSearch(textSearch);
+        const filterTitle = mockMusic.filter(i => i.title.toLocaleLowerCase().includes(textSearch));
+        const filterMusicLetter = mockMusic.filter(i => i.music.text.toLocaleLowerCase().includes(textSearch))
+        const filtered = filterTitle.length ? filterTitle : filterMusicLetter;
 
-        return setDataMusicTemp(mockMusic.filter(i => i.title.toLocaleLowerCase().includes(textSearch)));
+        setTextSearch(textSearch);
+        return setDataMusicTemp(filtered);
     }
 
     const gotToMusicText = ({ number, title, music, author }) => {
