@@ -1,9 +1,7 @@
 import React, { useState } from "react";
 import { Alert, View, ToastAndroid, FlatList, TouchableOpacity, Image, Dimensions } from "react-native";
 import { typeDevice } from "../../utils/Index";
-import { useTheme } from '@react-navigation/native';
 import mockMusicData from '../../utils/mockMusicData.json';
-import { useToast } from "react-native-toast-notifications";
 import { Container, ListView, SearchButton, SearchInput } from "../../style/SearchStyle";
 import { Author, ButtonTitle, Kids, Title } from "../../style";
 import { InfoMusic, List } from "../../style/LyricsStyle";
@@ -11,9 +9,7 @@ import themes from "../../style/themes";
 
 
 export default function Search({ navigation }) {
-    const toast = useToast();
     const [textSearch, setTextSearch] = useState('');
-    const { colors, dark } = useTheme();
     const [dataMusic, setDataMusic] = useState([]);
     const [dataMusicTemp, setDataMusicTemp] = useState([]);
 
@@ -35,17 +31,6 @@ export default function Search({ navigation }) {
                         }
                     ]
                 );
-
-            return toast.show(message,
-                {
-                    type: "danger",
-                    placement: "top",
-                    duration: 3000,
-                    offset: 30,
-                    animationType: "zoom-in"
-                }
-            )
-
         }
 
         if (dataMusicTemp.length <= 0) {
@@ -60,16 +45,6 @@ export default function Search({ navigation }) {
                         }
                     ]
                 );
-
-            return toast.show(notFoundMessage,
-                {
-                    type: "warning",
-                    placement: "top",
-                    duration: 3000,
-                    offset: 30,
-                    animationType: "zoom-in"
-                }
-            )
         }
 
     }
@@ -103,6 +78,13 @@ export default function Search({ navigation }) {
     }
 
     const widthScreen = Dimensions.get('window').width - 15;
+
+
+    const data = {
+        'sonho': require('../../assets/o_sonho.png'),
+        'caminhos': require('../../assets/caminhos.png'),
+        'undefined': require('../../assets/note_logo.png')
+    }
 
     return (
         <Container>
@@ -141,7 +123,7 @@ export default function Search({ navigation }) {
                         >
                             <List width={widthScreen}>
                                 <Image
-                                    source={require('../../assets/note_logo.png')}
+                                    source={data[item.album]}
                                     style={{ width: 45, height: 45, borderRadius: 8, marginRight: 10 }}
                                 />
                                 <InfoMusic width={widthScreen}>
