@@ -158,14 +158,15 @@ export default function App() {
               sceneContainerStyle={{ backgroundColor: themes.dark.background }}
               screenOptions={({ route }) => ({
                 tabBarHideOnKeyboard: true,
-                // tabBarLabelStyle: {
-                //   position: 'relative',
-                //   bottom: 10
-                // },
-                // tabBarIconStyle: {
-                //   bottom: 7,
-                //   position: 'relative'
-                // },
+                tabBarLabelStyle: {
+                  position: 'relative',
+                  bottom: 4,
+                  width: '100%'
+                },
+                tabBarIconStyle: {
+                  bottom: 1,
+                  position: 'relative'
+                },
                 tabBarIcon: ({ focused, color, size }) => {
                   let iconName;
                   if (route.name === 'Home') {
