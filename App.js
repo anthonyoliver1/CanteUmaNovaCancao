@@ -13,7 +13,6 @@ import { StatusBar } from 'expo-status-bar';
 import Music from './components/Music/Music';
 import * as NavigationBar from 'expo-navigation-bar';
 import { typeDevice } from './utils/Index';
-import { ToastProvider } from 'react-native-toast-notifications'
 import { ButtonTitle, Wrapper } from './style';
 import { ThemeProvider } from 'styled-components';
 import themes from './style/themes';
@@ -149,7 +148,6 @@ export default function App() {
 
   return (
     <ThemeProvider theme={themes.dark}>
-      <ToastProvider>
         <AppearanceProvider>
           <StatusBar translucent={true} style={themes.dark.barColor} />
           <NavigationContainer theme={themes.dark}>
@@ -198,7 +196,6 @@ export default function App() {
             </Tab.Navigator>
           </NavigationContainer>
         </AppearanceProvider>
-      </ToastProvider>
     </ThemeProvider>
   );
 }
