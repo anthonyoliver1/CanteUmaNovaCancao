@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Dimensions, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { Alert, Dimensions, ScrollView, StyleSheet, ToastAndroid, TouchableOpacity, View } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { Modalize } from 'react-native-modalize';
 import Slider from '@react-native-community/slider';
@@ -18,6 +18,7 @@ import {
 } from '../../style/MusicStyle';
 import { Wrapper } from '../../style';
 import themes from '../../style/themes';
+import { typeDevice } from '../../utils/Index';
 
 export default function Music({ route }) {
     const { musicTxt, audio, author, musicTitle } = route.params;
@@ -32,12 +33,7 @@ export default function Music({ route }) {
     const [progress, setProgress] = useState(0);
     const [duration, setDuration] = useState(0);
 
-    async function playOrPauseSound(params) {
-        if (musicStarted) {
-            params.includes('play') ? sound.playAsync() : sound.pauseAsync();
-            return;
-        }
-
+    async function loadMusic() {
         try {
             const { sound } = await Audio.Sound.createAsync(
                 require('../../assets/music/o_sonho.mp3')
@@ -45,14 +41,32 @@ export default function Music({ route }) {
             setSound(sound);
 
             sound.setOnPlaybackStatusUpdate(setInfoFile);
-
-            if (params != 'open') {
-                await sound.playAsync();
-                setMusicStarted(true);
-            }
-
         } catch (error) {
             console.log('Deu erro: ', error)
+            const notFoundMessage = 'Não foi possível carregar a música';
+
+            if (typeDevice.Android())
+                return ToastAndroid.show(notFoundMessage + ' :(', ToastAndroid.LONG);
+
+            return Alert.alert('Poxa :(', notFoundMessage,
+                [
+                    {
+                        text: 'Fechar'
+                    }
+                ]
+            );
+        }
+    }
+
+    async function playOrPauseSound(params) {
+        if (musicStarted) {
+            params.includes('play') ? sound.playAsync() : sound.pauseAsync();
+            return;
+        }
+
+        if (!params.includes('open')) {
+            await sound.playAsync();
+            setMusicStarted(true);
         }
     }
 
@@ -63,6 +77,10 @@ export default function Music({ route }) {
         (infoFile && infoFile.positionMillis) ? setProgress(timeM) : setProgress(0);
         (infoFile && infoFile.durationMillis) ? setDuration(du) : setDuration(0);
     }, [infoFile]);
+
+    useEffect(() => {
+        loadMusic();
+    }, [])
 
     useEffect(() => {
         return sound
@@ -85,7 +103,8 @@ export default function Music({ route }) {
     // })
 
     useEffect(() => {
-        setShowButtonPlay(Boolean(audio));
+        const show = musicTitle.includes('O Sonho')
+        setShowButtonPlay(Boolean(show));
     }, [audio])
 
     const showModalMusicAudio = () => {
@@ -104,11 +123,11 @@ export default function Music({ route }) {
     }
 
     const forwardButton = () => {
-        if (infoFile && infoFile.positionMillis) sound.setPositionAsync(infoFile.positionMillis + 30000);
+        if (infoFile && infoFile.positionMillis) sound.setPositionAsync(infoFile.positionMillis + 10000);
     }
 
     const backwardButton = () => {
-        if (infoFile && infoFile.positionMillis) sound.setPositionAsync(infoFile.positionMillis - 30000);
+        if (infoFile && infoFile.positionMillis) sound.setPositionAsync(infoFile.positionMillis - 10000);
     }
 
     const advancedMusic = ({ status, value }) => {
@@ -177,11 +196,9 @@ export default function Music({ route }) {
                 velocity={2000}
                 onOpened={() => {
                     setMarginText('270px');
-                    playOrPauseSound('open');
                 }}
                 onClosed={() => {
                     setMarginText('60px');
-                    sound.unloadAsync()
                 }}
             >
                 <ContentHeader>
@@ -214,7 +231,7 @@ export default function Music({ route }) {
 
                     <MusicControl>
                         <TouchableOpacity onPress={backwardButton}>
-                            <MaterialIcons name="replay-30" size={35} color='#FFF' />
+                            <MaterialIcons name="replay-10" size={40} color='#FFF' />
                         </TouchableOpacity>
 
                         <TouchableOpacity onPress={playOrPause} style={style.playAndPause}>
@@ -222,7 +239,7 @@ export default function Music({ route }) {
                         </TouchableOpacity>
 
                         <TouchableOpacity onPress={forwardButton}>
-                            <MaterialIcons name="forward-30" size={35} color='#FFF' />
+                            <MaterialIcons name="forward-10" size={40} color='#FFF' />
                         </TouchableOpacity>
                     </MusicControl>
                 </ProgressConstainer>
