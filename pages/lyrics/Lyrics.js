@@ -35,6 +35,7 @@ export default function Lyrics({ navigation }) {
         <Container>
             <FlatList
                 data={mockMusicData}
+                initialNumToRender={10}
                 renderItem={({ item, index, separators }) => (
                     <TouchableOpacity
                         key={item.number}

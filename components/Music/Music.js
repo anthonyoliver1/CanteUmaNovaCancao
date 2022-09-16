@@ -32,6 +32,7 @@ export default function Music({ route }) {
     const [infoFile, setInfoFile] = useState({});
     const [progress, setProgress] = useState(0);
     const [duration, setDuration] = useState(0);
+    const [isMounted, setIsMounted] = useState(false);
 
     async function loadMusic() {
         try {
@@ -79,15 +80,15 @@ export default function Music({ route }) {
     }, [infoFile]);
 
     useEffect(() => {
+        setIsMounted(!isMounted)
         loadMusic();
     }, [])
 
     useEffect(() => {
-        return sound
-            ? () => {
-                sound.unloadAsync();
-            }
-            : undefined;
+        return () => {
+            sound && sound.unloadAsync();
+            setIsMounted(!isMounted)
+        }
     }, [sound]);
 
     // const checkFile = async () => {
@@ -184,66 +185,67 @@ export default function Music({ route }) {
                 </TouchableOpacity>
                 : null
             }
+            {isMounted &&
+                <Modalize ref={modalizeRef}
+                    // snapPoint={330} tem que ter o valor menor que o modalHeight
+                    modalHeight={270}
+                    modalStyle={{ backgroundColor: themes.dark.colors.card, padding: 30 }}
+                    handleStyle={{ backgroundColor: "gray" }}
+                    handlePosition='inside'
+                    withOverlay={false}
+                    disableScrollIfPossible={true}
+                    velocity={1}
+                    onOpened={() => {
+                        setMarginText('270px');
+                    }}
+                    onClosed={() => {
+                        setMarginText('60px');
+                    }}
+                >
+                    <ContentHeader>
+                        <MusicName>
+                            {musicTitle}
+                        </MusicName>
+                        <AuthorMusic>
+                            {author}
+                        </AuthorMusic>
+                    </ContentHeader>
 
-            <Modalize ref={modalizeRef}
-                // snapPoint={330}
-                modalHeight={270}
-                modalStyle={{ backgroundColor: themes.dark.colors.card, padding: 30 }}
-                handleStyle={{ backgroundColor: "gray" }}
-                handlePosition='inside'
-                withOverlay={false}
-                disableScrollIfPossible={true}
-                velocity={2000}
-                onOpened={() => {
-                    setMarginText('270px');
-                }}
-                onClosed={() => {
-                    setMarginText('60px');
-                }}
-            >
-                <ContentHeader>
-                    <MusicName>
-                        {musicTitle}
-                    </MusicName>
-                    <AuthorMusic>
-                        {author}
-                    </AuthorMusic>
-                </ContentHeader>
+                    <ProgressConstainer>
+                        <View>
+                            <Slider
+                                value={progress}
+                                minimumValue={0}
+                                maximumValue={duration}
+                                maximumTrackTintColor='gray'
+                                minimumTrackTintColor='#0B97D3'
+                                thumbTintColor='#0B97D3'
+                                onSlidingStart={value => advancedMusic({ status: 'start', value: value })}
+                                onSlidingComplete={value => advancedMusic({ status: 'completed', value: value })}
+                            />
+                        </View>
 
-                <ProgressConstainer>
-                    <View>
-                        <Slider
-                            value={progress}
-                            minimumValue={0}
-                            maximumValue={duration}
-                            maximumTrackTintColor='gray'
-                            minimumTrackTintColor='#0B97D3'
-                            thumbTintColor='#0B97D3'
-                            onSlidingStart={value => advancedMusic({ status: 'start', value: value })}
-                            onSlidingComplete={value => advancedMusic({ status: 'completed', value: value })}
-                        />
-                    </View>
+                        <ProgressNummber>
+                            <Time> {formatTime(progress)} </Time>
+                            <Time> {formatTime(duration)} </Time>
+                        </ProgressNummber>
 
-                    <ProgressNummber>
-                        <Time> {formatTime(progress)} </Time>
-                        <Time> {formatTime(duration)} </Time>
-                    </ProgressNummber>
+                        <MusicControl>
+                            <TouchableOpacity onPress={backwardButton}>
+                                <MaterialIcons name="replay-10" size={40} color='#FFF' />
+                            </TouchableOpacity>
 
-                    <MusicControl>
-                        <TouchableOpacity onPress={backwardButton}>
-                            <MaterialIcons name="replay-10" size={40} color='#FFF' />
-                        </TouchableOpacity>
+                            <TouchableOpacity onPress={playOrPause} style={style.playAndPause}>
+                                <MaterialIcons name={typeIcon} size={40} color='#fff' />
+                            </TouchableOpacity>
 
-                        <TouchableOpacity onPress={playOrPause} style={style.playAndPause}>
-                            <MaterialIcons name={typeIcon} size={40} color='#fff' />
-                        </TouchableOpacity>
-
-                        <TouchableOpacity onPress={forwardButton}>
-                            <MaterialIcons name="forward-10" size={40} color='#FFF' />
-                        </TouchableOpacity>
-                    </MusicControl>
-                </ProgressConstainer>
-            </Modalize>
+                            <TouchableOpacity onPress={forwardButton}>
+                                <MaterialIcons name="forward-10" size={40} color='#FFF' />
+                            </TouchableOpacity>
+                        </MusicControl>
+                    </ProgressConstainer>
+                </Modalize>
+            }
         </Wrapper>
     );
 }

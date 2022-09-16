@@ -16,6 +16,7 @@ import { typeDevice } from './utils/Index';
 import { ButtonTitle, Wrapper } from './style';
 import { ThemeProvider } from 'styled-components';
 import themes from './style/themes';
+import MusicCipher from './components/Music/MusicCipher';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -29,16 +30,16 @@ function HomeScreen({ navigation }) {
 }
 
 function CipherScreen({ navigation }) {
-  Alert.alert('Em breve!', 'Logo logo teremos cifras 🎉', [
-    {
-      text: 'Fechar',
-      onPress: () => navigation.navigate('Home')
-    }
-  ])
+  // Alert.alert('Em breve!', 'Logo logo teremos cifras 🎉', [
+  //   {
+  //     text: 'Fechar',
+  //     onPress: () => navigation.navigate('Home')
+  //   }
+  // ])
 
   return (
     <Wrapper>
-      <Pressable
+      {/* <Pressable
         onPress={() => navigation.navigate('Music')}
         style={
           ({ pressed }) => [
@@ -52,8 +53,8 @@ function CipherScreen({ navigation }) {
         }
       >
         <ButtonTitle>Ir para Música</ButtonTitle>
-      </Pressable>
-      <Cipher />
+      </Pressable> */}
+      <Cipher navigation={navigation} />
     </Wrapper >
   );
 }
@@ -133,6 +134,36 @@ function SearchScreenStack({ navigation, route }) {
   );
 }
 
+function CipherScreenStack({ navigation, route }) {
+  const visible = route.params?.params.musicTitle.length < 25;
+  const widthScreen = !visible ? Dimensions.get('window').width - 130 : null;
+
+  return (
+    <Stack.Navigator screenOptions={{ headerShown: true }}>
+      <Stack.Screen name="CipherStack" component={CipherScreen} options={{ title: 'Cifras', headerTitleAlign: 'center' }} />
+      <Stack.Screen
+        name="MusicCipher"
+        component={MusicCipher}
+        options={
+          {
+            title: route.params?.params.musicTitle,
+            headerBackTitleVisible: visible,
+            headerTitleAlign: 'center',
+            headerBackTitleStyle: {
+              fontSize: 13
+            },
+            headerTitleStyle: {
+              width: widthScreen,
+              textAlign: 'center',
+              alignSelf: 'center',
+            }
+          }
+        }
+      />
+    </Stack.Navigator>
+  );
+}
+
 export default function App() {
 
   if (typeDevice.Android()) {
@@ -162,7 +193,7 @@ export default function App() {
                   width: '100%'
                 },
                 tabBarIconStyle: {
-                  bottom: 1,
+                  bottom: -1,
                   position: 'relative'
                 },
                 tabBarIcon: ({ focused, color, size }) => {
@@ -190,7 +221,7 @@ export default function App() {
               })}
             >
               <Tab.Screen name="Home" component={HomeStackMusic} options={{ headerShown: false, title: 'Música' }} />
-              <Tab.Screen name="Cipher" component={CipherScreen} options={{ title: 'Cifras', headerTitleAlign: 'center' }} />
+              <Tab.Screen name="Cipher" component={CipherScreenStack} options={{ headerShown: false, title: 'Cifras' }} />
               <Tab.Screen name="Search" component={SearchScreenStack} options={{ headerShown: false, title: 'Buscar' }} />
               <Tab.Screen name="About" component={AboutScreen} options={{ title: 'Mais', headerTitleAlign: 'center' }} />
             </Tab.Navigator>

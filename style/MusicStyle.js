@@ -12,7 +12,7 @@ export const MusicLetter = styled.Text`
     text-align: center;
     line-height: 25px;
     font-size: 16px;
-    margin-bottom: ${props => props.margin};
+    margin-bottom: ${props => props.margin ? props.margin : '60px'};
     color: ${props => props.theme.color};
 `;
 
