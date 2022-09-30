@@ -187,6 +187,7 @@ export default function App() {
               sceneContainerStyle={{ backgroundColor: themes.dark.background }}
               screenOptions={({ route }) => ({
                 tabBarHideOnKeyboard: true,
+                tabBarLabelPosition: 'below-icon',
                 tabBarLabelStyle: {
                   position: 'relative',
                   bottom: 4,
