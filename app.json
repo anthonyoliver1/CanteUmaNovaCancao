@@ -25,6 +25,11 @@
         "foregroundImage": "./assets/note_logo.png"
       },
       "package": "com.anthony.dev.AnthonyOliveira"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "5ae4da61-7aa9-43f0-a20c-e821698d8055"
+      }
     }
   }
 }

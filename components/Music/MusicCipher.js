@@ -21,13 +21,3 @@ export default function MusicCipher({ route }) {
         </Wrapper>
     );
 }
-/*
-    Apple Watch Series 8 -> Ciclo mestrual e ovulação.
-    Apple Watch SE -> chip mais rápido.
-    Apple Watch Ultra -> Focado para esportistas.
-
-    AirPods Pro -> novo chip e mesmo design.
-
-    iPhone 14 e iPhone 14 Plus -> 
-    
-*/ 

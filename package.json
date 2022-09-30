@@ -10,10 +10,11 @@
     "eject": "expo eject",
     "localhost": "npm install && expo start --localhost",
     "tunnel": "npm install && expo start --host tunnel",
-    "build_android": "expo build:android -t apk"
+    "build_android": "expo build:android -t apk",
+    "build_android_eas": "eas build --platform android",
+    "build_ios_eas": "eas build --platform ios"
   },
   "dependencies": {
-    "@expo/ngrok": "^4.1.0",
     "@react-native-community/slider": "^4.1.12",
     "@react-navigation/bottom-tabs": "^6.0.9",
     "@react-navigation/native": "^6.0.10",
