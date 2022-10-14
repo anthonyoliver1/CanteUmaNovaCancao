@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Alert, Image, Linking, Modal, Platform, ScrollView, Share, Text, ToastAndroid, View } from "react-native";
 import { typeDevice } from "../../utils/Index";
-import * as WebBrowser from 'expo-web-browser';
 import qs from 'qs';
 import { RadioButton } from 'react-native-paper';
 import { AboutButton, Container, ContainerModal, Description, ModalContent, ModalTitle, ModalWrapper, VersionApp, Wrapper } from "../../style/AboutStyle";
