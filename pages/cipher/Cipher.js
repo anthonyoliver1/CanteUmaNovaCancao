@@ -1,17 +1,27 @@
 import React, { useEffect, useState } from 'react';
 import { Image } from 'react-native';
 import { Dimensions, FlatList, TouchableOpacity, View } from 'react-native';
+import { getAllMusics } from '../../services/http';
 import { Author, Title } from '../../style';
 import { Container, InfoMusic, List } from '../../style/LyricsStyle';
-import mockMusicData from '../../utils/mockMusicData.json';
 
 
 export default function Cipher({ navigation }) {
     const [onlyCipher, setOnlyCipher] = useState({});
 
     useEffect(() => {
-        setOnlyCipher(mockMusicData.filter(cipher => cipher.music.cifra));
-    }, [])
+        allMusics();
+    }, []);
+
+    const allMusics = async () => {
+        const data = await getAllMusics();
+        const orderCihpher = data ? data
+            .filter(cipher => cipher.music.cifra)
+            .sort((a, b) => a.title.localeCompare(b.title))
+        : [];
+
+        setOnlyCipher(orderCihpher);
+    }
 
     const gotToMusicCipher = ({ number, title, music, author }) => {
         const { text, audio, cifra } = music;

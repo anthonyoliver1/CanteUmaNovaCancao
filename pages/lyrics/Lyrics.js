@@ -1,10 +1,25 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Dimensions, FlatList, Image, Platform, TouchableOpacity, View } from 'react-native';
 import mockMusicData from '../../utils/mockMusicData.json';
 import { Author, Kids, Title } from '../../style';
 import { Container, InfoMusic, List } from '../../style/LyricsStyle';
+import { getAllMusics } from '../../services/http';
 
 export default function Lyrics({ navigation }) {
+    const [musics, setMusics] = useState([]);
+
+    useEffect(() => {
+        allMusics();
+    }, []);
+
+    const allMusics = async () => {
+        const data = await getAllMusics();
+        const allMusicsLetter = data ? data
+            .sort((a, b) => a.author.localeCompare(b.author))
+        : [];
+
+        setMusics(allMusicsLetter);
+    }
 
     const gotToMusicText = ({ number, title, music, author }) => {
         const { text, audio } = music;
@@ -34,7 +49,7 @@ export default function Lyrics({ navigation }) {
     return (
         <Container>
             <FlatList
-                data={mockMusicData}
+                data={musics}
                 initialNumToRender={10}
                 renderItem={({ item, index, separators }) => (
                     <TouchableOpacity

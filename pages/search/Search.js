@@ -1,17 +1,29 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Alert, View, ToastAndroid, FlatList, TouchableOpacity, Image, Dimensions } from "react-native";
 import { typeDevice } from "../../utils/Index";
-import mockMusicData from '../../utils/mockMusicData.json';
 import { Container, ListView, SearchButton, SearchInput } from "../../style/SearchStyle";
 import { Author, ButtonTitle, Kids, Title } from "../../style";
 import { InfoMusic, List } from "../../style/LyricsStyle";
 import themes from "../../style/themes";
+import { getAllMusics } from "../../services/http";
 
 
 export default function Search({ navigation }) {
     const [textSearch, setTextSearch] = useState('');
     const [dataMusic, setDataMusic] = useState([]);
     const [dataMusicTemp, setDataMusicTemp] = useState([]);
+    const [musics, setMusics] = useState([]);
+
+    useEffect(() => {
+        allMusics();
+    }, []);
+
+    const allMusics = async () => {
+        const data = await getAllMusics();
+        const allMusicsLetter = data ? data : [];
+
+        setMusics(allMusicsLetter);
+    }
 
     const searchMusic = () => {
         const message = 'Digite o nome da música para buscar';
@@ -51,9 +63,8 @@ export default function Search({ navigation }) {
 
     const searcMusicTemp = (value) => {
         const textSearch = value.trim().toLocaleLowerCase();
-        const mockMusic = JSON.parse(JSON.stringify(mockMusicData));
-        const filterTitle = mockMusic.filter(i => i.title.toLocaleLowerCase().includes(textSearch));
-        const filterMusicLetter = mockMusic.filter(i => i.music.text.toLocaleLowerCase().includes(textSearch))
+        const filterTitle = musics.filter(i => i.title.toLocaleLowerCase().includes(textSearch));
+        const filterMusicLetter = musics.filter(i => i.music.text.toLocaleLowerCase().includes(textSearch));
         const filtered = filterTitle.length ? filterTitle : filterMusicLetter;
 
         setTextSearch(textSearch);
