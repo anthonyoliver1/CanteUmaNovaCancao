@@ -201,6 +201,7 @@ export default function Music({ route }) {
                     onClosed={() => {
                         setMarginText('60px');
                     }}
+                    scrollViewProps={{ scrollEnabled: false, showsVerticalScrollIndicator: false }}
                 >
                     <ContentHeader>
                         <MusicName>
