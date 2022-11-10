@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Alert, View, ToastAndroid, FlatList, TouchableOpacity, Image, Dimensions } from "react-native";
+import { Alert, View, ToastAndroid, FlatList, TouchableOpacity, Image, Dimensions, Keyboard, TouchableWithoutFeedback } from "react-native";
 import { typeDevice } from "../../utils/Index";
 import mockMusicData from '../../utils/mockMusicData.json';
 import { Container, ListView, SearchButton, SearchInput } from "../../style/SearchStyle";
@@ -87,64 +87,66 @@ export default function Search({ navigation }) {
     }
 
     return (
-        <Container>
-            <SearchInput
-                placeholder={"Pesquisar música ..."}
-                placeholderTextColor={'#c0c0c0'}
-                onChangeText={text => searcMusicTemp(text)}
-                onSubmitEditing={searchMusic}
-                selectionColor={themes.dark.colors.primary}
-            />
-            <SearchButton
-                style={
-                    ({ pressed }) => [
-                        {
-                            backgroundColor: pressed
-                                ? '#24b1ec'
-                                : '#0B97D3'
-                        },
-                    ]
-                }
-                onPress={() => searchMusic()}
-            >
-                <ButtonTitle>Pesquisar</ButtonTitle>
-            </SearchButton>
-
-            <ListView>
-                <FlatList
-                    data={dataMusic}
-                    renderItem={({ item, index, separators }) => (
-                        <TouchableOpacity
-                            key={item.number}
-                            onPress={() => gotToMusicText(item)}
-                            onShowUnderlay={separators.highlight}
-                            onHideUnderlay={separators.unhighlight}
-                            activeOpacity={0.4}
-                        >
-                            <List width={widthScreen}>
-                                <Image
-                                    source={data[item.album]}
-                                    style={{ width: 45, height: 45, borderRadius: 8, marginRight: 10 }}
-                                />
-                                <InfoMusic width={widthScreen}>
-                                    <View>
-                                        <Title>{item.title}</Title>
-                                        <Author>{item.author}</Author>
-                                    </View>
-                                    <View>
-                                        {item.kids ?
-                                            <Kids>kids</Kids>
-                                            : null
-                                        }
-                                    </View>
-                                </InfoMusic>
-
-                            </List>
-                        </TouchableOpacity>
-                    )}
-                    keyExtractor={item => item.number}
+        <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+            <Container>
+                <SearchInput
+                    placeholder={"Pesquisar música ..."}
+                    placeholderTextColor={'#c0c0c0'}
+                    onChangeText={text => searcMusicTemp(text)}
+                    onSubmitEditing={searchMusic}
+                    selectionColor={themes.dark.colors.primary}
                 />
-            </ListView>
-        </Container>
+                <SearchButton
+                    style={
+                        ({ pressed }) => [
+                            {
+                                backgroundColor: pressed
+                                    ? '#24b1ec'
+                                    : '#0B97D3'
+                            },
+                        ]
+                    }
+                    onPress={() => searchMusic()}
+                >
+                    <ButtonTitle>Pesquisar</ButtonTitle>
+                </SearchButton>
+
+                <ListView>
+                    <FlatList
+                        data={dataMusic}
+                        renderItem={({ item, index, separators }) => (
+                            <TouchableOpacity
+                                key={item.number}
+                                onPress={() => gotToMusicText(item)}
+                                onShowUnderlay={separators.highlight}
+                                onHideUnderlay={separators.unhighlight}
+                                activeOpacity={0.4}
+                            >
+                                <List width={widthScreen}>
+                                    <Image
+                                        source={data[item.album]}
+                                        style={{ width: 45, height: 45, borderRadius: 8, marginRight: 10 }}
+                                    />
+                                    <InfoMusic width={widthScreen}>
+                                        <View>
+                                            <Title>{item.title}</Title>
+                                            <Author>{item.author}</Author>
+                                        </View>
+                                        <View>
+                                            {item.kids ?
+                                                <Kids>kids</Kids>
+                                                : null
+                                            }
+                                        </View>
+                                    </InfoMusic>
+
+                                </List>
+                            </TouchableOpacity>
+                        )}
+                        keyExtractor={item => item.number}
+                    />
+                </ListView>
+            </Container>
+        </TouchableWithoutFeedback>
     )
 };
