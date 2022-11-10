@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { Alert, ToastAndroid } from 'react-native';
-import { typeDevice } from '../utils/Index';
+import { OSDevice, typeDevice } from '../utils/Index';
 
 export async function callApiMethodGet(
     base_url,
@@ -11,9 +11,9 @@ export async function callApiMethodGet(
     try {
         const headers = {
             'Content-Type': 'application/json',
-            'user-agent': 'CUNC-APP'
+            'user-agent': `CUNC-APP-${OSDevice()}`
         }
-        const { data } = await axios.get(url, headers);
+        const { data } = await axios.get(url, { headers });
         return data;
     } catch (error) {
         const messageError = 'Não foi possível carregar as músicas, feche e abra o app!'
@@ -24,8 +24,8 @@ export async function callApiMethodGet(
                     text: 'Fechar'
                 }
             ])
-        : ToastAndroid.show(messageError, ToastAndroid.LONG)
+            : ToastAndroid.show(messageError, ToastAndroid.LONG)
 
-        console.error('Não foi possivel fazer a requisição', error)
+        console.error('Não foi possivel fazer a requisição', error.error)
     }
 }
