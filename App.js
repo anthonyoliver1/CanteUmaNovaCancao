@@ -1,22 +1,22 @@
 import React, { useEffect } from 'react';
-import { Alert, Pressable, StyleSheet } from 'react-native';
+import { Alert, Dimensions, Pressable, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
-import { DarkTheme, NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer } from '@react-navigation/native';
 import Lyrics from './pages/lyrics/Lyrics';
 import Cipher from './pages/cipher/Cipher';
 import Search from './pages/search/Search';
 import About from './pages/About/About';
-import { AppearanceProvider, useColorScheme } from 'react-native-appearance';
+import { AppearanceProvider } from 'react-native-appearance';
 import { StatusBar } from 'expo-status-bar';
 import Music from './components/Music/Music';
 import * as NavigationBar from 'expo-navigation-bar';
 import { typeDevice } from './utils/Index';
-import { ToastProvider } from 'react-native-toast-notifications'
-import { ButtonTitle, Title, Wrapper } from './style';
+import { ButtonTitle, Wrapper } from './style';
 import { ThemeProvider } from 'styled-components';
 import themes from './style/themes';
+import MusicCipher from './components/Music/MusicCipher';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -30,31 +30,31 @@ function HomeScreen({ navigation }) {
 }
 
 function CipherScreen({ navigation }) {
-  Alert.alert('Em breve!', 'Logo logo teremos cifras 🎉', [
-    {
-      text: 'Fechar',
-      onPress: () => navigation.navigate('Home')
-    }
-  ])
+  // Alert.alert('Em breve!', 'Logo logo teremos cifras 🎉', [
+  //   {
+  //     text: 'Fechar',
+  //     onPress: () => navigation.navigate('Home')
+  //   }
+  // ])
 
   return (
     <Wrapper>
-      <Pressable
+      {/* <Pressable
         onPress={() => navigation.navigate('Music')}
         style={
           ({ pressed }) => [
             {
               backgroundColor: pressed
                 ? '#24b1ec'
-                : '#5bc8f5'
+                : '#0B97D3'
             },
             style.button
           ]
         }
       >
         <ButtonTitle>Ir para Música</ButtonTitle>
-      </Pressable>
-      <Cipher />
+      </Pressable> */}
+      <Cipher navigation={navigation} />
     </Wrapper >
   );
 }
@@ -66,8 +66,7 @@ function SearchScreen({ navigation }) {
     </Wrapper>
   );
 }
-function AboutScreen({ navigation, route }) {
-  // userTheme = route.params?.themeColor
+function AboutScreen({ navigation }) {
   return (
     <Wrapper>
       <About navigation={navigation} />
@@ -76,16 +75,88 @@ function AboutScreen({ navigation, route }) {
 }
 
 function HomeStackMusic({ navigation, route }) {
+  const visible = route.params?.params.musicTitle.length < 25;
+  const widthScreen = !visible ? Dimensions.get('window').width - 130 : null;
+
   return (
     <Stack.Navigator screenOptions={{ headerShown: true }}>
-      <Stack.Screen name="Music" component={HomeScreen} options={{ title: 'Música' }} />
+      <Stack.Screen name="Music" component={HomeScreen} options={{ title: 'Música', headerTitleAlign: 'center' }} />
       <Stack.Screen
         name="MusicLetter"
         component={Music}
         options={
           {
             title: route.params?.params.musicTitle,
-            headerBackTitle: 'Voltar',
+            headerBackTitleVisible: visible,
+            headerTitleAlign: 'center',
+            headerBackTitleStyle: {
+              fontSize: 13
+            },
+            headerTitleStyle: {
+              width: widthScreen,
+              textAlign: 'center',
+              alignSelf: 'center',
+            }
+          }
+        }
+      />
+    </Stack.Navigator>
+  );
+}
+
+function SearchScreenStack({ navigation, route }) {
+  const visible = route.params?.params.musicTitle.length < 25;
+  const widthScreen = !visible ? Dimensions.get('window').width - 130 : null;
+
+  return (
+    <Stack.Navigator screenOptions={{ headerShown: true }}>
+      <Stack.Screen name="SearchStack" component={SearchScreen} options={{ title: 'Buscar', headerTitleAlign: 'center' }} />
+      <Stack.Screen
+        name="MusicLetterSearch"
+        component={Music}
+        options={
+          {
+            title: route.params?.params.musicTitle,
+            headerBackTitleVisible: visible,
+            headerTitleAlign: 'center',
+            headerBackTitleStyle: {
+              fontSize: 13,
+            },
+            headerTitleStyle: {
+              width: widthScreen,
+              textAlign: 'center',
+              alignSelf: 'center',
+            }
+          }
+        }
+      />
+    </Stack.Navigator>
+  );
+}
+
+function CipherScreenStack({ navigation, route }) {
+  const visible = route.params?.params.musicTitle.length < 25;
+  const widthScreen = !visible ? Dimensions.get('window').width - 130 : null;
+
+  return (
+    <Stack.Navigator screenOptions={{ headerShown: true }}>
+      <Stack.Screen name="CipherStack" component={CipherScreen} options={{ title: 'Cifras', headerTitleAlign: 'center' }} />
+      <Stack.Screen
+        name="MusicCipher"
+        component={MusicCipher}
+        options={
+          {
+            title: route.params?.params.musicTitle,
+            headerBackTitleVisible: visible,
+            headerTitleAlign: 'center',
+            headerBackTitleStyle: {
+              fontSize: 13
+            },
+            headerTitleStyle: {
+              width: widthScreen,
+              textAlign: 'center',
+              alignSelf: 'center',
+            }
           }
         }
       />
@@ -94,31 +165,38 @@ function HomeStackMusic({ navigation, route }) {
 }
 
 export default function App() {
-  const scheme = useColorScheme();
-  const myTheme = themes[scheme] || themes.dark;
 
-  useEffect(() => {
-    if (typeDevice.Android()) {
-      if (scheme === 'dark') {
-        NavigationBar.setBackgroundColorAsync("#121212");
-        NavigationBar.setButtonStyleAsync("light");
-        return;
-      }
+  if (typeDevice.Android()) {
+    NavigationBar.setButtonStyleAsync("light");
+    NavigationBar.setBackgroundColorAsync("#1A1A1A");
+  }
 
-      NavigationBar.setBackgroundColorAsync("#FFFFFF");
-      NavigationBar.setButtonStyleAsync("dark");
-      return;
-    }
-  }, [scheme])
+  let heightScreen = null;
+
+  if (Dimensions.get('window').height < 600) {
+    heightScreen = Dimensions.get('window').height - 510
+  }
 
   return (
-    <ThemeProvider theme={myTheme}>
-      <ToastProvider>
+    <ThemeProvider theme={themes.dark}>
         <AppearanceProvider>
-          <StatusBar translucent={true} style={myTheme.barColor} />
-          <NavigationContainer theme={myTheme}>
+          <StatusBar translucent={true} style={themes.dark.barColor} />
+          <NavigationContainer theme={themes.dark}>
             <Tab.Navigator
+              backBehavior='history'
+              sceneContainerStyle={{ backgroundColor: themes.dark.background }}
               screenOptions={({ route }) => ({
+                tabBarHideOnKeyboard: true,
+                tabBarLabelPosition: 'below-icon',
+                tabBarLabelStyle: {
+                  position: 'relative',
+                  bottom: 4,
+                  width: '100%'
+                },
+                tabBarIconStyle: {
+                  bottom: -1,
+                  position: 'relative'
+                },
                 tabBarIcon: ({ focused, color, size }) => {
                   let iconName;
                   if (route.name === 'Home') {
@@ -135,21 +213,21 @@ export default function App() {
 
                   return <Ionicons name={iconName} size={size} color={color} />;
                 },
-                tabBarActiveTintColor: '#5bc8f5',
+                tabBarActiveTintColor: '#0B97D3',
                 tabBarInactiveTintColor: 'gray',
                 tabBarStyle: {
-                  overflow: 'hidden'
+                  flex: heightScreen ? null : 0.08,
+                  height: heightScreen ? heightScreen : null
                 },
               })}
             >
               <Tab.Screen name="Home" component={HomeStackMusic} options={{ headerShown: false, title: 'Música' }} />
-              <Tab.Screen name="Cipher" component={CipherScreen} options={{ title: 'Cifras' }} />
-              <Tab.Screen name="Search" component={SearchScreen} options={{ title: 'Buscar' }} />
-              <Tab.Screen name="About" component={AboutScreen} options={{ title: 'Mais' }} />
+              <Tab.Screen name="Cipher" component={CipherScreenStack} options={{ headerShown: false, title: 'Cifras' }} />
+              <Tab.Screen name="Search" component={SearchScreenStack} options={{ headerShown: false, title: 'Buscar' }} />
+              <Tab.Screen name="About" component={AboutScreen} options={{ title: 'Mais', headerTitleAlign: 'center' }} />
             </Tab.Navigator>
           </NavigationContainer>
         </AppearanceProvider>
-      </ToastProvider>
     </ThemeProvider>
   );
 }

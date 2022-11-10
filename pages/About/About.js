@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Alert, Image, Linking, Modal, Platform, ScrollView, Share, ToastAndroid, View } from "react-native";
+import { Alert, Image, Linking, Modal, Platform, ScrollView, Share, Text, ToastAndroid, View } from "react-native";
 import { typeDevice } from "../../utils/Index";
 import * as WebBrowser from 'expo-web-browser';
 import qs from 'qs';
 import { RadioButton } from 'react-native-paper';
 import { AboutButton, Container, ContainerModal, Description, ModalContent, ModalTitle, ModalWrapper, VersionApp, Wrapper } from "../../style/AboutStyle";
-import { ButtonTitle } from "../../style";
-import themes from "../../style/themes";
+import { B, ButtonTitle } from "../../style";
+import appInfo from "../../app.json";
 
 export default function About({ navigation }) {
 
@@ -27,20 +27,20 @@ export default function About({ navigation }) {
         try {
             if (typeDevice.mobile()) {
                 const linkShare = typeDevice.iOS() ? '' : 'https://google.com.br'
-                const result = await Share.share({
+                await Share.share({
                     message: 'Venha e Cante Uma Nova Canção com a gente!!' + `${"\n\n" + linkShare}`,
                     url: 'https://apple.com/br',
                     title: 'Cante Uma Nova Canção'
                 });
-                if (result.action === Share.sharedAction) {
-                    if (result.activityType) {
-                        // shared with activity type of result.activityType
-                    } else {
-                        // shared
-                    }
-                } else if (result.action === Share.dismissedAction) {
-                    // dismissed
-                }
+                // if (result.action === Share.sharedAction) {
+                //     if (result.activityType) {
+                //         // shared with activity type of result.activityType
+                //     } else {
+                //         // shared
+                //     }
+                // } else if (result.action === Share.dismissedAction) {
+                //     // dismissed
+                // }
                 return;
             }
         } catch (error) {
@@ -79,16 +79,16 @@ export default function About({ navigation }) {
         return Linking.openURL(url);
     }
 
-    const changeTheme = (themeSelected) => {
-        navigation.navigate(
-            'About',
-            {
-                screen: 'About',
-                themeColor: themeSelected,
-            }
-        )
-        setValueTheme(themeSelected)
-    }
+    // const changeTheme = (themeSelected) => {
+    //     navigation.navigate(
+    //         'About',
+    //         {
+    //             screen: 'About',
+    //             themeColor: themeSelected,
+    //         }
+    //     )
+    //     setValueTheme(themeSelected)
+    // }
 
     return (
         <Container>
@@ -110,7 +110,7 @@ export default function About({ navigation }) {
                                 {
                                     backgroundColor: pressed
                                         ? '#24b1ec'
-                                        : '#5bc8f5'
+                                        : '#0B97D3'
                                 }
                             ]
                         }
@@ -124,7 +124,7 @@ export default function About({ navigation }) {
                                 {
                                     backgroundColor: pressed
                                         ? '#24b1ec'
-                                        : '#5bc8f5'
+                                        : '#0B97D3'
                                 }
                             ]
                         }
@@ -138,7 +138,7 @@ export default function About({ navigation }) {
                                 {
                                     backgroundColor: pressed
                                         ? '#24b1ec'
-                                        : '#5bc8f5'
+                                        : '#0B97D3'
                                 }
                             ]
                         } onPress={() => sendEmail()}>
@@ -146,7 +146,7 @@ export default function About({ navigation }) {
                         </AboutButton>
                     </View>
 
-                    <Modal
+                    {/* <Modal
                         animationType="fade"
                         transparent={true}
                         visible={modalVisible}
@@ -167,7 +167,7 @@ export default function About({ navigation }) {
                                         {
                                             backgroundColor: pressed
                                                 ? '#24b1ec'
-                                                : '#5bc8f5'
+                                                : '#0B97D3'
                                         }
                                     ]}
                                     onPress={() => setModalVisible(!modalVisible)}
@@ -176,25 +176,26 @@ export default function About({ navigation }) {
                                 </AboutButton>
                             </ModalWrapper>
                         </ContainerModal>
-                    </Modal>
+                    </Modal> */}
 
-                    <AboutButton
+                    {/* <AboutButton
                         style={({ pressed }) => [
                             {
                                 backgroundColor: pressed
                                     ? '#24b1ec'
-                                    : '#5bc8f5'
+                                    : '#0B97D3'
                             }
                         ]}
                         onPress={() => setModalVisible(true)}
                     >
                         <ButtonTitle>Tema</ButtonTitle>
-                    </AboutButton>
+                    </AboutButton> */}
 
                     <VersionApp>
-                        Versão 1.0.0 {"\n"}
-                        OS: {OS}{"\n\n"}
+                        Versão: <B>{appInfo.expo.version}</B> {"\n"}
+                        OS: <B>{OS}</B>{"\n\n"}
                         Beta
+                        {/* <Text style={{fontSize: 30}}>🎧</Text> */}
                     </VersionApp>
                 </Wrapper>
             </ScrollView >

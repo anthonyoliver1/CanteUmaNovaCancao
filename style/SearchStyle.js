@@ -11,7 +11,7 @@ export const Container = styled.View`
 export const SearchInput = styled.TextInput`
     border-width: 2px;
     border-radius: 20px;
-    border-color: #5bc8f5;
+    border-color: #0B97D3;
     height: 40px;
     padding: 10px;
     margin-bottom: 10px;
@@ -30,4 +30,5 @@ export const SearchButton = styled.Pressable`
 export const ListView = styled.View`
     width: 100%;
     flex: 1;
+    align-items: center;
 `;

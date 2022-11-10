@@ -57,12 +57,16 @@ export const ModalContent = styled.View`
 `;
 
 export const VersionApp = styled.Text`
-    align-items: flex-end;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
     color: #ffff;
     text-align: center;
     padding: 20px;
     margin-top: 60px;
-    background-color: darkgray;
+    background-color: #3B3B3B;
     border-radius: 20px;
     overflow: hidden;
+
 `;

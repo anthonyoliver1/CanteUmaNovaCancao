@@ -3,17 +3,29 @@ import styled from "styled-components/native";
 export const Container = styled.View`
     flex: 1;
     width: 100%;
+    align-items: center;
+    padding-top: 4px;
 `;
 
 export const List = styled.View`
     padding: 15px;
-    margin-vertical: 3px;
-    width: 100%;
-    border-bottom-color: #5bc8f5;
-    border-bottom-width: 1px;
+    margin-vertical: 4px;
+    width: ${props => props.width+'px'};
+    background-color: ${props => props.theme.colors.card};
+    border-radius: 8px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    flex-wrap: nowrap;
+    align-content: center;
+    align-items: center;
+`;
+
+export const InfoMusic = styled.View`
+    width:  ${props => props.width - 90 + 'px'};
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-`;
 
+`;

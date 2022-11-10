@@ -1,18 +1,15 @@
 import React, { useState } from "react";
-import { Alert, View, ToastAndroid, FlatList, TouchableOpacity } from "react-native";
+import { Alert, View, ToastAndroid, FlatList, TouchableOpacity, Image, Dimensions } from "react-native";
 import { typeDevice } from "../../utils/Index";
-import { useTheme } from '@react-navigation/native';
 import mockMusicData from '../../utils/mockMusicData.json';
-import { useToast } from "react-native-toast-notifications";
 import { Container, ListView, SearchButton, SearchInput } from "../../style/SearchStyle";
 import { Author, ButtonTitle, Kids, Title } from "../../style";
-import { List } from "../../style/LyricsStyle";
+import { InfoMusic, List } from "../../style/LyricsStyle";
+import themes from "../../style/themes";
 
 
 export default function Search({ navigation }) {
-    const toast = useToast();
     const [textSearch, setTextSearch] = useState('');
-    const { colors, dark } = useTheme();
     const [dataMusic, setDataMusic] = useState([]);
     const [dataMusicTemp, setDataMusicTemp] = useState([]);
 
@@ -34,17 +31,6 @@ export default function Search({ navigation }) {
                         }
                     ]
                 );
-
-            return toast.show(message,
-                {
-                    type: "danger",
-                    placement: "top",
-                    duration: 3000,
-                    offset: 30,
-                    animationType: "zoom-in"
-                }
-            )
-
         }
 
         if (dataMusicTemp.length <= 0) {
@@ -59,16 +45,6 @@ export default function Search({ navigation }) {
                         }
                     ]
                 );
-
-            return toast.show(notFoundMessage,
-                {
-                    type: "warning",
-                    placement: "top",
-                    duration: 3000,
-                    offset: 30,
-                    animationType: "zoom-in"
-                }
-            )
         }
 
     }
@@ -76,17 +52,20 @@ export default function Search({ navigation }) {
     const searcMusicTemp = (value) => {
         const textSearch = value.trim().toLocaleLowerCase();
         const mockMusic = JSON.parse(JSON.stringify(mockMusicData));
-        setTextSearch(textSearch);
+        const filterTitle = mockMusic.filter(i => i.title.toLocaleLowerCase().includes(textSearch));
+        const filterMusicLetter = mockMusic.filter(i => i.music.text.toLocaleLowerCase().includes(textSearch))
+        const filtered = filterTitle.length ? filterTitle : filterMusicLetter;
 
-        return setDataMusicTemp(mockMusic.filter(i => i.title.toLocaleLowerCase().includes(textSearch)));
+        setTextSearch(textSearch);
+        return setDataMusicTemp(filtered);
     }
 
     const gotToMusicText = ({ number, title, music, author }) => {
         const { text, audio } = music;
         navigation.navigate(
-            'Home',
+            'Search',
             {
-                screen: 'MusicLetter',
+                screen: 'MusicLetterSearch',
                 params: {
                     numMusic: number,
                     musicTxt: text,
@@ -98,13 +77,23 @@ export default function Search({ navigation }) {
         );
     }
 
+    const widthScreen = Dimensions.get('window').width - 15;
+
+
+    const data = {
+        'sonho': require('../../assets/o_sonho.png'),
+        'caminhos': require('../../assets/caminhos.png'),
+        'undefined': require('../../assets/note_logo.png')
+    }
+
     return (
         <Container>
             <SearchInput
                 placeholder={"Pesquisar música ..."}
-                placeholderTextColor={dark ? '#5a5a5a' : '#c0c0c0'}
+                placeholderTextColor={'#c0c0c0'}
                 onChangeText={text => searcMusicTemp(text)}
                 onSubmitEditing={searchMusic}
+                selectionColor={themes.dark.colors.primary}
             />
             <SearchButton
                 style={
@@ -112,7 +101,7 @@ export default function Search({ navigation }) {
                         {
                             backgroundColor: pressed
                                 ? '#24b1ec'
-                                : '#5bc8f5'
+                                : '#0B97D3'
                         },
                     ]
                 }
@@ -132,17 +121,24 @@ export default function Search({ navigation }) {
                             onHideUnderlay={separators.unhighlight}
                             activeOpacity={0.4}
                         >
-                            <List>
-                                <View>
-                                    <Title>{item.title}</Title>
-                                    <Author>{item.author}</Author>
-                                </View>
-                                <View>
-                                    {item.kids ?
-                                        <Kids>kids</Kids>
-                                        : null
-                                    }
-                                </View>
+                            <List width={widthScreen}>
+                                <Image
+                                    source={data[item.album]}
+                                    style={{ width: 45, height: 45, borderRadius: 8, marginRight: 10 }}
+                                />
+                                <InfoMusic width={widthScreen}>
+                                    <View>
+                                        <Title>{item.title}</Title>
+                                        <Author>{item.author}</Author>
+                                    </View>
+                                    <View>
+                                        {item.kids ?
+                                            <Kids>kids</Kids>
+                                            : null
+                                        }
+                                    </View>
+                                </InfoMusic>
+
                             </List>
                         </TouchableOpacity>
                     )}

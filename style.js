@@ -10,20 +10,25 @@ export const Wrapper = styled.View`
 export const Title =  styled.Text`
     color: ${props => props.theme.color};
     font-size: 16px;
+    font-weight: 600;
 `;
 
 export const Author = styled.Text`
-    color: gray;
+    color: #0B97D3;
 `;
 
 export const Kids = styled.Text`
-    color: #5bc8f5;
+    color: #0B97D3;
     font-size: 16px;
 `;
 
-export const ButtonTitle =  styled.Text`
+export const ButtonTitle = styled.Text`
     color: #FFFFFFFF;
-    font-size: 16px;
+    font-size: 15px;
     font-weight: bold;
     text-align: center;
+`;
+
+export const B = styled.Text`
+    font-weight: bold;
 `;
