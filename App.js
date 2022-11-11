@@ -8,7 +8,6 @@ import Lyrics from './pages/lyrics/Lyrics';
 import Cipher from './pages/cipher/Cipher';
 import Search from './pages/search/Search';
 import About from './pages/About/About';
-import { AppearanceProvider } from 'react-native-appearance';
 import { StatusBar } from 'expo-status-bar';
 import Music from './components/Music/Music';
 import * as NavigationBar from 'expo-navigation-bar';
@@ -179,7 +178,6 @@ export default function App() {
 
   return (
     <ThemeProvider theme={themes.dark}>
-        <AppearanceProvider>
           <StatusBar translucent={true} style={themes.dark.barColor} />
           <NavigationContainer theme={themes.dark}>
             <Tab.Navigator
@@ -227,7 +225,6 @@ export default function App() {
               <Tab.Screen name="About" component={AboutScreen} options={{ title: 'Mais', headerTitleAlign: 'center' }} />
             </Tab.Navigator>
           </NavigationContainer>
-        </AppearanceProvider>
     </ThemeProvider>
   );
 }
