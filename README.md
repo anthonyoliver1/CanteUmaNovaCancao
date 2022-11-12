@@ -7,7 +7,7 @@
 </p>
 
 <h1 align="center">
-    <img alt="Cante Uma Nova Canção" title="Cante Uma Nova Canção" src="assets/banner-cunc-1.png" style="border-radius: 15px"/>
+    <img alt="Cante Uma Nova Canção" title="Cante Uma Nova Canção" src="assets/images_readme/banner-cunc-1.png" style="border-radius: 15px"/>
     <p style="display: flex; align-items: center; justify-content: center;line-height: 22px; margin-top: 15px">
         Cante Uma Nova Canção
         <img src="assets/note_logo.png" width="25" style="border-radius: 5px; margin-left: 10px;" alt="Logo">
@@ -33,23 +33,13 @@
 ### :art: **Layout**
 <br>
 
-⚪ ``Light Theme``
-
----
 <p align="center">
-    <img src="assets/cunc-music.jpeg" width="250" style="border-radius: 15px" height="450" alt="print musica">
-    <img src="assets/cunc-search.jpeg" width="250" style="border-radius: 15px" height="450" alt="print busca">
-    <img src="assets/cunc-about.jpeg" width="250" style="border-radius: 15px" height="450" alt="print sobre">
-</p>
-
-⚫ ``Dark Theme``
-
----
-
-<p align="center">
-    <img src="assets/cunc-music-dark.jpeg" width="250" style="border-radius: 15px" height="450" alt="print musica">
-    <img src="assets/cunc-search-dark.jpeg" width="250" style="border-radius: 15px" height="450" alt="print busca">
-    <img src="assets/cunc-about-dark.jpeg" width="250" style="border-radius: 15px" height="450" alt="print sobre">
+    <img src="assets/images_readme/cunc_home.jpeg" width="310" style="border-radius: 15px" height="640" alt="print musica">
+    <img src="assets/images_readme/cunc_music.jpeg" width="310" style="border-radius: 15px" height="640" alt="print musica">
+    <img src="assets/images_readme/cunc_cipher.jpeg" width="310" style="border-radius: 15px" height="640" alt="print musica">
+    <img src="assets/images_readme/cunc_cipher_ex.jpeg" width="310" style="border-radius: 15px" height="640" alt="print musica">
+    <img src="assets/images_readme/cunc_search.jpeg" width="310" style="border-radius: 15px" height="640" alt="print busca">
+    <img src="assets/images_readme/cunc_about.jpeg" width="310" style="border-radius: 15px" height="640" alt="print sobre">
 </p>
 
 ### :wrench: **Tecnologias utilizadas**
