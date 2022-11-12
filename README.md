@@ -34,12 +34,12 @@
 <br>
 
 <p align="center">
-    <img src="assets/images_readme/cunc_home.jpeg" width="310" style="border-radius: 15px" height="640" alt="print musica">
-    <img src="assets/images_readme/cunc_music.jpeg" width="310" style="border-radius: 15px" height="640" alt="print musica">
-    <img src="assets/images_readme/cunc_cipher.jpeg" width="310" style="border-radius: 15px" height="640" alt="print musica">
-    <img src="assets/images_readme/cunc_cipher_ex.jpeg" width="310" style="border-radius: 15px" height="640" alt="print musica">
-    <img src="assets/images_readme/cunc_search.jpeg" width="310" style="border-radius: 15px" height="640" alt="print busca">
-    <img src="assets/images_readme/cunc_about.jpeg" width="310" style="border-radius: 15px" height="640" alt="print sobre">
+    <img src="assets/images_readme/cunc_home.jpeg" width="350" style="border-radius: 15px" height="740" alt="print musica">
+    <img src="assets/images_readme/cunc_music.jpeg" width="350" style="border-radius: 15px" height="740" alt="print musica">
+    <img src="assets/images_readme/cunc_cipher.jpeg" width="350" style="border-radius: 15px" height="740" alt="print musica">
+    <img src="assets/images_readme/cunc_cipher_ex.jpeg" width="350" style="border-radius: 15px" height="740" alt="print musica">
+    <img src="assets/images_readme/cunc_search.jpeg" width="350" style="border-radius: 15px" height="740" alt="print busca">
+    <img src="assets/images_readme/cunc_about.jpeg" width="350" style="border-radius: 15px" height="740" alt="print sobre">
 </p>
 
 ### :wrench: **Tecnologias utilizadas**
