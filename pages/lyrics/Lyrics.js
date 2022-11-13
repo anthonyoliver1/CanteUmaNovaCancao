@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { Dimensions, FlatList, Image, Platform, TouchableOpacity, View } from 'react-native';
 import mockMusicData from '../../utils/mockMusicData.json';
 import { Author, Kids, Title } from '../../style';
@@ -30,41 +30,44 @@ export default function Lyrics({ navigation }) {
         'caminhos': require('../../assets/caminhos.png'),
         'undefined': require('../../assets/note_logo.png')
     }
+    const keyExtractor = (item) => item.number;
+
+    const renderItem = useCallback(({ item, separators }) => (
+        <TouchableOpacity
+            key={item.number}
+            onPress={() => gotToMusicText(item)}
+            onShowUnderlay={separators.highlight}
+            onHideUnderlay={separators.unhighlight}
+            activeOpacity={0.4}
+        >
+            <List width={widthScreen}>
+                <Image
+                    source={data[item.album]}
+                    style={{ width: 45, height: 45, borderRadius: 8, marginRight: 10 }}
+                />
+                <InfoMusic width={widthScreen}>
+                    <View>
+                        <Title>{item.title}</Title>
+                        <Author>{item.author}</Author>
+                    </View>
+                    <View>
+                        {item.kids ?
+                            <Kids>kids</Kids>
+                            : null
+                        }
+                    </View>
+                </InfoMusic>
+            </List>
+        </TouchableOpacity>
+    ), [])
 
     return (
         <Container>
             <FlatList
                 data={mockMusicData}
-                initialNumToRender={10}
-                renderItem={({ item, index, separators }) => (
-                    <TouchableOpacity
-                        key={item.number}
-                        onPress={() => gotToMusicText(item)}
-                        onShowUnderlay={separators.highlight}
-                        onHideUnderlay={separators.unhighlight}
-                        activeOpacity={0.4}
-                    >
-                        <List width={widthScreen}>
-                            <Image
-                                source={data[item.album]}
-                                style={{ width: 45, height: 45, borderRadius: 8, marginRight: 10 }}
-                            />
-                            <InfoMusic width={widthScreen}>
-                                <View>
-                                    <Title>{item.title}</Title>
-                                    <Author>{item.author}</Author>
-                                </View>
-                                <View>
-                                    {item.kids ?
-                                        <Kids>kids</Kids>
-                                        : null
-                                    }
-                                </View>
-                            </InfoMusic>
-                        </List>
-                    </TouchableOpacity>
-                )}
-                keyExtractor={item => item.number}
+                initialNumToRender={50}
+                keyExtractor={keyExtractor}
+                renderItem={renderItem}
             />
         </Container>
     );
