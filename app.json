@@ -7,7 +7,8 @@
     "icon": "./assets/note_logo.png",
     "splash": {
       "image": "./assets/splash_logo.png",
-      "resizeMode": "cover"
+      "resizeMode": "contain",
+      "backgroundColor": "#0B97D3"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
