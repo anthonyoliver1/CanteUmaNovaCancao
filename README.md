@@ -1,13 +1,15 @@
 <p align="center" style="display: flex; align-items: center; justify-content: space-evenly; align-content: center; line-height: 10px;">
     <img src="https://img.shields.io/badge/NODE-%3E%3D14.17.4-brightgreen?style=for-the-badge">
     <img src="https://img.shields.io/badge/NPM-%3E%3D7.20.5-orange?style=for-the-badge">
-    <img src="https://img.shields.io/badge/Android-10.0.0-yellowgreen?style=for-the-badge">
-    <img src="https://img.shields.io/badge/iOS-10.0.0-lightgrey?style=for-the-badge">
+    <img src="https://img.shields.io/badge/Android-v10-yellowgreen?style=for-the-badge">
+    <img src="https://img.shields.io/badge/iOS-v13-lightgrey?style=for-the-badge">
     <img src="https://img.shields.io/badge/STATUS-EM%20DESENVOLVIMENTO-blue?style=for-the-badge">
+    <img src="https://img.shields.io/badge/java-v11-red?style=for-the-badge">
+    <img src="https://img.shields.io/badge/xcode-%3E=10-lightgrey?style=for-the-badge">
 </p>
 
 <h1 align="center">
-    <img alt="Cante Uma Nova Canção" title="Cante Uma Nova Canção" src="assets/banner-cunc-1.png" style="border-radius: 15px"/>
+    <img alt="Cante Uma Nova Canção" title="Cante Uma Nova Canção" src="assets/images_readme/banner-cunc-1.png" style="border-radius: 15px"/>
     <p style="display: flex; align-items: center; justify-content: center;line-height: 22px; margin-top: 15px">
         Cante Uma Nova Canção
         <img src="assets/note_logo.png" width="25" style="border-radius: 5px; margin-left: 10px;" alt="Logo">
@@ -33,23 +35,13 @@
 ### :art: **Layout**
 <br>
 
-⚪ ``Light Theme``
-
----
 <p align="center">
-    <img src="assets/cunc-music.jpeg" width="250" style="border-radius: 15px" height="450" alt="print musica">
-    <img src="assets/cunc-search.jpeg" width="250" style="border-radius: 15px" height="450" alt="print busca">
-    <img src="assets/cunc-about.jpeg" width="250" style="border-radius: 15px" height="450" alt="print sobre">
-</p>
-
-⚫ ``Dark Theme``
-
----
-
-<p align="center">
-    <img src="assets/cunc-music-dark.jpeg" width="250" style="border-radius: 15px" height="450" alt="print musica">
-    <img src="assets/cunc-search-dark.jpeg" width="250" style="border-radius: 15px" height="450" alt="print busca">
-    <img src="assets/cunc-about-dark.jpeg" width="250" style="border-radius: 15px" height="450" alt="print sobre">
+    <img src="assets/images_readme/cunc_home.jpeg" width="350" style="border-radius: 15px" height="740" alt="print musica">
+    <img src="assets/images_readme/cunc_music.jpeg" width="350" style="border-radius: 15px" height="740" alt="print musica">
+    <img src="assets/images_readme/cunc_cipher.jpeg" width="350" style="border-radius: 15px" height="740" alt="print musica">
+    <img src="assets/images_readme/cunc_cipher_ex.jpeg" width="350" style="border-radius: 15px" height="740" alt="print musica">
+    <img src="assets/images_readme/cunc_search.jpeg" width="350" style="border-radius: 15px" height="740" alt="print busca">
+    <img src="assets/images_readme/cunc_about.jpeg" width="350" style="border-radius: 15px" height="740" alt="print sobre">
 </p>
 
 ### :wrench: **Tecnologias utilizadas**
@@ -74,6 +66,17 @@
 
 💡 (Seguir todos os passos de instalação do Expo CLI)
 
+**Build Android**
+- Java 11 ou superior
+- Android Studio
+- Dispositivo Android ou Emulador *
+
+**Build iOS**
+- MacOS
+- Xcode
+- Dispositivos iOS ou Emulador *
+
+*&nbsp;(Necessário ter o APP <b>Expo Go</b> instalado em  dispositivos Android ou iOS).
 
 ## :zap: **Rodando a aplicação**
 
