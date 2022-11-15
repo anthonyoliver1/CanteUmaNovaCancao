@@ -1,9 +1,11 @@
 <p align="center" style="display: flex; align-items: center; justify-content: space-evenly; align-content: center; line-height: 10px;">
     <img src="https://img.shields.io/badge/NODE-%3E%3D14.17.4-brightgreen?style=for-the-badge">
     <img src="https://img.shields.io/badge/NPM-%3E%3D7.20.5-orange?style=for-the-badge">
-    <img src="https://img.shields.io/badge/Android-10.0.0-yellowgreen?style=for-the-badge">
-    <img src="https://img.shields.io/badge/iOS-10.0.0-lightgrey?style=for-the-badge">
+    <img src="https://img.shields.io/badge/Android-v10-yellowgreen?style=for-the-badge">
+    <img src="https://img.shields.io/badge/iOS-v13-lightgrey?style=for-the-badge">
     <img src="https://img.shields.io/badge/STATUS-EM%20DESENVOLVIMENTO-blue?style=for-the-badge">
+    <img src="https://img.shields.io/badge/java-v11-red?style=for-the-badge">
+    <img src="https://img.shields.io/badge/xcode-%3E=10-lightgrey?style=for-the-badge">
 </p>
 
 <h1 align="center">
@@ -64,6 +66,17 @@
 
 💡 (Seguir todos os passos de instalação do Expo CLI)
 
+**Build Android**
+- Java 11 ou superior
+- Android Studio
+- Dispositivo Android ou Emulador *
+
+**Build iOS**
+- MacOS
+- Xcode
+- Dispositivos iOS ou Emulador *
+
+*&nbsp;(Necessário ter o APP <b>Expo Go</b> instalado em  dispositivos Android ou iOS).
 
 ## :zap: **Rodando a aplicação**
 
