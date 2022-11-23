@@ -11,6 +11,8 @@ PODS:
     - ReactCommon/turbomodule/core
   - EXConstants (14.0.2):
     - ExpoModulesCore
+  - EXErrorRecovery (4.0.1):
+    - ExpoModulesCore
   - EXFileSystem (15.1.1):
     - ExpoModulesCore
   - EXFont (11.0.1):
@@ -18,7 +20,7 @@ PODS:
   - EXJSONUtils (0.4.0)
   - EXManifests (0.4.0):
     - EXJSONUtils
-  - Expo (47.0.3):
+  - Expo (47.0.6):
     - ExpoModulesCore
   - expo-dev-client (2.0.0):
     - EXManifests
@@ -94,18 +96,18 @@ PODS:
     - expo-dev-menu/SafeAreaView
   - ExpoKeepAwake (11.0.1):
     - ExpoModulesCore
-  - ExpoModulesCore (1.0.2):
+  - ExpoModulesCore (1.0.3):
     - React-Core
     - ReactCommon/turbomodule/core
   - ExpoSystemUI (2.0.1):
     - ExpoModulesCore
   - ExpoWebBrowser (12.0.0):
     - ExpoModulesCore
-  - EXSplashScreen (0.17.4):
+  - EXSplashScreen (0.17.5):
     - ExpoModulesCore
     - React-Core
   - EXStructuredHeaders (3.0.1)
-  - EXUpdates (0.15.4):
+  - EXUpdates (0.15.5):
     - ASN1Decoder (~> 1.8)
     - EASClient
     - EXManifests
@@ -421,6 +423,7 @@ DEPENDENCIES:
   - EXApplication (from `../node_modules/expo-application/ios`)
   - EXAV (from `../node_modules/expo-av/ios`)
   - EXConstants (from `../node_modules/expo-constants/ios`)
+  - EXErrorRecovery (from `../node_modules/expo-error-recovery/ios`)
   - EXFileSystem (from `../node_modules/expo-file-system/ios`)
   - EXFont (from `../node_modules/expo-font/ios`)
   - EXJSONUtils (from `../node_modules/expo-json-utils/ios`)
@@ -492,6 +495,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/expo-av/ios"
   EXConstants:
     :path: "../node_modules/expo-constants/ios"
+  EXErrorRecovery:
+    :path: "../node_modules/expo-error-recovery/ios"
   EXFileSystem:
     :path: "../node_modules/expo-file-system/ios"
   EXFont:
@@ -603,22 +608,23 @@ SPEC CHECKSUMS:
   EXApplication: 034b1c40a8e9fe1bff76a1e511ee90dff64ad834
   EXAV: 766516466675fc5fdd7c500acced5934e8b00de2
   EXConstants: 3c86653c422dd77e40d10cbbabb3025003977415
+  EXErrorRecovery: ae43433feb0608a64dc5b1c8363b3e7769a9ea24
   EXFileSystem: 60602b6eefa6873f97172c684b7537c9760b50d6
   EXFont: 319606bfe48c33b5b5063fb0994afdc496befe80
   EXJSONUtils: 09aef2c1fba1a116ca8c73a2c8299aac00d96b43
   EXManifests: 347f49430b63444579aa013f0ad057d16b8d1cc8
-  Expo: 8e4f1d149b58d5df10d302e0b5c489f9fc6623fc
+  Expo: a581e979539bae3e49cd02d9dee2432947383d3b
   expo-dev-client: d703087f68db9f3540a2346c077945976d8c97b6
   expo-dev-launcher: 4b79cc4ecc33f134a416db3f5368ce33c80bf874
   expo-dev-menu: ac5fda174a4aca9d5fa59baa0ad56ca334dc4820
   expo-dev-menu-interface: 45581093393dacd51ce5e7f641cf9ed5064a2e3f
   ExpoKeepAwake: 69b59d0a8d2b24de9f82759c39b3821fec030318
-  ExpoModulesCore: 20decc110ca3987e1728dee2ce4b3f79e147edda
+  ExpoModulesCore: b5d21c8880afda6fb6ee95469f9ac2ec9b98e995
   ExpoSystemUI: c844dec5e49e677bcd6bfe15cc305b02127b1124
   ExpoWebBrowser: 073e50f16669d498fb49063b9b7fe780b24f7fda
-  EXSplashScreen: 4b57f8416a057411cb3c97db9fc9a615f8c1d5d9
+  EXSplashScreen: 3e989924f61a8dd07ee4ea584c6ba14be9b51949
   EXStructuredHeaders: fb774e45eac2e5d62ba40b28176bfbfba61b843e
-  EXUpdates: d0c361e15f668d22dd33633717a8d24991ea4925
+  EXUpdates: 50a48752f5597482b9dc9be7fb5053eaa1878584
   EXUpdatesInterface: bffd1ead18f0bab04fa784ca159c115607b8a23c
   FBLazyVector: affa4ba1bfdaac110a789192f4d452b053a86624
   FBReactNativeSpec: fe8b5f1429cfe83a8d72dc8ed61dc7704cac8745
@@ -658,4 +664,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 0534196fb82e6e77d53cbefcc65259342b8028ae
 
-COCOAPODS: 1.10.1
+COCOAPODS: 1.11.3
