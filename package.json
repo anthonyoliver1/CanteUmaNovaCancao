@@ -8,7 +8,7 @@
     "web": "expo start --web",
     "eject": "expo eject",
     "localhost": "npm install && expo start --localhost",
-    "tunnel": "npm install && expo start --host tunnel",
+    "tunnel": "npm install && expo start --tunnel",
     "build:android": "eas build --platform android",
     "build:ios": "eas device:create && eas build --platform ios",
     "build:apk": "eas build -p android --profile preview",
