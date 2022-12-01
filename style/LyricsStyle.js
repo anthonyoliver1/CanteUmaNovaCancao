@@ -4,13 +4,20 @@ export const Container = styled.View`
     flex: 1;
     width: 100%;
     align-items: center;
-    padding-top: 4px;
+    padding-top: 5px;
+`;
+
+export const Wrapper = styled.View`
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
 `;
 
 export const List = styled.View`
     padding: 15px;
     margin-vertical: 4px;
-    width: ${props => props.width+'px'};
     background-color: ${props => props.theme.colors.card};
     border-radius: 8px;
     display: flex;

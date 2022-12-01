@@ -1,10 +1,19 @@
-import React, { useCallback } from 'react';
-import { Dimensions, FlatList, Image, Platform, TouchableOpacity, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { Dimensions, Image, TouchableOpacity, View, VirtualizedList } from 'react-native';
 import mockMusicData from '../../utils/mockMusicData.json';
 import { Author, Kids, Title } from '../../style';
-import { Container, InfoMusic, List } from '../../style/LyricsStyle';
+import { Container, InfoMusic, List, Wrapper } from '../../style/LyricsStyle';
+import Filter from '../../components/Music/Filter';
 
 export default function Lyrics({ navigation }) {
+    const widthScreen = Dimensions.get('window').width - 10;
+
+    const [newOrder, setNewOrder] = useState('all');
+    const [music, setMusic] = useState(mockMusicData);
+
+    useEffect(() => {
+        orderList(newOrder);
+    }, [newOrder])
 
     const gotToMusicText = ({ number, title, music, author }) => {
         const { text, audio } = music;
@@ -23,16 +32,76 @@ export default function Lyrics({ navigation }) {
         )
     }
 
-    const widthScreen = Dimensions.get('window').width - 15;
-
     const data = {
         'sonho': require('../../assets/o_sonho.png'),
         'caminhos': require('../../assets/caminhos.png'),
         'undefined': require('../../assets/note_logo.png')
     }
+
+    const changeOrder = (order) => {
+        setNewOrder(order);
+    }
+
+    const filterOrder = [
+        { title: 'Todos', type: 'all' },
+        { title: 'A-Z', type: 'asc' },
+        { title: 'Z-A', type: 'desc' },
+        { title: 'Kids', type: 'kids' },
+        { title: 'Coração Audaz', type: 'audaz' },
+        { title: 'Igreja de Cristo Internacional', type: 'ICI' },
+    ]
+
+    const orderList = (params) => {
+        const action = {
+            'asc': () => {
+                setMusic(
+                    mockMusicData
+                        .filter(i => i.title)
+                        .sort((a, b) => a.title.localeCompare(b.title))
+                );
+            },
+            'desc': () => {
+                setMusic(
+                    mockMusicData
+                        .filter(i => i.title)
+                        .sort((a, b) => b.title.localeCompare(a.title))
+                );
+            },
+            'all': () => {
+                setMusic(
+                    mockMusicData.filter(i => i.number)
+                        .sort((a, b) => a.number > b.number)
+                );
+            },
+            'audaz': () => {
+                setMusic(
+                    mockMusicData
+                        .filter(i => i.author.includes('Audaz'))
+                        .sort((a, b) => a.album.localeCompare(b.album))
+                );
+            },
+            'ICI': () => {
+                setMusic(
+                    mockMusicData
+                        .filter(i => i.author.includes('Igreja'))
+                        .sort((a, b) => a.title.localeCompare(b.title))
+                );
+            },
+            'kids': () => {
+                setMusic(
+                    mockMusicData
+                        .filter(i => i.kids)
+                        .sort((a, b) => a.title.localeCompare(b.title))
+                );
+            }
+        }
+
+        action[params]();
+    }
+
     const keyExtractor = (item) => item.number;
 
-    const renderItem = useCallback(({ item, separators }) => (
+    const renderItem = ({ item, separators }) => (
         <TouchableOpacity
             key={item.number}
             onPress={() => gotToMusicText(item)}
@@ -40,34 +109,46 @@ export default function Lyrics({ navigation }) {
             onHideUnderlay={separators.unhighlight}
             activeOpacity={0.4}
         >
-            <List width={widthScreen}>
-                <Image
-                    source={data[item.album]}
-                    style={{ width: 45, height: 45, borderRadius: 8, marginRight: 10 }}
-                />
-                <InfoMusic width={widthScreen}>
-                    <View>
-                        <Title>{item.title}</Title>
-                        <Author>{item.author}</Author>
-                    </View>
-                    <View>
-                        {item.kids ?
-                            <Kids>kids</Kids>
-                            : null
-                        }
-                    </View>
-                </InfoMusic>
-            </List>
+            <Wrapper>
+                <List>
+                    <Image
+                        source={data[item.album]}
+                        style={{ width: 45, height: 45, borderRadius: 8, marginRight: 10 }}
+                    />
+                    <InfoMusic width={widthScreen}>
+                        <View>
+                            <Title>{item.title}</Title>
+                            <Author>{item.author}</Author>
+                        </View>
+                        <View>
+                            {item.kids && <Kids>kids</Kids>}
+                        </View>
+                    </InfoMusic>
+                </List>
+            </Wrapper>
         </TouchableOpacity>
-    ), [])
+    )
+
+    const getItemCount = data => data.length;
+
+    const getItem = (data, index) => {
+        return data[index];
+    }
+
+    const filter = () => (
+        <Filter orderList={(params) => changeOrder(params.type)} filterOrder={filterOrder} />
+    )
 
     return (
         <Container>
-            <FlatList
-                data={mockMusicData}
+            <VirtualizedList
+                ListHeaderComponent={filter}
+                data={music}
                 initialNumToRender={50}
                 keyExtractor={keyExtractor}
                 renderItem={renderItem}
+                getItemCount={getItemCount}
+                getItem={getItem}
             />
         </Container>
     );
