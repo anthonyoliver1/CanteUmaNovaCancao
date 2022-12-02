@@ -1,19 +1,19 @@
-import React, { useEffect } from 'react';
-import { Alert, Dimensions, Pressable, StyleSheet } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
+import { ThemeProvider } from 'styled-components';
+import { Dimensions } from 'react-native';
+import { typeDevice } from './utils/Index';
+import { StatusBar } from 'expo-status-bar';
+import { Ionicons } from '@expo/vector-icons';
+import { Wrapper } from './style';
+import * as NavigationBar from 'expo-navigation-bar';
 import Lyrics from './pages/lyrics/Lyrics';
 import Cipher from './pages/cipher/Cipher';
 import Search from './pages/search/Search';
 import About from './pages/About/About';
-import { StatusBar } from 'expo-status-bar';
 import Music from './components/Music/Music';
-import * as NavigationBar from 'expo-navigation-bar';
-import { typeDevice } from './utils/Index';
-import { ButtonTitle, Wrapper } from './style';
-import { ThemeProvider } from 'styled-components';
 import themes from './style/themes';
 import MusicCipher from './components/Music/MusicCipher';
 
@@ -29,30 +29,8 @@ function HomeScreen({ navigation }) {
 }
 
 function CipherScreen({ navigation }) {
-  // Alert.alert('Em breve!', 'Logo logo teremos cifras 🎉', [
-  //   {
-  //     text: 'Fechar',
-  //     onPress: () => navigation.navigate('Home')
-  //   }
-  // ])
-
   return (
     <Wrapper>
-      {/* <Pressable
-        onPress={() => navigation.navigate('Music')}
-        style={
-          ({ pressed }) => [
-            {
-              backgroundColor: pressed
-                ? '#24b1ec'
-                : '#0B97D3'
-            },
-            style.button
-          ]
-        }
-      >
-        <ButtonTitle>Ir para Música</ButtonTitle>
-      </Pressable> */}
       <Cipher navigation={navigation} />
     </Wrapper >
   );
@@ -65,6 +43,7 @@ function SearchScreen({ navigation }) {
     </Wrapper>
   );
 }
+
 function AboutScreen({ navigation }) {
   return (
     <Wrapper>
@@ -178,64 +157,53 @@ export default function App() {
 
   return (
     <ThemeProvider theme={themes.dark}>
-          <StatusBar translucent={true} style={themes.dark.barColor} />
-          <NavigationContainer theme={themes.dark}>
-            <Tab.Navigator
-              backBehavior='history'
-              sceneContainerStyle={{ backgroundColor: themes.dark.background }}
-              screenOptions={({ route }) => ({
-                tabBarHideOnKeyboard: true,
-                tabBarLabelPosition: 'below-icon',
-                tabBarLabelStyle: {
-                  position: 'relative',
-                  bottom: 4,
-                  width: '100%'
-                },
-                tabBarIconStyle: {
-                  bottom: -1,
-                  position: 'relative'
-                },
-                tabBarIcon: ({ focused, color, size }) => {
-                  let iconName;
-                  if (route.name === 'Home') {
-                    iconName = focused
-                      ? 'musical-notes'
-                      : 'musical-notes-outline';
-                  } else if (route.name === 'Cipher') {
-                    iconName = focused ? 'book' : 'book-outline';
-                  } else if (route.name === 'Search') {
-                    iconName = focused ? 'md-search' : 'md-search-outline'
-                  } else if (route.name === 'About') {
-                    iconName = focused ? 'menu' : 'menu-outline'
-                  }
+      <StatusBar translucent={true} style={themes.dark.barColor} />
+      <NavigationContainer theme={themes.dark}>
+        <Tab.Navigator
+          backBehavior='history'
+          sceneContainerStyle={{ backgroundColor: themes.dark.background }}
+          screenOptions={({ route }) => ({
+            tabBarHideOnKeyboard: typeDevice.Android(),
+            tabBarLabelPosition: 'below-icon',
+            tabBarLabelStyle: {
+              position: 'relative',
+              bottom: 4,
+              width: '100%'
+            },
+            tabBarIconStyle: {
+              bottom: -1,
+              position: 'relative'
+            },
+            tabBarIcon: ({ focused, color, size }) => {
+              let iconName;
+              if (route.name === 'Home') {
+                iconName = focused
+                  ? 'musical-notes'
+                  : 'musical-notes-outline';
+              } else if (route.name === 'Cipher') {
+                iconName = focused ? 'book' : 'book-outline';
+              } else if (route.name === 'Search') {
+                iconName = focused ? 'md-search' : 'md-search-outline'
+              } else if (route.name === 'About') {
+                iconName = focused ? 'menu' : 'menu-outline'
+              }
 
-                  return <Ionicons name={iconName} size={size} color={color} />;
-                },
-                tabBarActiveTintColor: '#0B97D3',
-                tabBarInactiveTintColor: 'gray',
-                tabBarStyle: {
-                  flex: heightScreen ? null : 0.08,
-                  height: heightScreen ? heightScreen : null
-                },
-              })}
-            >
-              <Tab.Screen name="Home" component={HomeStackMusic} options={{ headerShown: false, title: 'Música' }} />
-              <Tab.Screen name="Cipher" component={CipherScreenStack} options={{ headerShown: false, title: 'Cifras' }} />
-              <Tab.Screen name="Search" component={SearchScreenStack} options={{ headerShown: false, title: 'Buscar' }} />
-              <Tab.Screen name="About" component={AboutScreen} options={{ title: 'Mais', headerTitleAlign: 'center' }} />
-            </Tab.Navigator>
-          </NavigationContainer>
+              return <Ionicons name={iconName} size={size} color={color} />;
+            },
+            tabBarActiveTintColor: '#0B97D3',
+            tabBarInactiveTintColor: 'gray',
+            tabBarStyle: {
+              flex: heightScreen ? null : 0.08,
+              height: heightScreen ? heightScreen : null
+            },
+          })}
+        >
+          <Tab.Screen name="Home" component={HomeStackMusic} options={{ headerShown: false, title: 'Música' }} />
+          <Tab.Screen name="Cipher" component={CipherScreenStack} options={{ headerShown: false, title: 'Cifras' }} />
+          <Tab.Screen name="Search" component={SearchScreenStack} options={{ headerShown: false, title: 'Buscar' }} />
+          <Tab.Screen name="About" component={AboutScreen} options={{ title: 'Mais', headerTitleAlign: 'center' }} />
+        </Tab.Navigator>
+      </NavigationContainer>
     </ThemeProvider>
   );
 }
-
-const style = StyleSheet.create({
-  button: {
-    borderRadius: 20,
-    padding: 10,
-    elevation: 2,
-    width: 150,
-    marginBottom: 10,
-    marginTop: 20,
-  },
-});
