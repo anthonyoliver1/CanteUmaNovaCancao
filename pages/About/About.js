@@ -1,18 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { Alert, Image, Linking, Modal, Platform, ScrollView, Share, Text, ToastAndroid, View } from "react-native";
+import { Alert, Image, Linking, Platform, ScrollView, Share, Text, ToastAndroid, View } from "react-native";
 import { typeDevice } from "../../utils/Index";
 import * as WebBrowser from 'expo-web-browser';
 import qs from 'qs';
-import { RadioButton } from 'react-native-paper';
-import { AboutButton, Container, ContainerModal, Description, ModalContent, ModalTitle, ModalWrapper, VersionApp, Wrapper } from "../../style/AboutStyle";
+import { AboutButton, Container, Description, VersionApp, Wrapper } from "../../style/AboutStyle";
 import { B, ButtonTitle } from "../../style";
 import appInfo from "../../app.json";
 
 export default function About({ navigation }) {
 
     const [OS, setOS] = useState('')
-    const [modalVisible, setModalVisible] = useState(false);
-    const [valueTheme, setValueTheme] = useState('no-preference');
 
     useEffect(() => {
         switch (Platform.OS) {
@@ -53,10 +50,10 @@ export default function About({ navigation }) {
     }
 
     async function sendEmail() {
-        const to = 'teste@teste.com'
+        const to = 'anthony.silvaoliveira@outlook.com'
 
         const query = qs.stringify({
-            subject: '',
+            subject: 'Cante Uma Nova Canção',
             body: '',
             cc: '',
             bcc: ''
@@ -78,17 +75,6 @@ export default function About({ navigation }) {
 
         return Linking.openURL(url);
     }
-
-    // const changeTheme = (themeSelected) => {
-    //     navigation.navigate(
-    //         'About',
-    //         {
-    //             screen: 'About',
-    //             themeColor: themeSelected,
-    //         }
-    //     )
-    //     setValueTheme(themeSelected)
-    // }
 
     return (
         <Container>
@@ -145,52 +131,6 @@ export default function About({ navigation }) {
                             <ButtonTitle>Contato</ButtonTitle>
                         </AboutButton>
                     </View>
-
-                    {/* <Modal
-                        animationType="fade"
-                        transparent={true}
-                        visible={modalVisible}
-                    >
-                        <ContainerModal>
-                            <ModalWrapper>
-                                <ModalTitle>Tema:</ModalTitle>
-                                <ModalContent>
-                                    <RadioButton.Group onValueChange={newValue => changeTheme(newValue)} value={valueTheme}>
-                                        <RadioButton.Item label="Claro" value="light" mode="ios" labelStyle={{ color: '#ffff' }} />
-                                        <RadioButton.Item label="Escuro" value="dark" mode="ios" labelStyle={{ color: '#ffff' }} />
-                                        <RadioButton.Item label="Automático (Sistema)" value="no-preference" mode="ios" labelStyle={{ color: '#ffff' }} />
-                                    </RadioButton.Group>
-                                </ModalContent>
-
-                                <AboutButton
-                                    style={({ pressed }) => [
-                                        {
-                                            backgroundColor: pressed
-                                                ? '#24b1ec'
-                                                : '#0B97D3'
-                                        }
-                                    ]}
-                                    onPress={() => setModalVisible(!modalVisible)}
-                                >
-                                    <ButtonTitle>Ok</ButtonTitle>
-                                </AboutButton>
-                            </ModalWrapper>
-                        </ContainerModal>
-                    </Modal> */}
-
-                    {/* <AboutButton
-                        style={({ pressed }) => [
-                            {
-                                backgroundColor: pressed
-                                    ? '#24b1ec'
-                                    : '#0B97D3'
-                            }
-                        ]}
-                        onPress={() => setModalVisible(true)}
-                    >
-                        <ButtonTitle>Tema</ButtonTitle>
-                    </AboutButton> */}
-
                     <VersionApp>
                         Versão: <B>{appInfo.expo.version}</B> {"\n"}
                         OS: <B>{OS}</B>{"\n\n"}
