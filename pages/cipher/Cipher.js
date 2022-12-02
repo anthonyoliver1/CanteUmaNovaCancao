@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Image } from 'react-native';
-import { Dimensions, FlatList, TouchableOpacity, View } from 'react-native';
+import { Dimensions, Image, TouchableOpacity, View, VirtualizedList } from 'react-native';
 import { Author, Title } from '../../style';
-import { Container, InfoMusic, List } from '../../style/LyricsStyle';
+import { Container, InfoMusic, List, Wrapper } from '../../style/LyricsStyle';
 import mockMusicData from '../../utils/mockMusicData.json';
-
 
 export default function Cipher({ navigation }) {
     const [onlyCipher, setOnlyCipher] = useState({});
@@ -31,7 +29,7 @@ export default function Cipher({ navigation }) {
         )
     }
 
-    const widthScreen = Dimensions.get('window').width - 15;
+    const widthScreen = Dimensions.get('window').width - 10;
 
     const data = {
         'sonho': require('../../assets/o_sonho.png'),
@@ -39,38 +37,48 @@ export default function Cipher({ navigation }) {
         'undefined': require('../../assets/note_logo.png')
     }
 
+    const renderItem = ({ item, separators }) => (
+        <TouchableOpacity
+            key={item.number}
+            onPress={() => gotToMusicCipher(item)}
+            onShowUnderlay={separators.highlight}
+            onHideUnderlay={separators.unhighlight}
+            activeOpacity={0.4}
+        >
+            <Wrapper>
+                <List>
+                    <Image
+                        source={data[item.album]}
+                        style={{ width: 45, height: 45, borderRadius: 8, marginRight: 10 }}
+                    />
+                    <InfoMusic width={widthScreen}>
+                        <View>
+                            <Title>{item.title}</Title>
+                            <Author>{item.author}</Author>
+                        </View>
+                        <View>
+                            {item.kids && <Kids>kids</Kids>}
+                        </View>
+                    </InfoMusic>
+                </List>
+            </Wrapper>
+        </TouchableOpacity>
+    )
+
+    const getItemCount = data => data.length;
+
+    const getItem = (data, index) => {
+        return data[index];
+    }
+
     return (
         <Container>
-            <FlatList
+            <VirtualizedList
                 data={onlyCipher}
-                renderItem={({ item, separators }) => (
-                    <TouchableOpacity
-                        key={item.number}
-                        onPress={() => gotToMusicCipher(item)}
-                        onShowUnderlay={separators.highlight}
-                        onHideUnderlay={separators.unhighlight}
-                        activeOpacity={0.4}
-                    >
-                        <List width={widthScreen}>
-                            <Image
-                                source={data[item.album]}
-                                style={{ width: 45, height: 45, borderRadius: 8, marginRight: 10 }}
-                            />
-                            <InfoMusic width={widthScreen}>
-                                <View>
-                                    <Title>{item.title}</Title>
-                                    <Author>{item.author}</Author>
-                                </View>
-                                <View>
-                                    {item.kids ?
-                                        <Kids>kids</Kids>
-                                        : null
-                                    }
-                                </View>
-                            </InfoMusic>
-                        </List>
-                    </TouchableOpacity>
-                )}
+                initialNumToRender={50}
+                renderItem={renderItem}
+                getItemCount={getItemCount}
+                getItem={getItem}
                 keyExtractor={item => item.number}
             />
         </Container>

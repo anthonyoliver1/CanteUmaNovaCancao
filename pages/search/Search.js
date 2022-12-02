@@ -47,6 +47,7 @@ export default function Search({ navigation }) {
                 );
         }
 
+        Keyboard.dismiss();
     }
 
     const searcMusicTemp = (value) => {
@@ -79,12 +80,37 @@ export default function Search({ navigation }) {
 
     const widthScreen = Dimensions.get('window').width - 15;
 
-
     const data = {
         'sonho': require('../../assets/o_sonho.png'),
         'caminhos': require('../../assets/caminhos.png'),
         'undefined': require('../../assets/note_logo.png')
     }
+
+    const renderItem = ({ item, separators }) => (
+        <TouchableOpacity
+            key={item.number}
+            onPress={() => gotToMusicText(item)}
+            onShowUnderlay={separators.highlight}
+            onHideUnderlay={separators.unhighlight}
+            activeOpacity={0.4}
+        >
+            <List width={widthScreen}>
+                <Image
+                    source={data[item.album]}
+                    style={{ width: 45, height: 45, borderRadius: 8, marginRight: 10 }}
+                />
+                <InfoMusic width={widthScreen}>
+                    <View>
+                        <Title>{item.title}</Title>
+                        <Author>{item.author}</Author>
+                    </View>
+                    <View>
+                        {item.kids && <Kids>kids</Kids>}
+                    </View>
+                </InfoMusic>
+            </List>
+        </TouchableOpacity>
+    )
 
     return (
         <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
@@ -114,35 +140,7 @@ export default function Search({ navigation }) {
                 <ListView>
                     <FlatList
                         data={dataMusic}
-                        renderItem={({ item, index, separators }) => (
-                            <TouchableOpacity
-                                key={item.number}
-                                onPress={() => gotToMusicText(item)}
-                                onShowUnderlay={separators.highlight}
-                                onHideUnderlay={separators.unhighlight}
-                                activeOpacity={0.4}
-                            >
-                                <List width={widthScreen}>
-                                    <Image
-                                        source={data[item.album]}
-                                        style={{ width: 45, height: 45, borderRadius: 8, marginRight: 10 }}
-                                    />
-                                    <InfoMusic width={widthScreen}>
-                                        <View>
-                                            <Title>{item.title}</Title>
-                                            <Author>{item.author}</Author>
-                                        </View>
-                                        <View>
-                                            {item.kids ?
-                                                <Kids>kids</Kids>
-                                                : null
-                                            }
-                                        </View>
-                                    </InfoMusic>
-
-                                </List>
-                            </TouchableOpacity>
-                        )}
+                        renderItem={renderItem}
                         keyExtractor={item => item.number}
                     />
                 </ListView>
