@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Dimensions, Image, TouchableOpacity, View, VirtualizedList } from 'react-native';
 import mockMusicData from '../../utils/mockMusicData.json';
 import { Author, Kids, Title } from '../../style';
@@ -135,9 +135,9 @@ export default function Lyrics({ navigation }) {
         return data[index];
     }
 
-    const filter = () => (
+    const filter = useCallback(() => (
         <Filter orderList={(params) => changeOrder(params.type)} filterOrder={filterOrder} />
-    )
+    ),[])
 
     return (
         <Container>
