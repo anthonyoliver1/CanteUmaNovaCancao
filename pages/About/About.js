@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Alert, Image, Linking, Platform, ScrollView, Share, Text, ToastAndroid, View } from "react-native";
+import { Alert, Image, Linking, Platform, ScrollView, Share, ToastAndroid, View } from "react-native";
 import { typeDevice } from "../../utils/Index";
 import * as WebBrowser from 'expo-web-browser';
 import qs from 'qs';
@@ -12,12 +12,12 @@ export default function About({ navigation }) {
     const [OS, setOS] = useState('')
 
     useEffect(() => {
-        switch (Platform.OS) {
-            case 'android': setOS('Android')
-                break;
-            default: setOS('iOS')
-                break
+        const action = {
+            'android': () => setOS('Android'),
+            'ios': () => setOS('iOS')
         }
+
+        action[Platform.OS]();
     }, [])
 
     const share = async () => {

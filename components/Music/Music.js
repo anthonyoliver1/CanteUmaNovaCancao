@@ -179,11 +179,10 @@ export default function Music({ route }) {
                 </Container>
             </ScrollView>
 
-            {showButtonPlay ?
+            {showButtonPlay &&
                 <TouchableOpacity style={style.floatButtom} onPress={showModalMusicAudio}>
                     <MaterialIcons name="audiotrack" size={24} color="#fff" />
                 </TouchableOpacity>
-                : null
             }
             {isMounted &&
                 <Modalize ref={modalizeRef}
