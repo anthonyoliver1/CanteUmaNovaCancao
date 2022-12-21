@@ -105,7 +105,8 @@ export default function Search({ navigation }) {
                         <Author>{item.author}</Author>
                     </View>
                     <View>
-                        {item.kids && <Kids>kids</Kids>}
+                        {item.kids && <Kids>Kids</Kids>}
+                        {item.natal && <Kids>Natal</Kids>}
                     </View>
                 </InfoMusic>
             </List>
@@ -118,7 +119,7 @@ export default function Search({ navigation }) {
                 <SearchInput
                     placeholder={"Pesquisar música ..."}
                     placeholderTextColor={'#c0c0c0'}
-                    onChangeText={text => searcMusicTemp(text)}
+                    onChangeText={(text) => searcMusicTemp(text)}
                     onSubmitEditing={searchMusic}
                     selectionColor={themes.dark.colors.primary}
                 />

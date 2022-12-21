@@ -47,6 +47,7 @@ export default function Lyrics({ navigation }) {
         { title: 'A-Z', type: 'asc' },
         { title: 'Z-A', type: 'desc' },
         { title: 'Kids', type: 'kids' },
+        { title: 'Natal', type: 'natal' },
         { title: 'Coração Audaz', type: 'audaz' },
         { title: 'Igreja de Cristo Internacional', type: 'ICI' },
     ]
@@ -93,6 +94,14 @@ export default function Lyrics({ navigation }) {
                         .filter(i => i.kids)
                         .sort((a, b) => a.title.localeCompare(b.title))
                 );
+            },
+            'natal': () => {
+                setMusic(
+                    mockMusicData
+                        .filter(i => i.natal)
+                        .sort((a, b) => a.title.localeCompare(b.title))
+
+                )
             }
         }
 
@@ -121,7 +130,8 @@ export default function Lyrics({ navigation }) {
                             <Author>{item.author}</Author>
                         </View>
                         <View>
-                            {item.kids && <Kids>kids</Kids>}
+                            {item.kids && <Kids>Kids</Kids>}
+                            {item.natal && <Kids>Natal</Kids>}
                         </View>
                     </InfoMusic>
                 </List>
@@ -137,7 +147,7 @@ export default function Lyrics({ navigation }) {
 
     const filter = useCallback(() => (
         <Filter orderList={(params) => changeOrder(params.type)} filterOrder={filterOrder} />
-    ),[])
+    ), [])
 
     return (
         <Container>
