@@ -19,3 +19,12 @@ export const typeDevice = {
     }
     
 }
+
+export const OsDevice = () => {
+    switch (Platform.OS) {
+        case 'android': return 'Android'
+        case 'ios': return 'iOS'
+        default:
+            break;
+    }
+}
