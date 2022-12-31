@@ -44,34 +44,18 @@ export default function Lyrics({ navigation }) {
 
     const filterOrder = [
         { title: 'Todos', type: 'all' },
-        { title: 'A-Z', type: 'asc' },
-        { title: 'Z-A', type: 'desc' },
+        { title: 'Igreja de Cristo Internacional', type: 'ICI' },
+        { title: 'Coração Audaz', type: 'audaz' },
         { title: 'Kids', type: 'kids' },
         { title: 'Natal', type: 'natal' },
-        { title: 'Coração Audaz', type: 'audaz' },
-        { title: 'Igreja de Cristo Internacional', type: 'ICI' },
     ]
 
     const orderList = (params) => {
         const action = {
-            'asc': () => {
-                setMusic(
-                    mockMusicData
-                        .filter(i => i.title)
-                        .sort((a, b) => a.title.localeCompare(b.title))
-                );
-            },
-            'desc': () => {
-                setMusic(
-                    mockMusicData
-                        .filter(i => i.title)
-                        .sort((a, b) => b.title.localeCompare(a.title))
-                );
-            },
             'all': () => {
                 setMusic(
                     mockMusicData.filter(i => i.number)
-                        .sort((a, b) => a.number > b.number)
+                        .sort((a, b) =>a.title.localeCompare(b.title))
                 );
             },
             'audaz': () => {
