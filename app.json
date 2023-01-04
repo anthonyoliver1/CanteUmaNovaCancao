@@ -4,9 +4,9 @@
     "slug": "AnthonyOliveira",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/note_logo.png",
+    "icon": "./src/assets/note_logo.png",
     "splash": {
-      "image": "./assets/splash_logo.png",
+      "image": "./src/assets/splash_logo.png",
       "resizeMode": "contain",
       "backgroundColor": "#0B97D3"
     },
@@ -24,7 +24,7 @@
     "android": {
       "userInterfaceStyle": "automatic",
       "adaptiveIcon": {
-        "foregroundImage": "./assets/note_logo.png"
+        "foregroundImage": "./src/assets/note_logo.png"
       },
       "package": "com.anthony.dev.AnthonyOliveira"
     },

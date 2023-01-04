@@ -1,29 +1,17 @@
-import React, { useEffect, useState } from "react";
-import { Alert, Image, Linking, Platform, ScrollView, Share, ToastAndroid, View } from "react-native";
-import { typeDevice } from "../../utils/Index";
+import React from "react";
+import { Alert, Image, Linking, ScrollView, Share, ToastAndroid, View } from "react-native";
+import { AboutButton, Container, Description, VersionApp, Wrapper } from "../../style/AboutStyle";
+import { OsDevice, typeDevice } from "../../utils";
+import { B, ButtonTitle } from "../../../style";
+import appInfo from "../../../app.json";
 import * as WebBrowser from 'expo-web-browser';
 import qs from 'qs';
-import { AboutButton, Container, Description, VersionApp, Wrapper } from "../../style/AboutStyle";
-import { B, ButtonTitle } from "../../style";
-import appInfo from "../../app.json";
 
 export default function About({ navigation }) {
-
-    const [OS, setOS] = useState('')
-
-    useEffect(() => {
-        const action = {
-            'android': () => setOS('Android'),
-            'ios': () => setOS('iOS')
-        }
-
-        action[Platform.OS]();
-    }, [])
-
     const share = async () => {
         try {
             if (typeDevice.mobile()) {
-                const linkShare = typeDevice.iOS() ? '' : 'https://google.com.br'
+                const linkShare = typeDevice.iOS() ? '' : 'https://google.com.br';
                 await Share.share({
                     message: 'Venha e Cante Uma Nova Canção com a gente!!' + `${"\n\n" + linkShare}`,
                     url: 'https://apple.com/br',
@@ -46,11 +34,11 @@ export default function About({ navigation }) {
     }
 
     const goToWebsite = async () => {
-        await WebBrowser.openBrowserAsync('https://www.icisp.org.br/')
+        await WebBrowser.openBrowserAsync('https://www.icisp.org.br/');
     }
 
     async function sendEmail() {
-        const to = 'anthony.silvaoliveira@outlook.com'
+        const to = 'anthony.silvaoliveira@outlook.com';
 
         const query = qs.stringify({
             subject: 'Cante Uma Nova Canção',
@@ -70,7 +58,7 @@ export default function About({ navigation }) {
                         text: 'Fechar'
                     }
                 ])
-                : ToastAndroid.show('Não foi possível abrir o seu app de Email', ToastAndroid.LONG)
+                : ToastAndroid.show('Não foi possível abrir o seu app de Email', ToastAndroid.LONG);
         }
 
         return Linking.openURL(url);
@@ -133,7 +121,7 @@ export default function About({ navigation }) {
                     </View>
                     <VersionApp>
                         Versão: <B>{appInfo.expo.version}</B> {"\n"}
-                        OS: <B>{OS}</B>{"\n\n"}
+                        OS: <B>{OsDevice()}</B>{"\n\n"}
                         Beta
                         {/* <Text style={{fontSize: 30}}>🎧</Text> */}
                     </VersionApp>

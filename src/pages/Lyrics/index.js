@@ -1,9 +1,9 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Dimensions, Image, TouchableOpacity, View, VirtualizedList } from 'react-native';
-import mockMusicData from '../../utils/mockMusicData.json';
-import { Author, Kids, Title } from '../../style';
 import { Container, InfoMusic, List, Wrapper } from '../../style/LyricsStyle';
-import Filter from '../../components/Music/Filter';
+import { Author, Kids, Title } from '../../../style';
+import Filter from '../../components/Filter';
+import mockMusicData from '../../utils/mockMusicData.json';
 
 export default function Lyrics({ navigation }) {
     const widthScreen = Dimensions.get('window').width - 10;
@@ -13,7 +13,7 @@ export default function Lyrics({ navigation }) {
 
     useEffect(() => {
         orderList(newOrder);
-    }, [newOrder])
+    }, [newOrder]);
 
     const gotToMusicText = ({ number, title, music, author }) => {
         const { text, audio } = music;
@@ -29,7 +29,7 @@ export default function Lyrics({ navigation }) {
                     author: author
                 }
             }
-        )
+        );
     }
 
     const data = {
@@ -85,7 +85,7 @@ export default function Lyrics({ navigation }) {
                         .filter(i => i.natal)
                         .sort((a, b) => a.title.localeCompare(b.title))
 
-                )
+                );
             }
         }
 
@@ -131,7 +131,7 @@ export default function Lyrics({ navigation }) {
 
     const filter = useCallback(() => (
         <Filter orderList={(params) => changeOrder(params.type)} filterOrder={filterOrder} />
-    ), [])
+    ), []);
 
     return (
         <Container>

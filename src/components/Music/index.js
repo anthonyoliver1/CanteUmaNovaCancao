@@ -1,10 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Alert, Dimensions, ScrollView, StyleSheet, ToastAndroid, TouchableOpacity, View } from 'react-native';
+import { Alert, ScrollView, StyleSheet, ToastAndroid, TouchableOpacity, View } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
+import { typeDevice } from '../../utils';
 import { Modalize } from 'react-native-modalize';
-import Slider from '@react-native-community/slider';
 import { Audio } from 'expo-av';
+import { Wrapper } from '../../../style';
 import * as FileSystem from 'expo-file-system';
+import Slider from '@react-native-community/slider';
+import themes from '../../style/themes';
 import {
     AuthorMusic,
     Container,
@@ -16,18 +19,15 @@ import {
     ProgressNummber,
     Time
 } from '../../style/MusicStyle';
-import { Wrapper } from '../../style';
-import themes from '../../style/themes';
-import { typeDevice } from '../../utils/Index';
 
 export default function Music({ route }) {
     const { musicTxt, audio, author, musicTitle } = route.params;
 
     const modalizeRef = useRef(null);
-    const [showButtonPlay, setShowButtonPlay] = useState(undefined)
-    const [marginText, setMarginText] = useState('60px')
-    const [typeIcon, setTypeIcon] = useState('play-arrow')
-    const [musicStarted, setMusicStarted] = useState(false)
+    const [showButtonPlay, setShowButtonPlay] = useState(undefined);
+    const [marginText, setMarginText] = useState('60px');
+    const [typeIcon, setTypeIcon] = useState('play-arrow');
+    const [musicStarted, setMusicStarted] = useState(false);
     const [sound, setSound] = useState();
     const [infoFile, setInfoFile] = useState({});
     const [progress, setProgress] = useState(0);
@@ -43,7 +43,7 @@ export default function Music({ route }) {
 
             sound.setOnPlaybackStatusUpdate(setInfoFile);
         } catch (error) {
-            console.log('Deu erro: ', error)
+            console.log('Deu erro: ', error);
             const notFoundMessage = 'Não foi possível carregar a música';
 
             if (typeDevice.Android())
@@ -80,14 +80,14 @@ export default function Music({ route }) {
     }, [infoFile]);
 
     useEffect(() => {
-        setIsMounted(!isMounted)
+        setIsMounted(!isMounted);
         loadMusic();
-    }, [])
+    }, []);
 
     useEffect(() => {
         return () => {
             sound && sound.unloadAsync();
-            setIsMounted(!isMounted)
+            setIsMounted(!isMounted);
         }
     }, [sound]);
 
@@ -104,7 +104,7 @@ export default function Music({ route }) {
     // })
 
     useEffect(() => {
-        const show = musicTitle.includes('O Sonho')
+        const show = musicTitle.includes('O Sonho');
         setShowButtonPlay(Boolean(show));
     }, [audio])
 

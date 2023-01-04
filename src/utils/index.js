@@ -1,30 +1,29 @@
 import { Platform } from 'react-native';
 
 export const typeDevice = {
-    Android:  () => {
+    Android: () => {
         if (Platform.OS === 'android')
-            return true
+            return true;
     },
-    iOS:  () => {
+    iOS: () => {
         if (Platform.OS === 'ios')
-           return true
+            return true;
     },
     web: () => {
         if (Platform.OS === 'web')
-           return true
+            return true;
     },
     mobile: () => {
         if (Platform.OS === 'android' || Platform.OS === 'ios')
-            return true
+            return true;
     }
-    
 }
 
 export const OsDevice = () => {
-    switch (Platform.OS) {
-        case 'android': return 'Android'
-        case 'ios': return 'iOS'
-        default:
-            break;
+    const action = {
+        'android': () => 'Android',
+        'ios': () => 'iOS'
     }
+
+    return action[Platform.OS]();
 }

@@ -1,12 +1,11 @@
 import React, { useState } from "react";
 import { Alert, View, ToastAndroid, FlatList, TouchableOpacity, Image, Dimensions, Keyboard, TouchableWithoutFeedback } from "react-native";
-import { typeDevice } from "../../utils/Index";
-import mockMusicData from '../../utils/mockMusicData.json';
 import { Container, ListView, SearchButton, SearchInput } from "../../style/SearchStyle";
-import { Author, ButtonTitle, Kids, Title } from "../../style";
+import { Author, ButtonTitle, Kids, Title } from "../../../style";
 import { InfoMusic, List } from "../../style/LyricsStyle";
+import { typeDevice } from "../../utils";
+import mockMusicData from '../../utils/mockMusicData.json';
 import themes from "../../style/themes";
-
 
 export default function Search({ navigation }) {
     const [textSearch, setTextSearch] = useState('');
@@ -54,7 +53,7 @@ export default function Search({ navigation }) {
         const textSearch = value.trim().toLocaleLowerCase();
         const mockMusic = JSON.parse(JSON.stringify(mockMusicData));
         const filterTitle = mockMusic.filter(i => i.title.toLocaleLowerCase().includes(textSearch));
-        const filterMusicLetter = mockMusic.filter(i => i.music.text.toLocaleLowerCase().includes(textSearch))
+        const filterMusicLetter = mockMusic.filter(i => i.music.text.toLocaleLowerCase().includes(textSearch));
         const filtered = filterTitle.length ? filterTitle : filterMusicLetter;
 
         setTextSearch(textSearch);

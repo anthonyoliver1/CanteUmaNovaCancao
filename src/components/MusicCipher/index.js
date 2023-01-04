@@ -1,10 +1,7 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { ScrollView } from 'react-native';
-import {
-    Container,
-    MusicLetter,
-} from '../../style/MusicStyle';
-import { Wrapper } from '../../style';
+import { Container, MusicLetter } from '../../style/MusicStyle';
+import { Wrapper } from '../../../style';
 
 export default function MusicCipher({ route }) {
     const { cipher } = route.params;

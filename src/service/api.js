@@ -1,5 +1,5 @@
 import { Alert, ToastAndroid } from 'react-native';
-import { OsDevice, typeDevice } from '../utils/Index';
+import { OsDevice, typeDevice } from '../utils';
 
 export async function callApi(
     base_url,
@@ -11,7 +11,7 @@ export async function callApi(
         const headers = {
             'Content-Type': 'application/json',
             'user-agent': `CUNC-APP-${OsDevice()}`
-        }
+        };
 
         const response = await fetch(url, {
             method: method,
@@ -20,7 +20,7 @@ export async function callApi(
 
         return response.json();
     } catch (error) {
-        const messageError = 'Não foi possível carregar as músicas, feche e abra o app!'
+        const messageError = 'Não foi possível carregar as músicas, feche e abra o app!';
 
         typeDevice.iOS() ?
             Alert.alert('Houve um erro', messageError, [
@@ -28,7 +28,7 @@ export async function callApi(
                     text: 'Fechar'
                 }
             ])
-            : ToastAndroid.show(messageError, ToastAndroid.LONG)
+            : ToastAndroid.show(messageError, ToastAndroid.LONG);
 
         console.error('Não foi possivel fazer a requisição', error.error);
     }

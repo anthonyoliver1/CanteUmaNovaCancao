@@ -7,5 +7,5 @@ export const getAllMusics = async () => {
         BASE_URL,
         'api/cunc/get-all-musics',
         'GET'
-    )
+    );
 };

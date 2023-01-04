@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Dimensions, Image, TouchableOpacity, View, VirtualizedList } from 'react-native';
-import { Author, Title } from '../../style';
 import { Container, InfoMusic, List, Wrapper } from '../../style/LyricsStyle';
+import { Author, Title } from '../../../style';
 import mockMusicData from '../../utils/mockMusicData.json';
 
 export default function Cipher({ navigation }) {
@@ -26,7 +26,7 @@ export default function Cipher({ navigation }) {
                     cipher: cifra
                 }
             }
-        )
+        );
     }
 
     const widthScreen = Dimensions.get('window').width - 10;
