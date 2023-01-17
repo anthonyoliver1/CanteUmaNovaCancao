@@ -219,7 +219,7 @@ export default function Router() {
                         tabBarActiveTintColor: '#0B97D3',
                         tabBarInactiveTintColor: 'gray',
                         tabBarStyle: {
-                            flex: heightScreen ?? 0.08,
+                            flex: heightScreen ? null : 0.08,
                             height: heightScreen
                         },
                     })}
