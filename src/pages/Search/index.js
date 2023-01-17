@@ -1,13 +1,14 @@
 import React, { useState } from "react";
-import { Alert, View, ToastAndroid, FlatList, TouchableOpacity, Image, Dimensions, Keyboard, TouchableWithoutFeedback } from "react-native";
+import { View, FlatList, TouchableOpacity, Image, Dimensions, Keyboard, TouchableWithoutFeedback } from "react-native";
 import { Container, ListView, SearchButton, SearchInput } from "../../style/SearchStyle";
 import { Author, ButtonTitle, Kids, Title } from "../../../style";
 import { InfoMusic, List } from "../../style/LyricsStyle";
-import { typeDevice } from "../../utils";
 import mockMusicData from '../../utils/mockMusicData.json';
 import themes from "../../style/themes";
+import { useToast } from "react-native-toast-notifications";
 
 export default function Search({ navigation }) {
+    const { show } = useToast();
     const [textSearch, setTextSearch] = useState('');
     const [dataMusic, setDataMusic] = useState([]);
     const [dataMusicTemp, setDataMusicTemp] = useState([]);
@@ -19,31 +20,11 @@ export default function Search({ navigation }) {
 
         if (textSearch.length <= 1) {
             setDataMusic([]);
-            if (typeDevice.Android())
-                return ToastAndroid.show(message, ToastAndroid.SHORT);
-
-            if (typeDevice.iOS())
-                return Alert.alert('Hm...', message,
-                    [
-                        {
-                            text: 'Fechar'
-                        }
-                    ]
-                );
+            return show(message, { type: 'warning' });
         }
 
         if (dataMusicTemp.length <= 0) {
-            if (typeDevice.Android())
-                return ToastAndroid.show(notFoundMessage, ToastAndroid.SHORT);
-
-            if (typeDevice.iOS())
-                return Alert.alert('Hm...', notFoundMessage,
-                    [
-                        {
-                            text: 'Fechar'
-                        }
-                    ]
-                );
+            return show(notFoundMessage, { type: 'warning' });
         }
 
         Keyboard.dismiss();

@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Alert, ScrollView, StyleSheet, ToastAndroid, TouchableOpacity, View } from 'react-native';
+import { ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
-import { typeDevice } from '../../utils';
 import { Modalize } from 'react-native-modalize';
 import { Audio } from 'expo-av';
 import { Wrapper } from '../../../style';
@@ -19,9 +18,11 @@ import {
     ProgressNummber,
     Time
 } from '../../style/MusicStyle';
+import { useToast } from 'react-native-toast-notifications';
 
 export default function Music({ route }) {
     const { musicTxt, audio, author, musicTitle } = route.params;
+    const { show } = useToast();
 
     const modalizeRef = useRef(null);
     const [showButtonPlay, setShowButtonPlay] = useState(undefined);
@@ -46,16 +47,8 @@ export default function Music({ route }) {
             console.log('Deu erro: ', error);
             const notFoundMessage = 'Não foi possível carregar a música';
 
-            if (typeDevice.Android())
-                return ToastAndroid.show(notFoundMessage + ' :(', ToastAndroid.LONG);
+            return show(notFoundMessage, { type: 'danger' });
 
-            return Alert.alert('Poxa :(', notFoundMessage,
-                [
-                    {
-                        text: 'Fechar'
-                    }
-                ]
-            );
         }
     }
 

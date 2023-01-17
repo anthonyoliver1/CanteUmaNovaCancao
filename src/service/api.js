@@ -1,5 +1,5 @@
-import { Alert, ToastAndroid } from 'react-native';
-import { OsDevice, typeDevice } from '../utils';
+import { useToast } from 'react-native-toast-notifications';
+import { OsDevice } from '../utils';
 
 export async function callApi(
     base_url,
@@ -21,15 +21,9 @@ export async function callApi(
         return response.json();
     } catch (error) {
         const messageError = 'Não foi possível carregar as músicas, feche e abra o app!';
+        const { show } = useToast();
 
-        typeDevice.iOS() ?
-            Alert.alert('Houve um erro', messageError, [
-                {
-                    text: 'Fechar'
-                }
-            ])
-            : ToastAndroid.show(messageError, ToastAndroid.LONG);
-
+        show(messageError, { type: 'danger' });
         console.error('Não foi possivel fazer a requisição', error.error);
     }
 }

@@ -1,13 +1,16 @@
 import React from "react";
-import { Alert, Image, Linking, ScrollView, Share, ToastAndroid, View } from "react-native";
+import { Image, Linking, ScrollView, Share, View } from "react-native";
 import { AboutButton, Container, Description, VersionApp, Wrapper } from "../../style/AboutStyle";
 import { OsDevice, typeDevice } from "../../utils";
 import { B, ButtonTitle } from "../../../style";
 import appInfo from "../../../app.json";
 import * as WebBrowser from 'expo-web-browser';
 import qs from 'qs';
+import { useToast } from "react-native-toast-notifications";
 
 export default function About({ navigation }) {
+    const { show } = useToast();
+
     const share = async () => {
         try {
             if (typeDevice.mobile()) {
@@ -38,30 +41,29 @@ export default function About({ navigation }) {
     }
 
     async function sendEmail() {
-        const to = 'anthony.silvaoliveira@outlook.com';
+        try {
+            const to = 'anthony.silvaoliveira@outlook.com';
 
-        const query = qs.stringify({
-            subject: 'Cante Uma Nova Canção',
-            body: '',
-            cc: '',
-            bcc: ''
-        });
+            const query = qs.stringify({
+                subject: 'Cante Uma Nova Canção',
+                body: '',
+                cc: '',
+                bcc: ''
+            });
 
-        let url = `mailto:${to}?${query}`;
+            let url = `mailto:${to}?${query}`;
 
-        const canOpen = await Linking.canOpenURL(url);
+            const canOpen = await Linking.canOpenURL(url);
 
-        if (!canOpen) {
-            typeDevice.iOS() ?
-                Alert.alert('Houve um erro', 'Não foi possível abrir o seu app de email', [
-                    {
-                        text: 'Fechar'
-                    }
-                ])
-                : ToastAndroid.show('Não foi possível abrir o seu app de Email', ToastAndroid.LONG);
+            if (!canOpen) {
+                show('Não foi possível abrir o seu app de email', { type: 'danger' });
+            }
+
+            return Linking.openURL(url);
+
+        } catch (error) {
+            show('Ops! Houve um erro abrir o seu app de email', { type: 'danger' });
         }
-
-        return Linking.openURL(url);
     }
 
     return (
