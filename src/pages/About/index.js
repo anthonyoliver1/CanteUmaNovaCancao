@@ -62,7 +62,7 @@ export default function About({ navigation }) {
             return Linking.openURL(url);
 
         } catch (error) {
-            show('Ops! Houve um erro abrir o seu app de email', { type: 'danger' });
+            show('Ops! Houve um erro ao abrir o seu app de email', { type: 'danger' });
         }
     }
 
