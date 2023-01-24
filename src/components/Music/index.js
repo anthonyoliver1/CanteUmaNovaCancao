@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { Modalize } from 'react-native-modalize';
-import { Audio } from 'expo-av';
+import { Audio, InterruptionModeAndroid, InterruptionModeIOS } from 'expo-av';
 import { Wrapper } from '../../../style';
 import * as FileSystem from 'expo-file-system';
 import Slider from '@react-native-community/slider';
@@ -37,6 +37,14 @@ export default function Music({ route }) {
 
     async function loadMusic() {
         try {
+            await Audio.setAudioModeAsync({
+                playsInSilentModeIOS: true,
+                staysActiveInBackground: true,
+                playThroughEarpieceAndroid: false,
+                interruptionModeAndroid: InterruptionModeAndroid.DoNotMix,
+                interruptionModeIOS: InterruptionModeIOS.DoNotMix
+            });
+
             const { sound } = await Audio.Sound.createAsync(
                 require('../../assets/music/o_sonho.mp3')
             );
