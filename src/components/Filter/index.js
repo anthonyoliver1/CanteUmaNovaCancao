@@ -2,12 +2,12 @@ import React from 'react';
 import { FlatList, TouchableOpacity } from 'react-native';
 import { Container, TextButton, Wrapper } from '../../style/FilterStyle';
 
-export default function Filter({ orderList, filterOrder }) {
+export default function Filter({ listHandler, filterOrder }) {
 
     const renderItem = ({ item, separators }) => (
         <TouchableOpacity
             key={item.title}
-            onPress={() => orderList(item)}
+            onPress={() => listHandler(item)}
             onShowUnderlay={separators.highlight}
             onHideUnderlay={separators.unhighlight}
             activeOpacity={0.4}
