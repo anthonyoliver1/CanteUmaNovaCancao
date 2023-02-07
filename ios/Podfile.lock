@@ -21,6 +21,8 @@ PODS:
   - EXJSONUtils (0.3.0)
   - EXManifests (0.3.1):
     - EXJSONUtils
+  - EXNetwork (4.3.0):
+    - ExpoModulesCore
   - Expo (46.0.19):
     - ExpoModulesCore
   - expo-dev-client (1.3.1):
@@ -344,6 +346,8 @@ PODS:
     - ReactCommon/turbomodule/core
   - react-native-slider (4.2.3):
     - React-Core
+  - react-native-webview (11.23.0):
+    - React-Core
   - React-perflogger (0.69.6)
   - React-RCTActionSheet (0.69.6):
     - React-Core/RCTActionSheetHeaders (= 0.69.6)
@@ -441,6 +445,8 @@ PODS:
     - React-logger (= 0.69.6)
     - React-perflogger (= 0.69.6)
     - ReactCommon/turbomodule/core (= 0.69.6)
+  - RNCAsyncStorage (1.17.11):
+    - React-Core
   - RNGestureHandler (2.5.0):
     - React-Core
   - RNScreens (3.15.0):
@@ -460,6 +466,7 @@ DEPENDENCIES:
   - EXFont (from `../node_modules/expo-font/ios`)
   - EXJSONUtils (from `../node_modules/expo-json-utils/ios`)
   - EXManifests (from `../node_modules/expo-manifests/ios`)
+  - EXNetwork (from `../node_modules/expo-network/ios`)
   - Expo (from `../node_modules/expo`)
   - expo-dev-client (from `../node_modules/expo-dev-client/ios`)
   - expo-dev-launcher (from `../node_modules/expo-dev-launcher`)
@@ -493,6 +500,7 @@ DEPENDENCIES:
   - React-logger (from `../node_modules/react-native/ReactCommon/logger`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - "react-native-slider (from `../node_modules/@react-native-community/slider`)"
+  - react-native-webview (from `../node_modules/react-native-webview`)
   - React-perflogger (from `../node_modules/react-native/ReactCommon/reactperflogger`)
   - React-RCTActionSheet (from `../node_modules/react-native/Libraries/ActionSheetIOS`)
   - React-RCTAnimation (from `../node_modules/react-native/Libraries/NativeAnimation`)
@@ -505,6 +513,7 @@ DEPENDENCIES:
   - React-RCTVibration (from `../node_modules/react-native/Libraries/Vibration`)
   - React-runtimeexecutor (from `../node_modules/react-native/ReactCommon/runtimeexecutor`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
+  - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage`)"
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
@@ -537,6 +546,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/expo-json-utils/ios"
   EXManifests:
     :path: "../node_modules/expo-manifests/ios"
+  EXNetwork:
+    :path: "../node_modules/expo-network/ios"
   Expo:
     :path: "../node_modules/expo"
   expo-dev-client:
@@ -601,6 +612,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-safe-area-context"
   react-native-slider:
     :path: "../node_modules/@react-native-community/slider"
+  react-native-webview:
+    :path: "../node_modules/react-native-webview"
   React-perflogger:
     :path: "../node_modules/react-native/ReactCommon/reactperflogger"
   React-RCTActionSheet:
@@ -625,6 +638,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/runtimeexecutor"
   ReactCommon:
     :path: "../node_modules/react-native/ReactCommon"
+  RNCAsyncStorage:
+    :path: "../node_modules/@react-native-async-storage/async-storage"
   RNGestureHandler:
     :path: "../node_modules/react-native-gesture-handler"
   RNScreens:
@@ -645,6 +660,7 @@ SPEC CHECKSUMS:
   EXFont: 06df627203afcb8a3b3152ec06eb2f11f46f0cff
   EXJSONUtils: 2a74b8f40f1523cc3f92af99c91aa78201737a77
   EXManifests: b38dc61303f5eede990b4c8ecbfac32f82160e65
+  EXNetwork: cba9570f90f4f27ce938afd57810b484febf1fab
   Expo: 2aa7370e08c458536b7089120e84ed8bd204357b
   expo-dev-client: 381f39773b9fd83008fd58bf493d3a7be748752d
   expo-dev-launcher: 5a2a86276911631997b8821d278a964252bfbbf7
@@ -678,6 +694,7 @@ SPEC CHECKSUMS:
   React-logger: ebb4d31bbbe4f1a8a1a9b658d7429210b8f68160
   react-native-safe-area-context: 6c12e3859b6f27b25de4fee8201cfb858432d8de
   react-native-slider: 98b724cd3e44c3454a6d0724e796d4e9c52189ce
+  react-native-webview: e771bc375f789ebfa02a26939a57dbc6fa897336
   React-perflogger: 1fb1ad5333b43a5137afd7608695f7a42c5efd27
   React-RCTActionSheet: a435bd67689433575a1e5d7614b021d2c17f0726
   React-RCTAnimation: d097c5ed2d00735958508617555abd85183b94e2
@@ -690,6 +707,7 @@ SPEC CHECKSUMS:
   React-RCTVibration: 285f8538386c660e6b9497e204636acd93bf7fcc
   React-runtimeexecutor: 0af71c94f968fa10015bf0119951bccd2e4d8865
   ReactCommon: fe7580b9d10f00249facf25659e0ec051320cc8a
+  RNCAsyncStorage: 8616bd5a58af409453ea4e1b246521bb76578d60
   RNGestureHandler: bad495418bcbd3ab47017a38d93d290ebd406f50
   RNScreens: 4a1af06327774490d97342c00aee0c2bafb497b7
   Yoga: 75bf4b0131cfb46a659cd0c13309b79a6fcff66d
