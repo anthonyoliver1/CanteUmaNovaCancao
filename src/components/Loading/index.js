@@ -1,4 +1,5 @@
-import { ActivityIndicator, Image } from "react-native";
+import React from "react";
+import { ActivityIndicator } from "react-native";
 import { Container } from "../../style/LoadingIndicatorStyle";
 import themes from "../../style/themes";
 
