@@ -31,3 +31,11 @@ export const OsDevice = () => {
 export const wait = (timeout) => {
     return new Promise(resolve => setTimeout(resolve, timeout));
 }
+
+export const isNull = (value) => {
+    return value === null;
+}
+
+export const isUndefined = (value) => {
+    return value === undefined;
+}
