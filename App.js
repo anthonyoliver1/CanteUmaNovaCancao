@@ -1,34 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import Router from './src/routes/router';
-import { ToastProvider } from 'react-native-toast-notifications'
-import { Keyboard } from 'react-native';
 import themes from './src/style/themes'
+import { ToastProvider } from 'react-native-toast-notifications'
+import { MusicProvider } from './src/contexts/music';
+import  { ConnectionProvider } from './src/contexts/connection';
 
 export default function App() {
-  const [positionToast, setPositionToast] = useState(85);
-
-  const keyboardShow = Keyboard.addListener(
-    'keyboardDidShow',
-    () => setPositionToast(0)
-  )
-
-  const keyboardHide = Keyboard.addListener(
-    'keyboardDidHide',
-    () => setPositionToast(85)
-  )
-
-  useEffect(() => {
-    return clean = () => {
-      keyboardShow.remove();
-      keyboardHide.remove();
-    }
-  })
-
   return (
     <ToastProvider
       placement='bottom'
-      style={{ bottom: positionToast }}
-      duration={2500}
+      style={{ bottom: '5%' }}
+      duration={3500}
       animationDuration={200}
       animationType='zoom-in'
       dangerColor={themes.dark.toastColor.danger}
@@ -36,7 +18,11 @@ export default function App() {
       successColor={themes.dark.toastColor.success}
       normalColor={themes.dark.toastColor.normal}
     >
-      <Router />
+      <MusicProvider>
+        <ConnectionProvider>
+          <Router />
+        </ConnectionProvider>
+      </MusicProvider>
     </ToastProvider>
   )
 }
