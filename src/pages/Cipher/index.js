@@ -1,15 +1,20 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { Dimensions, Image, TouchableOpacity, View, VirtualizedList } from 'react-native';
 import { Container, InfoMusic, List, Wrapper } from '../../style/LyricsStyle';
 import { Author, Title } from '../../../style';
-import mockMusicData from '../../utils/mockMusicData.json';
+// import mockMusicData from '../../utils/mockMusicData.json';
+import MusicContext from '../../contexts/music';
+import LoadingIndicator from '../../components/Loading';
 
 export default function Cipher({ navigation }) {
-    const [onlyCipher, setOnlyCipher] = useState({});
+    const {
+        allCiphers,
+        getStorageCipher,
+    } = useContext(MusicContext);
 
     useEffect(() => {
-        setOnlyCipher(mockMusicData.filter(cipher => cipher.music.cifra));
-    }, [])
+        getStorageCipher();
+    }, []);
 
     const gotToMusicCipher = ({ number, title, music, author }) => {
         const { text, audio, cifra } = music;
@@ -73,14 +78,18 @@ export default function Cipher({ navigation }) {
 
     return (
         <Container>
-            <VirtualizedList
-                data={onlyCipher}
-                initialNumToRender={50}
-                renderItem={renderItem}
-                getItemCount={getItemCount}
-                getItem={getItem}
-                keyExtractor={item => item.number}
-            />
+            {allCiphers.length ?
+                <VirtualizedList
+                    data={allCiphers}
+                    initialNumToRender={50}
+                    renderItem={renderItem}
+                    getItemCount={getItemCount}
+                    getItem={getItem}
+                    keyExtractor={item => item.number}
+                />
+                :
+                <LoadingIndicator />
+            }
         </Container>
     );
 };

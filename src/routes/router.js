@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Lyrics from '../pages/Lyrics';
 import Cipher from '../pages/Cipher';
 import Search from '../pages/Search';
@@ -11,11 +11,15 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 import { ThemeProvider } from 'styled-components';
 import { Dimensions } from 'react-native';
-import { typeDevice } from '../utils';
+import { typeDevice, wait } from '../utils';
 import { StatusBar } from 'expo-status-bar';
 import { Ionicons } from '@expo/vector-icons';
 import { Wrapper } from '../../style';
 import * as NavigationBar from 'expo-navigation-bar';
+import ErrorScreen from '../components/ErrorScreen';
+import MusicContext from '../contexts/music';
+import ConnectionContext from '../contexts/connection';
+import Loader from '../components/Loading/LoaderScreen';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -170,7 +174,39 @@ function CipherScreenStack({ route }) {
 }
 
 export default function Router() {
+    const {
+        allMusics,
+        getMusics,
+        getStorageMusic
+    } = useContext(MusicContext);
+
+    const {
+        isConnection,
+        getNetworkStateAsync
+    } = useContext(ConnectionContext);
+
+    const [showPageError, setShowPageError] = useState(false);
+    const [inLoading, setInLoading] = useState(true);
+
     let heightScreen = null;
+
+    useEffect(() => {
+        getNetworkStateAsync();
+        getStorageMusic();
+    }, [])
+
+    useEffect(() => {
+        wait(1500).then(() => setInLoading(false));
+    }, [])
+
+    useEffect(() => {
+        const checkingConnectionAndMusicLocal = !isConnection && !Boolean(allMusics.length);
+
+        setShowPageError(checkingConnectionAndMusicLocal);
+        if (checkingConnectionAndMusicLocal) return;
+
+        getMusics();
+    }, [isConnection])
 
     if (Dimensions.get('window').height < 600) {
         heightScreen = Dimensions.get('window').height - 510;
@@ -179,6 +215,18 @@ export default function Router() {
     if (typeDevice.Android()) {
         NavigationBar.setButtonStyleAsync("light");
         NavigationBar.setBackgroundColorAsync("#1A1A1A");
+    }
+
+    if (inLoading) {
+        return (
+            <Loader />
+        )
+    }
+
+    if (showPageError) {
+        return (
+            <ErrorScreen />
+        )
     }
 
     return (
