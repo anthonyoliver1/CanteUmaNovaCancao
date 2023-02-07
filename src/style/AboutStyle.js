@@ -16,7 +16,7 @@ export const Description = styled.Text`
     margin-bottom: 30px;
     text-align: justify;
     padding: 25px;
-    color: ${props => props.theme.color}
+    color: ${props => props.theme.color};
 `;
 
 export const AboutButton = styled.Pressable`
