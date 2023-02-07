@@ -13,7 +13,7 @@ export function ConnectionProvider({ children }) {
 
     const getNetworkStateAsync = useCallback(async () => {
         const connection = await Network.getNetworkStateAsync();
-        setIsConnection(!connection.isInternetReachable);
+        setIsConnection(connection.isInternetReachable);
     }, [])
 
     return (
