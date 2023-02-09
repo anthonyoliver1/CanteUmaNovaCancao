@@ -250,17 +250,15 @@ export default function Router() {
                         },
                         tabBarIcon: ({ focused, color, size }) => {
                             let iconName;
-                            if (route.name === 'Home') {
-                                iconName = focused
-                                    ? 'musical-notes'
-                                    : 'musical-notes-outline';
-                            } else if (route.name === 'Cipher') {
-                                iconName = focused ? 'book' : 'book-outline';
-                            } else if (route.name === 'Search') {
-                                iconName = focused ? 'md-search' : 'md-search-outline'
-                            } else if (route.name === 'About') {
-                                iconName = focused ? 'menu' : 'menu-outline'
+
+                            const actions = {
+                                'Home': () => iconName = focused ? 'musical-notes' : 'musical-notes-outline',
+                                'Cipher': () => iconName = focused ? 'book' : 'book-outline',
+                                'Search': () => iconName = focused ? 'md-search' : 'md-search-outline',
+                                'About': () => iconName = focused ? 'menu' : 'menu-outline',
                             }
+
+                            actions[route.name]();
 
                             return <Ionicons name={iconName} size={size} color={color} />;
                         },
