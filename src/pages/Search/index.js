@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { View, FlatList, TouchableOpacity, Image, Dimensions, Keyboard, TouchableWithoutFeedback } from "react-native";
 import { Container, ListView, SearchButton, SearchInput } from "../../style/SearchStyle";
 import { Author, ButtonTitle, Kids, Title } from "../../../style";
@@ -6,9 +6,15 @@ import { InfoMusic, List } from "../../style/LyricsStyle";
 import mockMusicData from '../../utils/mockMusicData.json';
 import themes from "../../style/themes";
 import { useToast } from "react-native-toast-notifications";
+import MusicContext from "../../contexts/music";
 
 export default function Search({ navigation }) {
     const { show } = useToast();
+
+    const {
+        allMusics
+    } = useContext(MusicContext);
+
     const [textSearch, setTextSearch] = useState('');
     const [dataMusic, setDataMusic] = useState([]);
     const [dataMusicTemp, setDataMusicTemp] = useState([]);
@@ -32,7 +38,7 @@ export default function Search({ navigation }) {
 
     const searcMusicTemp = (value) => {
         const textSearch = value.trim().toLocaleLowerCase();
-        const mockMusic = JSON.parse(JSON.stringify(mockMusicData));
+        const mockMusic = JSON.parse(JSON.stringify(allMusics));
         const filterTitle = mockMusic.filter(i => i.title.toLocaleLowerCase().includes(textSearch));
         const filterMusicLetter = mockMusic.filter(i => i.music.text.toLocaleLowerCase().includes(textSearch));
         const filtered = filterTitle.length ? filterTitle : filterMusicLetter;
