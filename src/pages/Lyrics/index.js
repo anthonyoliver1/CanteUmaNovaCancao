@@ -154,7 +154,7 @@ export default function Lyrics({ navigation }) {
     const onRefresh = useCallback(async () => {
         setRefreshingManually(true);
         getMusics();
-
+        getStorageMusic();
         refreshing && setRefreshingManually(false);
     }, [refreshing]);
 
@@ -170,7 +170,7 @@ export default function Lyrics({ navigation }) {
                     getItemCount={getItemCount}
                     getItem={getItem}
                     onRefresh={onRefresh}
-                    refreshing={refreshing && refreshingManually}
+                    refreshing={!!refreshing && refreshingManually}
                 />
                 :
                 <LoadingIndicator />
