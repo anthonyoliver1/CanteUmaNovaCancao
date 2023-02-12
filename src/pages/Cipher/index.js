@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { Dimensions, Image, TouchableOpacity, View, VirtualizedList } from 'react-native';
 import { Container, InfoMusic, List, Wrapper } from '../../style/LyricsStyle';
 import { Author, Title } from '../../../style';
@@ -9,8 +9,12 @@ import LoadingIndicator from '../../components/Loading';
 export default function Cipher({ navigation }) {
     const {
         allCiphers,
+        refreshing,
         getStorageCipher,
     } = useContext(MusicContext);
+
+    const [refreshingManually, setRefreshingManually] = useState(false);
+
 
     useEffect(() => {
         getStorageCipher();
@@ -63,6 +67,7 @@ export default function Cipher({ navigation }) {
                         </View>
                         <View>
                             {item.kids && <Kids>kids</Kids>}
+                            {item.natal && <Kids>Natal</Kids>}
                         </View>
                     </InfoMusic>
                 </List>
@@ -76,6 +81,11 @@ export default function Cipher({ navigation }) {
         return data[index];
     }
 
+    const onRefresh = useCallback(async () => {
+        setRefreshingManually(true);
+        getStorageCipher();
+    }, [refreshing]);
+
     return (
         <Container>
             {allCiphers.length ?
@@ -86,6 +96,8 @@ export default function Cipher({ navigation }) {
                     getItemCount={getItemCount}
                     getItem={getItem}
                     keyExtractor={item => item.number}
+                    onRefresh={onRefresh}
+                    refreshing={refreshing && !!refreshingManually}
                 />
                 :
                 <LoadingIndicator />

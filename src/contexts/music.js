@@ -50,11 +50,14 @@ export function MusicProvider({ children }) {
     }
 
     const getStorageCipher = async () => {
+        setRefreshing(true);
         const getMusicInStorage = await AsyncStorage.getItem('@ALL_MUSICS');
         const convertMusicInStorage = JSON.parse(getMusicInStorage);
         const ciphers = convertMusicInStorage?.filter(cipher => cipher.music.cifra);
 
         setAllCiphers(ciphers ?? {});
+        setRefreshing(false);
+
     }
 
     return (
