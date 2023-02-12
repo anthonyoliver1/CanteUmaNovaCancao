@@ -37,6 +37,10 @@ export default function Music({ route }) {
 
     async function loadMusic() {
         try {
+            if (!audio) return;
+
+            const urlMusic = `https://novacancao.azureedge.net/${audio}`
+            
             await Audio.setAudioModeAsync({
                 playsInSilentModeIOS: true,
                 staysActiveInBackground: true,
@@ -45,8 +49,10 @@ export default function Music({ route }) {
                 interruptionModeIOS: InterruptionModeIOS.DoNotMix
             });
 
+
             const { sound } = await Audio.Sound.createAsync(
-                require('../../assets/music/o_sonho.mp3')
+                { uri: urlMusic },
+                { shouldPlay: false }
             );
             setSound(sound);
 
@@ -105,8 +111,7 @@ export default function Music({ route }) {
     // })
 
     useEffect(() => {
-        const show = musicTitle.includes('O Sonho');
-        setShowButtonPlay(Boolean(show));
+        setShowButtonPlay(Boolean(audio));
     }, [audio])
 
     const showModalMusicAudio = () => {
