@@ -1,14 +1,9 @@
 import React from "react";
-import { Image, NativeModules } from "react-native";
+import { Image } from "react-native";
 import { ButtonTitle } from "../../../style";
 import { Container, ErrorButton, MessageErrorSubTitle, MessageErrorTitle, Wrapper } from "../../style/ErrorScreenStyle";
 
-export default function ErrorScreen() {
-
-    const reloadApp = () => {
-        NativeModules.DevSettings.reload();
-    }
-
+export default function ErrorScreen({onChange}) {
     return (
         <Container>
             <Wrapper>
@@ -33,7 +28,7 @@ export default function ErrorScreen() {
                     }
                 ]
             }
-                onPress={reloadApp}
+                onPress={onChange}
             >
                 <ButtonTitle>Reiniciar app</ButtonTitle>
             </ErrorButton>

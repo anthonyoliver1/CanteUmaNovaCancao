@@ -197,7 +197,7 @@ export default function Router() {
 
     useEffect(() => {
         wait(1500).then(() => setInLoading(false));
-    }, [])
+    }, [inLoading])
 
     useEffect(() => {
         const checkingConnectionAndMusicLocal = !isConnection && !Boolean(allMusics.length);
@@ -206,7 +206,12 @@ export default function Router() {
         if (checkingConnectionAndMusicLocal) return;
 
         getMusics();
-    }, [isConnection])
+    }, [isConnection, showPageError, inLoading])
+
+    const forceReload = () => {
+        setInLoading(true);
+        setShowPageError(false);
+    }
 
     if (Dimensions.get('window').height < 600) {
         heightScreen = Dimensions.get('window').height - 510;
@@ -218,14 +223,30 @@ export default function Router() {
     }
 
     if (inLoading) {
+        if (typeDevice.Android()) {
+            NavigationBar.setButtonStyleAsync("dark");
+            NavigationBar.setBackgroundColorAsync("#0B97D3");
+        }
+
         return (
-            <Loader />
+            <>
+                <StatusBar translucent={true} style={themes.dark.barColor} />
+                <Loader />
+            </>
         )
     }
 
     if (showPageError) {
+        if (typeDevice.Android()) {
+            NavigationBar.setButtonStyleAsync("light");
+            NavigationBar.setBackgroundColorAsync("#2A2A2A");
+        }
+
         return (
-            <ErrorScreen />
+            <>
+                <StatusBar translucent={true} style={themes.dark.barColor} />
+                <ErrorScreen onChange={() => forceReload()} />
+            </>
         )
     }
 
