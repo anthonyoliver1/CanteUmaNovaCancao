@@ -20,7 +20,7 @@ export async function callApi(
 
         return response.json();
     } catch (error) {
-        const messageError = 'Não foi possível carregar as músicas, feche e abra o app!';
+        const messageError = 'Não foi possível carregar as músicas, feche e abra o app amor 😅';
         const { show } = useToast();
 
         show(messageError, { type: 'danger' });

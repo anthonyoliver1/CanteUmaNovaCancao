@@ -2,6 +2,7 @@ import React, { createContext, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useToast } from "react-native-toast-notifications";
 import { getAllMusics } from "../service/http";
+import mock from "../utils/mockMusicData.json"
 
 const MusicContextData = {
     allMusics: {},
@@ -24,13 +25,13 @@ export function MusicProvider({ children }) {
     const getMusics = async () => {
         try {
             setRefreshing(true);
-            const response = await getAllMusics();
+            const response = mock//await getAllMusics();
             storageMusic(response);
 
             setRefreshing(false);
         } catch (error) {
             setRefreshing(false);
-            toast.show('Não foi possível carregar as músicas', { type: 'danger' });
+            toast.show('Não foi possível carregar as músicas nena 🥺', { type: 'danger' });
         }
     }
 
@@ -38,7 +39,7 @@ export function MusicProvider({ children }) {
         try {
             await AsyncStorage.setItem('@ALL_MUSICS', JSON.stringify(data));
         } catch (error) {
-            toast.show('Não foi possível armazenar as musicas no dispositivo', { type: 'danger' });
+            toast.show('Não foi possível armazenar as musicas no dispositivo gatita 🥺', { type: 'danger' });
         }
     }
 

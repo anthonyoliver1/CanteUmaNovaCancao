@@ -62,13 +62,13 @@ export default function About({ navigation }) {
             const canOpen = await Linking.canOpenURL(url);
 
             if (!canOpen) {
-                show('Não foi possível abrir o seu app de email', { type: 'danger' });
+                show('Não foi possível abrir o seu app de email benzinho 😕', { type: 'danger' });
             }
 
             return Linking.openURL(url);
 
         } catch (error) {
-            show('Ops! Houve um erro ao abrir o seu app de email', { type: 'danger' });
+            show('Ops! Houve um erro ao abrir o seu app de email moça linda 😢', { type: 'danger' });
         }
     }
 
@@ -87,7 +87,7 @@ export default function About({ navigation }) {
                     </Description>
 
                     <View>
-                        <AboutButton style={
+                        {/* <AboutButton style={
                             ({ pressed }) => [
                                 {
                                     backgroundColor: pressed
@@ -113,7 +113,7 @@ export default function About({ navigation }) {
                             onPress={() => goToWebsite()}
                         >
                             <ButtonTitle>Visite nossa Igreja</ButtonTitle>
-                        </AboutButton>
+                        </AboutButton> */}
 
                         <AboutButton style={
                             ({ pressed }) => [
@@ -123,14 +123,59 @@ export default function About({ navigation }) {
                                         : '#0B97D3'
                                 }
                             ]
-                        } onPress={() => sendEmail()}>
-                            <ButtonTitle>Contato</ButtonTitle>
+                        } onPress={() => show('Amor da minha vida ❤️')}>
+                            <ButtonTitle>❤️</ButtonTitle>
+                        </AboutButton>
+                        <AboutButton style={
+                            ({ pressed }) => [
+                                {
+                                    backgroundColor: pressed
+                                        ? '#24b1ec'
+                                        : '#0B97D3'
+                                }
+                            ]
+                        } onPress={() => show('Meu môzinho ❤️')}>
+                            <ButtonTitle>❤️</ButtonTitle>
+                        </AboutButton>
+                        <AboutButton style={
+                            ({ pressed }) => [
+                                {
+                                    backgroundColor: pressed
+                                        ? '#24b1ec'
+                                        : '#0B97D3'
+                                }
+                            ]
+                        } onPress={() => show('Linda, perfeita, maravilhosa 😍')}>
+                            <ButtonTitle>❤️</ButtonTitle>
+                        </AboutButton>
+                        <AboutButton style={
+                            ({ pressed }) => [
+                                {
+                                    backgroundColor: pressed
+                                        ? '#24b1ec'
+                                        : '#0B97D3'
+                                }
+                            ]
+                        } onPress={() => show('A namorada mais incrível do universo 🥰😍❤️')}>
+                            <ButtonTitle>❤️</ButtonTitle>
+                        </AboutButton>
+                        <AboutButton style={
+                            ({ pressed }) => [
+                                {
+                                    backgroundColor: pressed
+                                        ? '#24b1ec'
+                                        : '#0B97D3'
+                                }
+                            ]
+                        } onPress={() => show('EU TE AMOOOO ❤️❤️❤️')}>
+                            <ButtonTitle>❤️</ButtonTitle>
                         </AboutButton>
                     </View>
-                    <VersionApp onLongPress={() => resetData()}>
+                    <VersionApp on onLongPress={() => resetData()}>
                         Versão: <B>{appInfo.expo.version}</B> {"\n"}
                         OS: <B>{OsDevice()}</B>{"\n\n"}
-                        Beta
+                        <B>Môzi</B> {'\n'}
+                        ❤️
                         {/* <Text style={{fontSize: 30}}>🎧</Text> */}
                     </VersionApp>
                 </Wrapper>

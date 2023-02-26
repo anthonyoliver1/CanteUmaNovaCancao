@@ -59,7 +59,7 @@ export default function Music({ route }) {
             sound.setOnPlaybackStatusUpdate(setInfoFile);
         } catch (error) {
             console.log('Deu erro: ', error);
-            const notFoundMessage = 'Não foi possível carregar a música';
+            const notFoundMessage = 'Não foi possível carregar a música baby 😢';
 
             return show(notFoundMessage, { type: 'danger' });
 

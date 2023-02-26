@@ -20,8 +20,8 @@ export default function Search({ navigation }) {
     const [dataMusicTemp, setDataMusicTemp] = useState([]);
 
     const searchMusic = () => {
-        const message = 'Digite o nome da música para buscar';
-        const notFoundMessage = 'Música não encontrada';
+        const message = 'Ops, digite algo para buscar môzi môzi 🙃';
+        const notFoundMessage = 'não foi possível achar a música cariño 😥';
         setDataMusic(dataMusicTemp);
 
         if (textSearch.length <= 1) {
