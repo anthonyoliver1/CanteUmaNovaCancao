@@ -206,10 +206,13 @@ export default function Router() {
         if (checkingConnectionAndMusicLocal) return;
 
         getMusics();
-    }, [isConnection, showPageError, inLoading])
+    }, [isConnection, showPageError, inLoading, allMusics])
 
     const forceReload = () => {
         setInLoading(true);
+        getNetworkStateAsync();
+        getMusics();
+        wait(5000);
         setShowPageError(false);
     }
 
