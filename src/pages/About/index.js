@@ -7,6 +7,7 @@ import appInfo from "../../../app.json";
 import * as WebBrowser from 'expo-web-browser';
 import qs from 'qs';
 import { useToast } from "react-native-toast-notifications";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function About({ navigation }) {
     const { show } = useToast();
@@ -38,6 +39,11 @@ export default function About({ navigation }) {
 
     const goToWebsite = async () => {
         await WebBrowser.openBrowserAsync('https://www.icisp.org.br/');
+    }
+
+    const resetData = async () => {
+        await AsyncStorage.removeItem('@ALL_MUSICS');
+        show('Limpando base local', { type: 'warning' });
     }
 
     async function sendEmail() {
@@ -121,7 +127,7 @@ export default function About({ navigation }) {
                             <ButtonTitle>Contato</ButtonTitle>
                         </AboutButton>
                     </View>
-                    <VersionApp>
+                    <VersionApp onLongPress={() => resetData()}>
                         Versão: <B>{appInfo.expo.version}</B> {"\n"}
                         OS: <B>{OsDevice()}</B>{"\n\n"}
                         Beta
