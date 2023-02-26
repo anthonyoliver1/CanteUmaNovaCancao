@@ -15,9 +15,18 @@ export default function Lyrics({ navigation }) {
         getMusics,
     } = useContext(MusicContext);
 
+    const filters = [
+        { title: 'Todos', type: 'all', selected: true },
+        { title: 'Igreja de Cristo Internacional', type: 'ICI', selected: false },
+        { title: 'Coração Audaz', type: 'audaz', selected: false },
+        { title: 'Kids', type: 'kids', selected: false },
+        { title: 'Natal', type: 'natal', selected: false },
+    ];
+
     const widthScreen = Dimensions.get('window').width - 10;
 
     const [newOrder, setNewOrder] = useState('all');
+    const [filterOrder] = useState(filters);
     const [music, setMusic] = useState({});
     const [refreshingManually, setRefreshingManually] = useState(false);
 
@@ -54,17 +63,16 @@ export default function Lyrics({ navigation }) {
         'undefined': require('../../assets/note_logo.png')
     }
 
-    const changeOrder = (order) => {
+    const changeOrder = useCallback((order) => {
         setNewOrder(order.type);
-    }
-
-    const filterOrder = [
-        { title: 'Todos', type: 'all' },
-        { title: 'Igreja de Cristo Internacional', type: 'ICI' },
-        { title: 'Coração Audaz', type: 'audaz' },
-        { title: 'Kids', type: 'kids' },
-        { title: 'Natal', type: 'natal' },
-    ]
+        filterOrder.forEach((element) => {
+            if (element.type === order.type) {
+                element.selected = !element.selected
+            } else {
+                element.selected = false;
+            }
+        });
+    }, [filterOrder])
 
     const orderList = (params) => {
         if (!allMusics.length) return;
@@ -149,7 +157,7 @@ export default function Lyrics({ navigation }) {
 
     const filter = useCallback(() => (
         <Filter listHandler={changeOrder} filterOrder={filterOrder} />
-    ), []);
+    ), [filterOrder]);
 
     const onRefresh = useCallback(async () => {
         setRefreshingManually(true);
