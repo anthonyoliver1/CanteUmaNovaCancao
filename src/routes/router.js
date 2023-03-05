@@ -203,10 +203,10 @@ export default function Router() {
         const checkingConnectionAndMusicLocal = !isConnection && !Boolean(allMusics.length);
 
         setShowPageError(checkingConnectionAndMusicLocal);
-        if (checkingConnectionAndMusicLocal) return;
+        if (checkingConnectionAndMusicLocal || inLoading) return;
 
         getMusics();
-    }, [isConnection, showPageError, inLoading, allMusics])
+    }, [inLoading])
 
     const forceReload = () => {
         setInLoading(true);
