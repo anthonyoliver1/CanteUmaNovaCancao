@@ -31,8 +31,9 @@ export default function Lyrics({ navigation }) {
     const [refreshingManually, setRefreshingManually] = useState(false);
 
     useEffect(() => {
+        if (!allMusics.length)
         getStorageMusic();
-    }, [])
+    }, [allMusics])
 
     useEffect(() => {
         orderList(newOrder);
@@ -162,7 +163,7 @@ export default function Lyrics({ navigation }) {
         getMusics();
         getStorageMusic();
         refreshing && setRefreshingManually(false);
-    }, [refreshing]);
+    }, [refreshing, allMusics]);
 
     return (
         <Container>
