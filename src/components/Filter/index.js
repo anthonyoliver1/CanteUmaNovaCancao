@@ -1,14 +1,26 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { FlatList, TouchableOpacity } from 'react-native';
 import { Container, FilterContainer, TextButton, Wrapper } from '../../style/FilterStyle';
 
 export default function Filter({ listHandler, filterOrder }) {
+    const flatListRef = useRef(FlatList);
 
-    const renderItem = ({ item, separators }) => (
-        <FilterContainer>
+    const renderItem = ({ item, separators, index }) => {
+        const pressed = () => {
+            listHandler(item);
+
+            flatListRef.current.scrollToIndex({
+                animated: true,
+                index: index,
+                viewOffset: 1,
+                viewPosition: 0.5
+            });
+        }
+
+        return <FilterContainer>
             <TouchableOpacity
                 key={item.title}
-                onPress={() => listHandler(item)}
+                onPress={() => pressed()}
                 onShowUnderlay={separators.highlight}
                 onHideUnderlay={separators.unhighlight}
                 activeOpacity={0.4}
@@ -20,11 +32,12 @@ export default function Filter({ listHandler, filterOrder }) {
                 </Wrapper>
             </TouchableOpacity>
         </FilterContainer>
-    )
+    }
 
     return (
         <Container>
             <FlatList
+                ref={flatListRef}
                 data={filterOrder}
                 horizontal={true}
                 renderItem={renderItem}
