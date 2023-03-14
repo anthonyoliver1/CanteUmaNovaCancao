@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { ScrollView } from 'react-native';
-import { Container, MusicLetter } from '../../style/MusicStyle';
+import { Container } from '../../style/MusicStyle';
 import { Wrapper } from '../../../style';
+import { Cipher } from '../../style/CipherStyle';
 
 export default function MusicCipher({ route }) {
     const { cipher } = route.params;
@@ -10,9 +11,9 @@ export default function MusicCipher({ route }) {
         <Wrapper>
             <ScrollView>
                 <Container>
-                    <MusicLetter>
+                    <Cipher>
                         {cipher.replace(/&/gm, '')}
-                    </MusicLetter>
+                    </Cipher>
                 </Container>
             </ScrollView>
         </Wrapper>

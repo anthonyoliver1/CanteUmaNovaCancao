@@ -1,5 +1,5 @@
 import React from "react";
-import { Image, Linking, ScrollView, Share, View } from "react-native";
+import { Image, Linking, Pressable, ScrollView, Share, View } from "react-native";
 import { AboutButton, Container, Description, VersionApp, Wrapper } from "../../style/AboutStyle";
 import { OsDevice, typeDevice } from "../../utils";
 import { B, ButtonTitle } from "../../../style";
@@ -171,13 +171,24 @@ export default function About({ navigation }) {
                             <ButtonTitle>❤️</ButtonTitle>
                         </AboutButton>
                     </View>
-                    <VersionApp on onLongPress={() => resetData()}>
-                        Versão: <B>{appInfo.expo.version}</B> {"\n"}
-                        OS: <B>{OsDevice()}</B>{"\n\n"}
-                        <B>Môzi</B> {'\n'}
-                        ❤️
-                        {/* <Text style={{fontSize: 30}}>🎧</Text> */}
-                    </VersionApp>
+
+                    <Pressable onLongPress={() => resetData()}
+                        style={
+                            ({ pressed }) => [
+                                {
+                                    backgroundColor: pressed &&
+                                        '#00000000'
+                                }
+                            ]
+                        }
+                    >
+                        <VersionApp>
+                            Versão: <B>{appInfo.expo.version}</B> {"\n"}
+                            OS: <B>{OsDevice()}</B>{"\n\n"}
+                            <B>Môzi</B> {'\n'}
+                            ❤️
+                        </VersionApp>
+                    </Pressable>
                 </Wrapper>
             </ScrollView >
         </Container>
