@@ -59,7 +59,7 @@ export default function Lyrics({ navigation }) {
     const data = {
         'sonho': require('../../assets/o_sonho.png'),
         'caminhos': require('../../assets/caminhos.png'),
-        'undefined': require('../../assets/note_logo.png')
+        'undefined': require('../../assets/cunc.png')
     }
 
     const changeOrder = useCallback((order) => {
