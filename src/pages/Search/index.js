@@ -41,10 +41,12 @@ export default function Search({ navigation }) {
         const mockMusic = JSON.parse(JSON.stringify(allMusics));
         const filterTitle = mockMusic.filter(i => i.title.toLocaleLowerCase().includes(textSearch));
         const filterMusicLetter = mockMusic.filter(i => i.music.text.toLocaleLowerCase().includes(textSearch));
-        const filtered = filterTitle.length ? filterTitle : filterMusicLetter;
+        const filterMusicNumber = mockMusic.filter(i => i.number.toString() == textSearch);
+        const filteredByText = filterTitle.length ? filterTitle : filterMusicLetter;
+        const filter = filteredByText.concat(filterMusicNumber);
 
         setTextSearch(textSearch);
-        return setDataMusicTemp(filtered);
+        return setDataMusicTemp(filter);
     }
 
     const gotToMusicText = ({ number, title, music, author }) => {

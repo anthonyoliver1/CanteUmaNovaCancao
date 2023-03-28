@@ -54,6 +54,8 @@
     </dict>
     <key>NSMicrophoneUsageDescription</key>
     <string>Allow $(PRODUCT_NAME) to access your microphone</string>
+    <key>RCTRootViewBackgroundColor</key>
+    <integer>4278190080</integer>
     <key>UIBackgroundModes</key>
     <array>
       <string>audio</string>

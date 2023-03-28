@@ -4,7 +4,8 @@
     "slug": "AnthonyOliveira",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./src/assets/logo_cunc_white.png",
+    "icon": "./src/assets/cunc.png",
+    "backgroundColor": "#000000",
     "splash": {
       "image": "./src/assets/splash_logo.png",
       "resizeMode": "contain",
@@ -29,7 +30,7 @@
     "android": {
       "userInterfaceStyle": "automatic",
       "adaptiveIcon": {
-        "foregroundImage": "./src/assets/logo_cunc_white.png"
+        "foregroundImage": "./src/assets/cunc.png"
       },
       "package": "com.anthony.dev.AnthonyOliveira"
     },
