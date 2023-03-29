@@ -15,9 +15,14 @@ export default function About({ navigation }) {
     const share = async () => {
         try {
             if (typeDevice.mobile()) {
-                const linkShare = typeDevice.iOS() ? '' : 'https://google.com.br';
+                const linkShare =
+                    'Venha e Cante Uma Nova Canção com a gente!!' +
+                    `${typeDevice.Android()
+                        ? '\n\n https://play.google.com/store/apps/details?id=br.org.icoc.novacancao'
+                        : ''
+                    }`;
                 await Share.share({
-                    message: 'Venha e Cante Uma Nova Canção com a gente!!' + `${"\n\n" + linkShare}`,
+                    message: linkShare,
                     url: 'https://apple.com/br',
                     title: 'Cante Uma Nova Canção'
                 });
