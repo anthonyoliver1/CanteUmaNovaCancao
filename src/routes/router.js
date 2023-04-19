@@ -20,6 +20,9 @@ import ErrorScreen from '../components/ErrorScreen';
 import MusicContext from '../contexts/music';
 import ConnectionContext from '../contexts/connection';
 import Loader from '../components/Loading/LoaderScreen';
+import TermsOfUse from '../components/TermsOfUse';
+import PrivacyPolicy from '../components/PrivacyPolicy';
+import SpecialPage from '../components/SpecialPage';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -173,6 +176,83 @@ function CipherScreenStack({ route }) {
     );
 }
 
+function AboutScreenStack({ route }) {
+    return (
+        <Stack.Navigator screenOptions={{ headerShown: true }}>
+            <Stack.Screen
+                name="AboutStack"
+                component={AboutScreen}
+                options={
+                    {
+                        title: 'Mais',
+                        headerTitleAlign: 'center'
+                    }
+                }
+            />
+            <Stack.Screen
+                name="TermsOfUse"
+                component={TermsOfUse}
+                options={
+                    {
+                        title: 'Termos de Uso',
+                        headerBackTitleVisible: false,
+                        headerTitleAlign: 'center',
+                        headerBackTitleStyle: {
+                            fontSize: 13
+                        },
+                        headerTitleStyle: {
+                            width: null,
+                            textAlign: 'center',
+                            alignSelf: 'center',
+                        },
+                        presentation: 'modal',
+                    }
+                }
+            />
+            <Stack.Screen
+                name="PrivacyPolicy"
+                component={PrivacyPolicy}
+                options={
+                    {
+                        title: 'Políticas de Privacidade',
+                        headerBackTitleVisible: false,
+                        headerTitleAlign: 'center',
+                        headerBackTitleStyle: {
+                            fontSize: 13
+                        },
+                        headerTitleStyle: {
+                            width: null,
+                            textAlign: 'center',
+                            alignSelf: 'center',
+                        },
+                        presentation: 'modal',
+                    }
+                }
+            />
+            <Stack.Screen
+                name="SpecialPage"
+                component={SpecialPage}
+                options={
+                    {
+                        title: 'Especial',
+                        headerBackTitleVisible: false,
+                        headerTitleAlign: 'center',
+                        headerBackTitleStyle: {
+                            fontSize: 13
+                        },
+                        headerTitleStyle: {
+                            width: null,
+                            textAlign: 'center',
+                            alignSelf: 'center',
+                        },
+                        presentation: 'modal',
+                    }
+                }
+            />
+        </Stack.Navigator>
+    );
+}
+
 export default function Router() {
     const {
         allMusics,
@@ -297,7 +377,7 @@ export default function Router() {
                     <Tab.Screen name="Home" component={HomeStackMusic} options={{ headerShown: false, title: 'Música' }} />
                     <Tab.Screen name="Cipher" component={CipherScreenStack} options={{ headerShown: false, title: 'Cifras' }} />
                     <Tab.Screen name="Search" component={SearchScreenStack} options={{ headerShown: false, title: 'Buscar' }} />
-                    <Tab.Screen name="About" component={AboutScreen} options={{ title: 'Mais', headerTitleAlign: 'center' }} />
+                    <Tab.Screen name="About" component={AboutScreenStack} options={{ headerShown: false, title: 'Mais', gestureEnabled: false }} />
                 </Tab.Navigator>
             </NavigationContainer>
         </ThemeProvider>
