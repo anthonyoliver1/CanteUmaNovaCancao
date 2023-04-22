@@ -39,3 +39,13 @@ export const isNull = (value) => {
 export const isUndefined = (value) => {
     return value === undefined;
 }
+
+export const formatNameMusic = (value) => {
+    const { album, number, title } = value;
+
+    if (!album) {
+        return `${number}. ${title}`;
+    }
+
+    return title;
+}
