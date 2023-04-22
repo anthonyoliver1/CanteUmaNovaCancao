@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { View, FlatList, TouchableOpacity, Image, Dimensions, Keyboard, TouchableWithoutFeedback } from "react-native";
+import { View, FlatList, TouchableOpacity, Image, Dimensions, Keyboard, TouchableWithoutFeedback, Text } from "react-native";
 import { Container, ListView, SearchButton, SearchInput } from "../../style/SearchStyle";
 import { Author, ButtonTitle, Kids, Title } from "../../../style";
 import { InfoMusic, List } from "../../style/LyricsStyle";
@@ -7,6 +7,7 @@ import mockMusicData from '../../utils/mockMusicData.json';
 import themes from "../../style/themes";
 import { useToast } from "react-native-toast-notifications";
 import MusicContext from "../../contexts/music";
+import { formatNameMusic } from "../../utils";
 
 export default function Search({ navigation }) {
     const { show } = useToast();
@@ -37,16 +38,27 @@ export default function Search({ navigation }) {
     }
 
     const searcMusicTemp = (value) => {
-        const textSearch = value.trim().toLocaleLowerCase();
+        const textSearch = normalize(value);
+
+        if (!value.length) return setDataMusic([]);
         const mockMusic = JSON.parse(JSON.stringify(allMusics));
-        const filterTitle = mockMusic.filter(i => i.title.toLocaleLowerCase().includes(textSearch));
-        const filterMusicLetter = mockMusic.filter(i => i.music.text.toLocaleLowerCase().includes(textSearch));
+        const filterTitle = mockMusic.filter(i => normalize(i.title).includes(textSearch));
+        const filterMusicLetter = mockMusic.filter(i => normalize(i.music.text).includes(textSearch));
         const filterMusicNumber = mockMusic.filter(i => i.number.toString() == textSearch);
         const filteredByText = filterTitle.length ? filterTitle : filterMusicLetter;
         const filter = filteredByText.concat(filterMusicNumber);
 
         setTextSearch(textSearch);
         return setDataMusicTemp(filter);
+    }
+
+    const normalize = (value) => {
+        return value
+            .toLowerCase()
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "")
+            .replace(/[^a-zA-Z0-9]+/g, "")
+            .replace(/\s/g, '')
     }
 
     const gotToMusicText = ({ number, title, music, author }) => {
@@ -89,7 +101,7 @@ export default function Search({ navigation }) {
                 />
                 <InfoMusic width={widthScreen}>
                     <View>
-                        <Title>{item.title}</Title>
+                        <Title>{formatNameMusic(item)}</Title>
                         <Author>{item.author}</Author>
                     </View>
                     <View>
