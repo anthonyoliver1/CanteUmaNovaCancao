@@ -1,10 +1,12 @@
-import React, { useCallback, useContext, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { Dimensions, Image, TouchableOpacity, View, VirtualizedList } from 'react-native';
 import { Container, InfoMusic, List, Wrapper } from '../../style/LyricsStyle';
 import { Author, Title } from '../../../style';
 // import mockMusicData from '../../utils/mockMusicData.json';
 import MusicContext from '../../contexts/music';
 import LoadingIndicator from '../../components/Loading';
+import { formatNameMusic } from '../../utils';
+import { useScrollToTop } from '@react-navigation/native';
 
 export default function Cipher({ navigation }) {
     const {
@@ -13,8 +15,11 @@ export default function Cipher({ navigation }) {
         getStorageCipher,
     } = useContext(MusicContext);
 
+    const listRef = useRef(null);
+
     const [refreshingManually, setRefreshingManually] = useState(false);
 
+    useScrollToTop(listRef);
 
     useEffect(() => {
         getStorageCipher();
@@ -62,7 +67,7 @@ export default function Cipher({ navigation }) {
                     />
                     <InfoMusic width={widthScreen}>
                         <View>
-                            <Title>{item.title}</Title>
+                            <Title>{formatNameMusic(item)}</Title>
                             <Author>{item.author}</Author>
                         </View>
                         <View>
@@ -90,6 +95,7 @@ export default function Cipher({ navigation }) {
         <Container>
             {allCiphers.length ?
                 <VirtualizedList
+                    ref={listRef}
                     data={allCiphers}
                     initialNumToRender={50}
                     renderItem={renderItem}
