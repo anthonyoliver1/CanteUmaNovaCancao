@@ -2,7 +2,7 @@
   "name": "canteumanovacancao",
   "version": "1.0.0",
   "scripts": {
-    "start": "expo start --dev-client",
+    "start": "npm install && expo start --dev-client",
     "android": "expo run:android --device",
     "ios": "expo run:ios --device",
     "web": "expo start --web",
@@ -14,7 +14,10 @@
     "build:ios": "eas device:create && eas build --platform ios",
     "build:apk": "eas build -p android --profile preview",
     "build:dev-android": "eas build --profile development --platform android",
-    "build:dev-ios": "eas build --profile development-simulator --platform ios"
+    "build:android-develop-apk": "npm run clean-module && npm install && npx expo-doctor && npm install && npx expo prebuild && cd android && ./gradlew clean && ./gradlew :app:assembleRelease && cd ../",
+    "build:android-apk": "npm run clean-module && npm install && npx expo-doctor && npm install && npx expo prebuild && cd android &&./gradlew clean && ./gradlew :app:bundleRelease && cd ../",
+    "build:dev-ios": "eas build --profile development-simulator --platform ios",
+    "clean-module": "rm -rf node_modules package-lock.json && npm cache clean --force"
   },
   "dependencies": {
     "@expo/ngrok": "^4.1.0",
