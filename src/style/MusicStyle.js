@@ -12,14 +12,20 @@ export const MusicLetter = styled.Text`
     text-align: center;
     line-height: 25px;
     font-size: 16px;
-    margin-bottom: ${props => props.margin ? props.margin : '60px'};
+    margin-bottom: 60px;
     color: ${props => props.theme.color};
+`;
+
+export const ContainerModal = styled.View`
+    display: flex;
+    align-items: center;
+    width: 100%;
 `;
 
 export const ContentHeader = styled.View`
     align-items: center;
     justify-content: center;
-    margin-bottom: 15px;
+    margin: 15px 0;
 `;
 
 export const MusicName = styled.Text`
@@ -56,8 +62,41 @@ export const MusicControl = styled.View`
     flex-direction: row;
     justify-content: space-around;
     align-items: center;
-    top: 10px;
-    height: 100px;
+    height: 85px;
 `;
 
+export const ContainerMiniPlayer = styled.View`
+    display: flex;
+    align-items: center;
+    align-content: center;
+    justify-content: space-between;
+    flex-direction: row;
+`;
 
+export const ContentMusicName = styled.View`
+    display: flex;
+    align-items: center;
+    align-content: center;
+    justify-content: space-between;
+    flex-direction: row;
+`;
+
+export const WrapperMusicName = styled.View`
+    display: flex;
+    padding-left: 15px;
+`;
+
+export const MusicNameMiniPlayer = styled.Text`
+    font-size: 15px;
+    font-weight: 500;
+    color: ${props => props.theme.color};
+    
+    max-width: 230px;
+`;
+
+export const AuthorMusicMiniPlayer = styled.Text`
+    font-size: 12px;
+    font-weight: 500;
+    opacity: 0.5;
+    color: ${props => props.theme.color};
+`;
