@@ -14,7 +14,8 @@
     "build:ios": "eas device:create && eas build --platform ios",
     "build:apk": "eas build -p android --profile preview",
     "build:dev-android": "eas build --profile development --platform android",
-    "build:dev-ios": "eas build --profile development-simulator --platform ios"
+    "build:dev-ios": "eas build --profile development-simulator --platform ios",
+    "dependecies-in-use": "npx depcheck"
   },
   "dependencies": {
     "@expo/ngrok": "^4.1.0",
