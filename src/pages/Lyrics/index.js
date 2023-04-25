@@ -55,7 +55,8 @@ export default function Lyrics({ navigation }) {
                     musicTxt: text,
                     musicTitle: title,
                     audio: audio,
-                    author: author
+                    author: author,
+                    image: album
                 }
             }
         );
