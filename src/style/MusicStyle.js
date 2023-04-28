@@ -67,8 +67,13 @@ export const MusicControl = styled.View`
 
 export const ContainerMiniPlayer = styled.View`
     display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+`;
+
+export const WarpperMiniPlayer = styled.View`
+    display: flex;
     align-items: center;
-    align-content: center;
     justify-content: space-between;
     flex-direction: row;
 `;
@@ -77,13 +82,13 @@ export const ContentMusicName = styled.View`
     display: flex;
     align-items: center;
     align-content: center;
-    justify-content: space-between;
     flex-direction: row;
 `;
 
 export const WrapperMusicName = styled.View`
     display: flex;
     padding-left: 15px;
+    width: 80%;
 `;
 
 export const MusicNameMiniPlayer = styled.Text`
