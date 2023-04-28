@@ -22,6 +22,7 @@ import {
     ProgressConstainer,
     ProgressNummber,
     Time,
+    WarpperMiniPlayer,
     WrapperMusicName
 } from '../../style/MusicStyle';
 import { useToast } from 'react-native-toast-notifications';
@@ -203,6 +204,21 @@ export default function Music({ route }) {
         return `${minutesFormated}:${secondsFormated}`;
     }
 
+    const ProgressBar = ({ progress = 0, duration }) => {
+        const [width, setWidth] = useState('0%');
+
+        useEffect(() => {
+            const musicPercent = ((progress / duration) * 100) || 0;
+            setWidth(`${musicPercent}%`);
+        }, [progress])
+
+        return (
+            <View style={style.container}>
+                <View style={[style.progress, { width }]} />
+            </View>
+        );
+    }
+
     return (
         <Wrapper>
             <ScrollView>
@@ -252,23 +268,26 @@ export default function Music({ route }) {
                     HeaderComponent={
                         positionModal !== 'top' &&
                         <ContainerMiniPlayer>
-                            <ContentMusicName>
-                                <Image
-                                    style={{ width: 40, height: 40, borderRadius: 8 }}
-                                    source={data[image]}
-                                />
-                                <WrapperMusicName>
-                                    <MusicNameMiniPlayer numberOfLines={1}>
-                                        {musicTitle}
-                                    </MusicNameMiniPlayer>
-                                    <AuthorMusicMiniPlayer>
-                                        {author}
-                                    </AuthorMusicMiniPlayer>
-                                </WrapperMusicName>
-                            </ContentMusicName>
-                            <TouchableOpacity onPress={playOrPause} style={style.playOrPause}>
-                                <FontAwesome5 name={typeIcon} size={20} color='#fff' />
-                            </TouchableOpacity>
+                            <WarpperMiniPlayer>
+                                <ContentMusicName>
+                                    <Image
+                                        style={{ width: 40, height: 40, borderRadius: 8 }}
+                                        source={data[image]}
+                                    />
+                                    <WrapperMusicName>
+                                        <MusicNameMiniPlayer numberOfLines={1}>
+                                            {musicTitle}
+                                        </MusicNameMiniPlayer>
+                                        <AuthorMusicMiniPlayer>
+                                            {author}
+                                        </AuthorMusicMiniPlayer>
+                                    </WrapperMusicName>
+                                </ContentMusicName>
+                                <TouchableOpacity onPress={playOrPause} style={style.playOrPause}>
+                                    <FontAwesome5 name={typeIcon} size={20} color='#fff' />
+                                </TouchableOpacity>
+                            </WarpperMiniPlayer>
+                            <ProgressBar key={'progresBar'} progress={progress} duration={duration} />
                         </ContainerMiniPlayer>
                     }
                 >
@@ -360,5 +379,18 @@ const style = StyleSheet.create({
     },
     playOrPause: {
         paddingRight: 15
-    }
+    },
+    container: {
+        width: '100%',
+        height: 2,
+        backgroundColor: '#EFEFF4',
+        borderRadius: 10,
+        overflow: 'hidden',
+        position: 'relative',
+        top: 5
+    },
+    progress: {
+        height: 2,
+        backgroundColor: '#0B97D3',
+    },
 });
