@@ -1,56 +1,91 @@
 import React from "react";
-import { ScrollView, Text } from "react-native";
+import { Linking, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { B } from "../../../style";
 import { AppName, Container, Subtitle, Title, Wrapper } from "../../style/TermsAndPrivacyStyle";
+import { useToast } from "react-native-toast-notifications";
+import qs from 'qs';
 
 export default function PrivacyPolicy() {
+    const { show } = useToast();
+
+    async function sendEmail() {
+        try {
+            const to = 'anthony.silvaoliveira@outlook.com';
+            const body = 'Olá, \n\n Estou com dúvidas sobre as Políticas de Privacidade do Cante Uma Nova Canção,\n pode me ajudar ? \n\n Obrigado(a).';
+            
+            const query = qs.stringify({
+                subject: 'Cante Uma Nova Canção',
+                body,
+                cc: '',
+                bcc: ''
+            });
+
+            let url = `mailto:${to}?${query}`;
+
+            const canOpen = await Linking.canOpenURL(url);
+
+            if (!canOpen) {
+                show('Não foi possível abrir o seu app de email', { type: 'danger' });
+            }
+
+            return Linking.openURL(url);
+
+        } catch (error) {
+            show('Ops! Houve um erro ao abrir o seu app de email', { type: 'danger' });
+        }
+    }
+
+    const link = () => Linking.openURL('https://policies.google.com/?hl=pt');
+
+    const goTo = (fun, value) => (
+        <View>
+            <TouchableOpacity onPress={() => fun()}>
+                <AppName isLink>{value}</AppName>
+            </TouchableOpacity>
+        </View>
+    );
+
     return (
         <Container>
             <ScrollView>
                 <Wrapper>
                     <Title>Políticas Privacidade</Title>{"\n\n"}
                     <Text>
-                        Nós adotamos esta Política de Privacidade, que determina como nós estamos processando as informações coletadas pelo app
-                        <AppName> Cante Uma Nova Canção</AppName> e também explica por quais razões nós precisamos coletar dados pessoais sobre você.
-                        Portanto, você deve ler esta Política de Privacidade antes de usar o aplicativo <AppName>Cante Uma Nova Canção</AppName>.
+                        Esta Política de Privacidade descreve como o aplicativo <AppName>"Cante Uma Nova Canção"</AppName> coleta,
+                        usa e protege as informações pessoais dos usuários do aplicativo.A sua privacidade é muito importante para nós.
                     </Text>{"\n\n"}
-                    <Subtitle>Informações que coletamos</Subtitle> {"\n\n"}
+                    <Subtitle>1. Informações que coletamos</Subtitle> {"\n\n"}
                     <Text>
-                        Quando você usa o aplicativo <AppName>Cante Uma Nova Canção</AppName>, nós automaticamente coletamos certas informações sobre seu dispositivo,
-                        incluindo informações sobre seu endereço IP, fuso horário e alguns dos cookies instalados no seu dispositivo.
-                        Além disso, quando você usa o app, nós coletamos informações sobre as páginas individuais ou músicas que você visualiza/escuta,
-                        e sobre como você interage com o app. Nós nos referimos a essas informações coletadas automaticamente como "Informações sobre o dispositivo".
+                        O aplicativo <AppName>"Cante Uma Nova Canção"</AppName> não coleta nenhuma informação pessoal dos usuários,
+                        exceto informações coletadas pelo {goTo(link, 'Google Analytics')}
                     </Text>{"\n\n"}
-                    <Subtitle>Por que fazemos o coletas dos seus dados?</Subtitle>{"\n\n"}
+                    <Subtitle>2. Como usamos as informações</Subtitle>{"\n\n"}
                     <Text>
-                        Para que possamos melhorar o aplicativo com base no uso dos usuários, assim,
-                        garantimos uma boa experiência no uso do <AppName>Cante Uma Nova Canção</AppName>.
+                        Usamos as informações coletadas pelo {goTo(link, 'Google Analytics')} para:{"\n"}
+                        - Análise de dados: como entender as tendências do usuário e melhorar o desempenho do aplicativo.
                     </Text>{"\n\n"}
-                    <Subtitle>Links para outros sites</Subtitle>{"\n\n"}
+                    <Subtitle>3. Compartilhamento de informações</Subtitle>{"\n\n"}
                     <Text>
-                        Nosso app pode conter links para outros sites que não são controlados por nós e/ou não são de nossa propriedade.
-                        Por favor, esteja ciente de que nós não somos responsáveis pelas políticas de privacidade de tais sites e organizações terceiras.
-                        Nós incentivamos você a estar ciente de quando sair do nosso aplicativo,
-                        e também incentivamos você a ler a política de privacidade de cada um dos sites/apps que podem coletar suas informações pessoais.
+                        Não compartilhamos informações pessoais com terceiros, exceto com o {goTo(link, 'Google Analytics.')}
                     </Text>{"\n\n"}
-                    <Subtitle>Análise de dados</Subtitle>{"\n\n"}
+                    <Subtitle>4. Segurança de informações</Subtitle>{"\n\n"}
                     <Text>
-                        O Cante Uma Nova Canção usa o o Google Analytics para monitorar e coletar dados enquanto você usa o aplicativo, assim,
-                        podemos entregar uma experiência melhor para os usuários do aplicativo.
+                        Temos medidas de segurança adequadas em vigor para proteger suas informações pessoais contra acesso não autorizado, uso, alteração ou divulgação.
+                        No entanto, nenhuma medida de segurança é infalível e não podemos garantir que suas informações pessoais estejam completamente seguras,
+                        mas reiteramos que não coletamos informações pessoais dos usuários.
                     </Text>{"\n\n"}
-                    <Subtitle>Declaração legal</Subtitle>{"\n\n"}
+                    <Subtitle>5. Alterações na política de privacidade</Subtitle>{"\n\n"}
                     <Text>
-                        Nós vamos divulgar qualquer informação que coletarmos, usarmos ou recebermos caso tal divulgação seja solicitada ou permitida por lei,
-                        de forma a cumprir intimações ou processos judiciais similares,
-                        e também quando considerarmos em boa fé que a divulgação é necessária para a proteção de nossos direitos,
-                        para a proteção da segurança de outros, para investigações de fraude ou para responder a uma solicitação do governo.
+                        Podemos atualizar esta Política de Privacidade a qualquer momento.
+                        A nova versão da política de privacidade entrará em vigor quando for publicada no aplicativo.
+                        Se você continuar a usar o aplicativo após modificações, significa que você concorda com os novos termos.
                     </Text>{"\n\n"}
-                    <Subtitle>Informações de contato</Subtitle>{"\n\n"}
+                    <Subtitle>6. Contato</Subtitle>{"\n\n"}
                     <Text>
-                        Se você quiser entrar em contato conosco para saber mais sobre esta Política de Privacidade,
-                        ou quiser acessar quaisquer informações relativas aos seus direitos individuais e às suas Informações Pessoais,
-                        você poderá enviar um e-mail para o endereço anthony.silvaoliveira@outlook.com.
-                    </Text>{"\n\n"}
+                        Se você tiver alguma dúvida sobre esta Política de Privacidade,
+                        entre em contato conosco pelo e-mail: {goTo(sendEmail, 'anthony.silvaoliveira@outlook.com')}
+                    </Text>
+                    {"\n\n"}
                     <Text>
                         Esta política é efetiva a partir de <B>Mar</B>/<B>2023</B>.
                     </Text>

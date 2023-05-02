@@ -9,7 +9,7 @@ export const Wrapper = styled.Text`
     color: ${({ theme }) => theme.colors.text};
     line-height: 20px;
     display: flex;
-    padding: 20px;
+    margin: 20px;
     text-align: justify;
 `;
 
@@ -21,6 +21,13 @@ export const Title = styled.Text`
 export const AppName = styled.Text`
     color: ${({ theme }) => theme.colors.primary};
     font-weight: 500;
+    ${({ isLink, theme }) => isLink &&
+        `   
+            text-decoration: underline ${theme.colors.primary}
+            font-weight: 700;
+            top: 3.5px;
+        `
+    }
 `;
 
 export const Subtitle = styled.Text`
