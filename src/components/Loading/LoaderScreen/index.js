@@ -1,18 +1,26 @@
 import React from "react";
-import { ActivityIndicator, Image } from "react-native";
-import { Container, LoadingContainer } from "../../../style/LoaderScreenStyle";
-import themes from "../../../style/themes";
+import { Container } from "../../../style/LoaderScreenStyle";
+import { MotiImage } from 'moti';
 
 export default function Loader() {
     return (
         <Container>
-            <Image
+            <MotiImage
+                from={{
+                    translateY: 0,
+                }}
+                animate={{
+                    translateY: -30,
+                    opacity: 1
+                }}
+                transition={{
+                    type: 'timing',
+                    duration: 1000,
+                    repeat: 4,
+                }}
                 style={{ width: '50%', height: '100%' }}
                 source={require('../../../assets/splash_logo.png')}
             />
-            <LoadingContainer>
-                <ActivityIndicator size={'large'} color={themes.dark.colors.card} />
-            </LoadingContainer>
         </Container>
     )
 }
