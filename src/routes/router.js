@@ -276,7 +276,7 @@ export default function Router() {
     }, [])
 
     useEffect(() => {
-        wait(1500).then(() => setInLoading(false));
+        wait(4050).then(() => setInLoading(false));
     }, [inLoading])
 
     useEffect(() => {
