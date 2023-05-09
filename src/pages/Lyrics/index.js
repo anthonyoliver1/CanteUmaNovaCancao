@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { Dimensions, Image, TouchableOpacity, View, VirtualizedList } from 'react-native';
 import { Container, InfoMusic, List, Wrapper } from '../../style/LyricsStyle';
 import { Author, Kids, Title } from '../../../style';
@@ -6,6 +6,8 @@ import Filter from '../../components/Filter';
 // import mockMusicData from '../../utils/mockMusicData.json';
 import MusicContext from '../../contexts/music';
 import LoadingIndicator from '../../components/Loading';
+import { formatNameMusic } from '../../utils';
+import { useScrollToTop } from '@react-navigation/native';
 
 export default function Lyrics({ navigation }) {
     const {
@@ -24,22 +26,25 @@ export default function Lyrics({ navigation }) {
     ];
 
     const widthScreen = Dimensions.get('window').width - 10;
+    const listRef = useRef(null);
 
     const [newOrder, setNewOrder] = useState('all');
     const [filterOrder] = useState(filters);
     const [music, setMusic] = useState({});
     const [refreshingManually, setRefreshingManually] = useState(false);
 
+    useScrollToTop(listRef);
+
     useEffect(() => {
         if (!allMusics.length)
-        getStorageMusic();
+            getStorageMusic();
     }, [allMusics])
 
     useEffect(() => {
         orderList(newOrder);
     }, [newOrder, allMusics]);
 
-    const gotToMusicText = ({ number, title, music, author }) => {
+    const gotToMusicText = ({ number, title, music, author, album }) => {
         const { text, audio } = music;
         navigation.navigate(
             'Home',
@@ -50,7 +55,8 @@ export default function Lyrics({ navigation }) {
                     musicTxt: text,
                     musicTitle: title,
                     audio: audio,
-                    author: author
+                    author: author,
+                    image: album
                 }
             }
         );
@@ -80,7 +86,7 @@ export default function Lyrics({ navigation }) {
             'all': () => {
                 setMusic(
                     allMusics.filter(i => i.number)
-                        .sort((a, b) => a.title.localeCompare(b.title))
+                        .sort((a, b) => a.number > b.number)
                 );
             },
             'audaz': () => {
@@ -94,21 +100,21 @@ export default function Lyrics({ navigation }) {
                 setMusic(
                     allMusics
                         .filter(i => i.author.includes('Igreja'))
-                        .sort((a, b) => a.title.localeCompare(b.title))
+                        .sort((a, b) => a.number > b.number)
                 );
             },
             'kids': () => {
                 setMusic(
                     allMusics
                         .filter(i => i.kids)
-                        .sort((a, b) => a.title.localeCompare(b.title))
+                        .sort((a, b) => a.number > b.number)
                 );
             },
             'natal': () => {
                 setMusic(
                     allMusics
                         .filter(i => i.natal)
-                        .sort((a, b) => a.title.localeCompare(b.title))
+                        .sort((a, b) => a.number > b.number)
 
                 );
             }
@@ -135,7 +141,7 @@ export default function Lyrics({ navigation }) {
                     />
                     <InfoMusic width={widthScreen}>
                         <View>
-                            <Title>{item.title}</Title>
+                            <Title>{formatNameMusic(item)}</Title>
                             <Author>{item.author}</Author>
                         </View>
                         <View>
@@ -169,6 +175,7 @@ export default function Lyrics({ navigation }) {
         <Container>
             {allMusics.length ?
                 <VirtualizedList
+                    ref={listRef}
                     ListHeaderComponent={filter}
                     data={music}
                     initialNumToRender={50}

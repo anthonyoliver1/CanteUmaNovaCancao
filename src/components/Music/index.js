@@ -1,46 +1,68 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
-import { MaterialIcons } from '@expo/vector-icons';
+import { Image, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { MaterialIcons, FontAwesome5 } from '@expo/vector-icons';
 import { Modalize } from 'react-native-modalize';
-import { Audio, InterruptionModeAndroid, InterruptionModeIOS } from 'expo-av';
+import { Audio, InterruptionModeAndroid, InterruptionModeIOS, PitchCorrectionQuality } from 'expo-av';
 import { Wrapper } from '../../../style';
 import * as FileSystem from 'expo-file-system';
 import Slider from '@react-native-community/slider';
 import themes from '../../style/themes';
 import {
     AuthorMusic,
+    AuthorMusicMiniPlayer,
     Container,
+    ContainerMiniPlayer,
+    ContainerModal,
     ContentHeader,
+    ContentMusicName,
     MusicControl,
     MusicLetter,
     MusicName,
+    MusicNameMiniPlayer,
     ProgressConstainer,
     ProgressNummber,
-    Time
+    Time,
+    WarpperMiniPlayer,
+    WrapperMusicName
 } from '../../style/MusicStyle';
 import { useToast } from 'react-native-toast-notifications';
 
 export default function Music({ route }) {
-    const { musicTxt, audio, author, musicTitle } = route.params;
+    const { musicTxt, audio, author, musicTitle, image } = route.params;
     const { show } = useToast();
 
+    const data = {
+        'sonho': require('../../assets/o_sonho.png'),
+        'caminhos': require('../../assets/caminhos.png'),
+        'undefined': require('../../assets/cunc.png')
+    }
+
     const modalizeRef = useRef(null);
+
     const [showButtonPlay, setShowButtonPlay] = useState(undefined);
-    const [marginText, setMarginText] = useState('60px');
-    const [typeIcon, setTypeIcon] = useState('play-arrow');
+    const [typeIcon, setTypeIcon] = useState('play');
     const [musicStarted, setMusicStarted] = useState(false);
     const [sound, setSound] = useState();
     const [infoFile, setInfoFile] = useState({});
     const [progress, setProgress] = useState(0);
     const [duration, setDuration] = useState(0);
     const [isMounted, setIsMounted] = useState(false);
+    const [positionModal, setPositionModal] = useState('');
 
     async function loadMusic() {
         try {
             if (!audio) return;
 
-            const urlMusic = `https://novacancao.azureedge.net/${audio}`
-            
+            const source = {
+                uri: encodeURI(`https://novacancao.azureedge.net/${audio}`)
+            };
+
+            const initialStatus = {
+                shouldPlay: false,
+                pitchCorrectionQuality: PitchCorrectionQuality.High,
+                shouldCorrectPitch: true
+            };
+
             await Audio.setAudioModeAsync({
                 playsInSilentModeIOS: true,
                 staysActiveInBackground: true,
@@ -49,11 +71,11 @@ export default function Music({ route }) {
                 interruptionModeIOS: InterruptionModeIOS.DoNotMix
             });
 
-
             const { sound } = await Audio.Sound.createAsync(
-                { uri: urlMusic },
-                { shouldPlay: false }
+                source,
+                initialStatus
             );
+
             setSound(sound);
 
             sound.setOnPlaybackStatusUpdate(setInfoFile);
@@ -62,13 +84,12 @@ export default function Music({ route }) {
             const notFoundMessage = 'Não foi possível carregar a música baby 😢';
 
             return show(notFoundMessage, { type: 'danger' });
-
         }
     }
 
     async function playOrPauseSound(params) {
         if (musicStarted) {
-            params.includes('play') ? sound.playAsync() : sound.pauseAsync();
+            params.includes('play') ? await sound.playAsync() : await sound.pauseAsync();
             return;
         }
 
@@ -85,6 +106,14 @@ export default function Music({ route }) {
         (infoFile && infoFile.positionMillis) ? setProgress(timeM) : setProgress(0);
         (infoFile && infoFile.durationMillis) ? setDuration(du) : setDuration(0);
     }, [infoFile]);
+
+    useEffect(() => {
+        if (progress > 0 && progress === duration) {
+            setTypeIcon('play');
+            sound.pauseAsync();
+            sound.setPositionAsync(0);
+        }
+    }, [progress, duration, sound]);
 
     useEffect(() => {
         setIsMounted(!isMounted);
@@ -119,12 +148,13 @@ export default function Music({ route }) {
     }
 
     const playOrPause = () => {
-        if (typeIcon === 'play-arrow') {
+        if (typeIcon === 'play') {
             setTypeIcon('pause');
             playOrPauseSound('play');
         }
-        else {
-            setTypeIcon('play-arrow');
+
+        if (typeIcon === 'pause' && progress > 0) {
+            setTypeIcon('play');
             playOrPauseSound('pause');
         }
     }
@@ -142,7 +172,7 @@ export default function Music({ route }) {
 
         if (status == 'start') {
             playOrPauseSound('pause');
-            setTypeIcon('play-arrow');
+            setTypeIcon('play');
         }
 
         if (status == 'completed') {
@@ -162,7 +192,6 @@ export default function Music({ route }) {
                 return;
             }
         }
-
     }
 
     const formatTime = (number) => {
@@ -175,81 +204,150 @@ export default function Music({ route }) {
         return `${minutesFormated}:${secondsFormated}`;
     }
 
+    const ProgressBar = ({ progress = 0, duration }) => {
+        const [width, setWidth] = useState('0%');
+
+        useEffect(() => {
+            const musicPercent = ((progress / duration) * 100) || 0;
+            setWidth(`${musicPercent}%`);
+        }, [progress])
+
+        return (
+            <View style={style.container}>
+                <View style={[style.progress, { width }]} />
+            </View>
+        );
+    }
+
     return (
         <Wrapper>
             <ScrollView>
                 <Container>
-                    <MusicLetter margin={marginText}>
+                    <MusicLetter>
                         {musicTxt}
                     </MusicLetter>
                 </Container>
             </ScrollView>
 
-            {showButtonPlay &&
+            {/* {showButtonPlay &&
                 <TouchableOpacity style={style.floatButtom} onPress={showModalMusicAudio}>
                     <MaterialIcons name="audiotrack" size={24} color="#fff" />
                 </TouchableOpacity>
-            }
-            {isMounted &&
-                <Modalize ref={modalizeRef}
-                    // snapPoint={330} tem que ter o valor menor que o modalHeight
-                    modalHeight={270}
-                    modalStyle={{ backgroundColor: themes.dark.colors.card, padding: 30 }}
-                    handleStyle={{ backgroundColor: "gray" }}
+            } */}
+            {(isMounted && showButtonPlay) &&
+                <Modalize
+                    ref={modalizeRef}
+                    alwaysOpen={60}
+                    modalHeight={445}
                     handlePosition='inside'
+                    withHandle={positionModal === 'top'}
                     withOverlay={false}
                     disableScrollIfPossible={true}
+                    tapGestureEnabled={true}
+                    useNativeDriver={true}
                     velocity={1}
-                    onOpened={() => {
-                        setMarginText('270px');
-                    }}
-                    onClosed={() => {
-                        setMarginText('60px');
-                    }}
-                    scrollViewProps={{ scrollEnabled: false, showsVerticalScrollIndicator: false }}
+                    panGestureComponentEnabled={true}
+                    onPositionChange={setPositionModal}
+                    scrollViewProps={
+                        {
+                            scrollEnabled: false,
+                            showsVerticalScrollIndicator: false
+                        }
+                    }
+                    modalStyle={
+                        {
+                            backgroundColor: themes.dark.colors.card,
+                            padding: positionModal == 'top' ? 30 : 10,
+                        }
+                    }
+                    handleStyle={
+                        {
+                            backgroundColor: "gray"
+                        }
+                    }
+                    HeaderComponent={
+                        positionModal !== 'top' &&
+                        <ContainerMiniPlayer>
+                            <WarpperMiniPlayer>
+                                <ContentMusicName>
+                                    <Image
+                                        style={{ width: 40, height: 40, borderRadius: 8 }}
+                                        source={data[image]}
+                                    />
+                                    <WrapperMusicName>
+                                        <MusicNameMiniPlayer numberOfLines={1}>
+                                            {musicTitle}
+                                        </MusicNameMiniPlayer>
+                                        <AuthorMusicMiniPlayer>
+                                            {author}
+                                        </AuthorMusicMiniPlayer>
+                                    </WrapperMusicName>
+                                </ContentMusicName>
+                                <TouchableOpacity onPress={playOrPause} style={style.playOrPause}>
+                                    <FontAwesome5 name={typeIcon} size={20} color='#fff' />
+                                </TouchableOpacity>
+                            </WarpperMiniPlayer>
+                            <ProgressBar key={'progresBar'} progress={progress} duration={duration} />
+                        </ContainerMiniPlayer>
+                    }
                 >
-                    <ContentHeader>
-                        <MusicName>
-                            {musicTitle}
-                        </MusicName>
-                        <AuthorMusic>
-                            {author}
-                        </AuthorMusic>
-                    </ContentHeader>
-
-                    <ProgressConstainer>
-                        <View>
-                            <Slider
-                                value={progress}
-                                minimumValue={0}
-                                maximumValue={duration}
-                                maximumTrackTintColor='gray'
-                                minimumTrackTintColor='#0B97D3'
-                                thumbTintColor='#0B97D3'
-                                onSlidingStart={value => advancedMusic({ status: 'start', value: value })}
-                                onSlidingComplete={value => advancedMusic({ status: 'completed', value: value })}
+                    {positionModal === 'top' &&
+                        <ContainerModal>
+                            <Image
+                                style={{ width: 200, height: 200, borderRadius: 8 }}
+                                source={data[image]}
                             />
-                        </View>
+                            <ContentHeader>
+                                <MusicName>
+                                    {musicTitle}
+                                </MusicName>
+                                <AuthorMusic>
+                                    {author}
+                                </AuthorMusic>
+                            </ContentHeader>
 
-                        <ProgressNummber>
-                            <Time> {formatTime(progress)} </Time>
-                            <Time> {formatTime(duration)} </Time>
-                        </ProgressNummber>
+                            <ProgressConstainer>
+                                <View>
+                                    <Slider
+                                        value={progress}
+                                        minimumValue={0}
+                                        maximumValue={duration}
+                                        maximumTrackTintColor='gray'
+                                        minimumTrackTintColor='#0B97D3'
+                                        thumbTintColor='#0B97D3'
+                                        onSlidingStart={value => advancedMusic({ status: 'start', value: value })}
+                                        onSlidingComplete={value => advancedMusic({ status: 'completed', value: value })}
+                                    />
+                                </View>
 
-                        <MusicControl>
-                            <TouchableOpacity onPress={backwardButton}>
-                                <MaterialIcons name="replay-10" size={40} color='#FFF' />
-                            </TouchableOpacity>
+                                <ProgressNummber>
+                                    <Time> {formatTime(progress)} </Time>
+                                    <Time> {formatTime(duration)} </Time>
+                                </ProgressNummber>
 
-                            <TouchableOpacity onPress={playOrPause} style={style.playAndPause}>
-                                <MaterialIcons name={typeIcon} size={40} color='#fff' />
-                            </TouchableOpacity>
+                                <MusicControl>
+                                    <TouchableOpacity onPress={backwardButton}>
+                                        <MaterialIcons name="replay-10" size={40} color='#FFF' />
+                                    </TouchableOpacity>
 
-                            <TouchableOpacity onPress={forwardButton}>
-                                <MaterialIcons name="forward-10" size={40} color='#FFF' />
-                            </TouchableOpacity>
-                        </MusicControl>
-                    </ProgressConstainer>
+                                    <TouchableOpacity onPress={playOrPause}
+                                        style={
+                                            [
+                                                style.playAndPause,
+                                                { paddingLeft: typeIcon === 'play' ? 3.5 : 0 }
+                                            ]
+                                        }
+                                    >
+                                        <FontAwesome5 name={typeIcon} size={23} color='#fff' />
+                                    </TouchableOpacity>
+
+                                    <TouchableOpacity onPress={forwardButton}>
+                                        <MaterialIcons name="forward-10" size={40} color='#FFF' />
+                                    </TouchableOpacity>
+                                </MusicControl>
+                            </ProgressConstainer>
+                        </ContainerModal>
+                    }
                 </Modalize>
             }
         </Wrapper>
@@ -276,6 +374,23 @@ const style = StyleSheet.create({
         width: 60,
         height: 60,
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
+        alignContent: 'center'
+    },
+    playOrPause: {
+        paddingRight: 15
+    },
+    container: {
+        width: '100%',
+        height: 2,
+        backgroundColor: '#EFEFF4',
+        borderRadius: 10,
+        overflow: 'hidden',
+        position: 'relative',
+        top: 5
+    },
+    progress: {
+        height: 2,
+        backgroundColor: '#0B97D3',
     },
 });

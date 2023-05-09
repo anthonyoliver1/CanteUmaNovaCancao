@@ -11,6 +11,7 @@ npm-debug.*
 web-build/
 package-lock.json
 yarn.lock
+.vscode
 
 # macOS
 .DS_Store
@@ -73,5 +74,3 @@ buck-out/
 .expo/
 web-build/
 dist/
-
-# @end expo-cli

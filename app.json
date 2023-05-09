@@ -4,7 +4,7 @@
     "slug": "AnthonyOliveira",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./src/assets/cunc.png",
+    "icon": "./src/assets/note_logo.png",
     "backgroundColor": "#000000",
     "splash": {
       "image": "./src/assets/splash_logo.png",

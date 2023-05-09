@@ -5,19 +5,25 @@ import { OsDevice, typeDevice } from "../../utils";
 import { B, ButtonTitle } from "../../../style";
 import appInfo from "../../../app.json";
 import * as WebBrowser from 'expo-web-browser';
+import * as Haptics from 'expo-haptics';
 import qs from 'qs';
 import { useToast } from "react-native-toast-notifications";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function About({ navigation }) {
     const { show } = useToast();
+    let counter = 0;
 
     const share = async () => {
         try {
             if (typeDevice.mobile()) {
-                const linkShare = typeDevice.iOS() ? '' : 'https://google.com.br';
+                const linkShare =
+                    'Venha e Cante Uma Nova Canção com a gente!!' +
+                    `${typeDevice.Android()
+                        ? '\n\n https://play.google.com/store/apps/details?id=br.org.icoc.novacancao'
+                        : ''
+                    }`;
                 await Share.share({
-                    message: 'Venha e Cante Uma Nova Canção com a gente!!' + `${"\n\n" + linkShare}`,
+                    message: linkShare,
                     url: 'https://apple.com/br',
                     title: 'Cante Uma Nova Canção'
                 });
@@ -41,9 +47,19 @@ export default function About({ navigation }) {
         await WebBrowser.openBrowserAsync('https://www.icisp.org.br/');
     }
 
-    const resetData = async () => {
-        await AsyncStorage.removeItem('@ALL_MUSICS');
-        show('Limpando base local', { type: 'warning' });
+    const goToSpecialPage = async () => {
+        counter++;
+
+        if (counter >= 10) {
+            navigation.navigate('SpecialPage');
+            counter = 0;
+        }
+
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    }
+
+    const goTo = (screen) => {
+        navigation.navigate(screen);
     }
 
     async function sendEmail() {
@@ -170,9 +186,32 @@ export default function About({ navigation }) {
                         } onPress={() => show('EU TE AMOOOO ❤️❤️❤️')}>
                             <ButtonTitle>❤️</ButtonTitle>
                         </AboutButton>
+
+                        <AboutButton style={
+                            ({ pressed }) => [
+                                {
+                                    backgroundColor: pressed
+                                        ? '#24b1ec'
+                                        : '#0B97D3'
+                                }
+                            ]
+                        } onPress={() => goTo('TermsOfUse')}>
+                            <ButtonTitle>Termos de Uso</ButtonTitle>
+                        </AboutButton>
+                        <AboutButton style={
+                            ({ pressed }) => [
+                                {
+                                    backgroundColor: pressed
+                                        ? '#24b1ec'
+                                        : '#0B97D3'
+                                }
+                            ]
+                        } onPress={() => goTo('PrivacyPolicy')}>
+                            <ButtonTitle>Políticas de Privacidade</ButtonTitle>
+                        </AboutButton>
                     </View>
 
-                    <Pressable onLongPress={() => resetData()}
+                    <Pressable onLongPress={() => goToSpecialPage()}
                         style={
                             ({ pressed }) => [
                                 {
