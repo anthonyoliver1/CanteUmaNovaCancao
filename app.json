@@ -2,7 +2,7 @@
   "expo": {
     "name": "C.U.N.C",
     "slug": "AnthonyOliveira",
-    "version": "1.0.0",
+    "version": "2.1.4",
     "orientation": "portrait",
     "icon": "./src/assets/note_logo.png",
     "backgroundColor": "#000000",
@@ -30,7 +30,7 @@
     "android": {
       "userInterfaceStyle": "automatic",
       "adaptiveIcon": {
-        "foregroundImage": "./src/assets/cunc.png"
+        "foregroundImage": "./src/assets/note_logo.png"
       },
       "package": "com.anthony.dev.AnthonyOliveira"
     },
