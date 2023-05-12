@@ -140,9 +140,9 @@ export default function Lyrics({ navigation }) {
                         style={{ width: 45, height: 45, borderRadius: 8, marginRight: 10 }}
                     />
                     <InfoMusic width={widthScreen}>
-                        <View>
-                            <Title>{formatNameMusic(item)}</Title>
-                            <Author>{item.author}</Author>
+                        <View style={{ width: (item.kids || item.natal) ? '80%' : '100%' }}>
+                            <Title numberOfLines={1}>{formatNameMusic(item)}</Title>
+                            <Author numberOfLines={1}>{item.author}</Author>
                         </View>
                         <View>
                             {item.kids && <Kids>Kids</Kids>}

@@ -1,10 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Image, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { Alert, Image, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { MaterialIcons, FontAwesome5 } from '@expo/vector-icons';
 import { Modalize } from 'react-native-modalize';
 import { Audio, InterruptionModeAndroid, InterruptionModeIOS, PitchCorrectionQuality } from 'expo-av';
 import { Wrapper } from '../../../style';
 import * as FileSystem from 'expo-file-system';
+import * as Clipboard from 'expo-clipboard'
 import Slider from '@react-native-community/slider';
 import themes from '../../style/themes';
 import {
@@ -219,11 +220,30 @@ export default function Music({ route }) {
         );
     }
 
+    const copyText = () => {
+        const copyMusic = `${musicTitle}\n${author}\n\n${musicTxt}`;
+
+        Alert.alert(
+            'Deseja copiar ?',
+            `Você quer copiar a música ${musicTitle} - ${author} ?`,
+            [
+                {
+                    text: 'Copiar',
+                    onPress: async () => await Clipboard.setStringAsync(copyMusic)
+                },
+                {
+                    text: 'Cancelar',
+                    style: 'cancel'
+                }
+            ]
+        );
+    }
+
     return (
         <Wrapper>
             <ScrollView>
                 <Container>
-                    <MusicLetter>
+                    <MusicLetter onLongPress={copyText} suppressHighlighting>
                         {musicTxt}
                     </MusicLetter>
                 </Container>
