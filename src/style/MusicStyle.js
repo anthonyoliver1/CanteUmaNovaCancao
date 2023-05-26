@@ -1,4 +1,7 @@
+import { Dimensions, StyleSheet } from "react-native";
 import styled from "styled-components/native";
+import themes from "./themes";
+import { typeDevice } from "../utils";
 
 export const Container = styled.View`
     flex: 1;
@@ -104,3 +107,58 @@ export const AuthorMusicMiniPlayer = styled.Text`
     opacity: 0.5;
     color: ${props => props.theme.color};
 `;
+
+export const style = StyleSheet.create({
+    playAndPause: {
+        backgroundColor: themes.dark.colors.primary,
+        borderRadius: 30,
+        width: 60,
+        height: 60,
+        alignItems: 'center',
+        justifyContent: 'center',
+        alignContent: 'center'
+    },
+    playOrPause: {
+        paddingRight: 15
+    },
+    container: {
+        width: '100%',
+        height: 2,
+        backgroundColor: '#FFFFFF50',
+        borderRadius: 10,
+        overflow: 'hidden',
+        position: 'relative',
+        top: 5
+    },
+    progress: {
+        height: 2,
+        backgroundColor: themes.dark.colors.primary,
+    },
+    headerContainer: {
+        right: typeDevice.Android() ? 15 : 10,
+    },
+    headerButton: {
+        backgroundColor: themes.dark.colors.primary + '50',
+        padding: 5,
+        borderRadius: 20,
+    },
+    modalButtons: {
+        padding: 20,
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        flexDirection: 'row',
+    },
+    textButton: {
+        color: '#FFF',
+        marginLeft: 10,
+        width: Dimensions.get('screen').width - 180
+    },
+    separator: {
+        height: 1,
+        backgroundColor: themes.dark.colors.primary,
+        width: '95%',
+        alignSelf: 'center',
+        opacity: 0.2
+    }
+});
