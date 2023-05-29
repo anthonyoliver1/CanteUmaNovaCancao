@@ -45,7 +45,8 @@ export default function Lyrics({ navigation }) {
     }, [newOrder, allMusics]);
 
     const gotToMusicText = ({ number, title, music, author, album }) => {
-        const { text, audio } = music;
+        const { text, audio, cifra, video } = music;
+
         navigation.navigate(
             'Home',
             {
@@ -56,7 +57,11 @@ export default function Lyrics({ navigation }) {
                     musicTitle: title,
                     audio: audio,
                     author: author,
-                    image: album
+                    image: album,
+                    isCipher: cifra && 'cifra',
+                    isVideo: video && 'video',
+                    cipher: cifra,
+                    linkVideo: video
                 }
             }
         );
@@ -140,9 +145,9 @@ export default function Lyrics({ navigation }) {
                         style={{ width: 45, height: 45, borderRadius: 8, marginRight: 10 }}
                     />
                     <InfoMusic width={widthScreen}>
-                        <View>
-                            <Title>{formatNameMusic(item)}</Title>
-                            <Author>{item.author}</Author>
+                        <View style={{ width: (item.kids || item.natal) ? '80%' : '100%' }}>
+                            <Title numberOfLines={1}>{formatNameMusic(item)}</Title>
+                            <Author numberOfLines={1}>{item.author}</Author>
                         </View>
                         <View>
                             {item.kids && <Kids>Kids</Kids>}

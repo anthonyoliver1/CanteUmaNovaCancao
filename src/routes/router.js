@@ -60,8 +60,7 @@ function AboutScreen({ navigation }) {
 }
 
 function HomeStackMusic({ route }) {
-    const visible = route.params?.params.musicTitle.length < 25;
-    const widthScreen = !visible ? Dimensions.get('window').width - 130 : null;
+    const widthScreen = Dimensions.get('window').width - 100;
 
     return (
         <Stack.Navigator screenOptions={{ headerShown: true }}>
@@ -81,16 +80,23 @@ function HomeStackMusic({ route }) {
                 options={
                     {
                         title: route.params?.params.musicTitle,
-                        headerBackTitleVisible: visible,
+                        headerBackTitleVisible: false,
                         headerTitleAlign: 'center',
-                        headerBackTitleStyle: {
-                            fontSize: 13
-                        },
                         headerTitleStyle: {
-                            width: widthScreen,
-                            textAlign: 'center',
-                            alignSelf: 'center',
+                            maxWidth: widthScreen,
                         }
+                    }
+                }
+            />
+            <Stack.Screen
+                name="MusicCipherInHome"
+                component={MusicCipher}
+                options={
+                    {
+                        title: route.params?.params.musicTitle,
+                        headerBackTitleVisible: false,
+                        headerTitleAlign: 'center',
+                        presentation: 'modal'
                     }
                 }
             />
@@ -99,8 +105,7 @@ function HomeStackMusic({ route }) {
 }
 
 function SearchScreenStack({ route }) {
-    const visible = route.params?.params.musicTitle.length < 25;
-    const widthScreen = !visible ? Dimensions.get('window').width - 130 : null;
+    const widthScreen = Dimensions.get('window').width - 100;
 
     return (
         <Stack.Navigator screenOptions={{ headerShown: true }}>
@@ -120,11 +125,8 @@ function SearchScreenStack({ route }) {
                 options={
                     {
                         title: route.params?.params.musicTitle,
-                        headerBackTitleVisible: visible,
+                        headerBackTitleVisible: false,
                         headerTitleAlign: 'center',
-                        headerBackTitleStyle: {
-                            fontSize: 13,
-                        },
                         headerTitleStyle: {
                             width: widthScreen,
                             textAlign: 'center',
@@ -138,8 +140,7 @@ function SearchScreenStack({ route }) {
 }
 
 function CipherScreenStack({ route }) {
-    const visible = route.params?.params.musicTitle.length < 25;
-    const widthScreen = !visible ? Dimensions.get('window').width - 130 : null;
+    const widthScreen = Dimensions.get('window').width - 100;
 
     return (
         <Stack.Navigator screenOptions={{ headerShown: true }}>
@@ -159,11 +160,8 @@ function CipherScreenStack({ route }) {
                 options={
                     {
                         title: route.params?.params.musicTitle,
-                        headerBackTitleVisible: visible,
+                        headerBackTitleVisible: false,
                         headerTitleAlign: 'center',
-                        headerBackTitleStyle: {
-                            fontSize: 13
-                        },
                         headerTitleStyle: {
                             width: widthScreen,
                             textAlign: 'center',
@@ -197,14 +195,6 @@ function AboutScreenStack({ route }) {
                         title: 'Termos de Uso',
                         headerBackTitleVisible: false,
                         headerTitleAlign: 'center',
-                        headerBackTitleStyle: {
-                            fontSize: 13
-                        },
-                        headerTitleStyle: {
-                            width: null,
-                            textAlign: 'center',
-                            alignSelf: 'center',
-                        },
                         presentation: 'modal',
                     }
                 }
@@ -217,14 +207,6 @@ function AboutScreenStack({ route }) {
                         title: 'Políticas de Privacidade',
                         headerBackTitleVisible: false,
                         headerTitleAlign: 'center',
-                        headerBackTitleStyle: {
-                            fontSize: 13
-                        },
-                        headerTitleStyle: {
-                            width: null,
-                            textAlign: 'center',
-                            alignSelf: 'center',
-                        },
                         presentation: 'modal',
                     }
                 }
@@ -237,14 +219,6 @@ function AboutScreenStack({ route }) {
                         title: 'Especial',
                         headerBackTitleVisible: false,
                         headerTitleAlign: 'center',
-                        headerBackTitleStyle: {
-                            fontSize: 13
-                        },
-                        headerTitleStyle: {
-                            width: null,
-                            textAlign: 'center',
-                            alignSelf: 'center',
-                        },
                         presentation: 'modal',
                     }
                 }

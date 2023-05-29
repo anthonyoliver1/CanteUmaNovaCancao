@@ -1,10 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Image, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
-import { MaterialIcons, FontAwesome5 } from '@expo/vector-icons';
+import { Alert, Image, Linking, Pressable, ScrollView, Share, Text, TouchableOpacity, View } from 'react-native';
+import { Entypo, Ionicons, MaterialIcons, FontAwesome5 } from '@expo/vector-icons';
 import { Modalize } from 'react-native-modalize';
 import { Audio, InterruptionModeAndroid, InterruptionModeIOS, PitchCorrectionQuality } from 'expo-av';
 import { Wrapper } from '../../../style';
 import * as FileSystem from 'expo-file-system';
+import * as Clipboard from 'expo-clipboard'
+import * as Haptics from 'expo-haptics';
 import Slider from '@react-native-community/slider';
 import themes from '../../style/themes';
 import {
@@ -23,12 +25,26 @@ import {
     ProgressNummber,
     Time,
     WarpperMiniPlayer,
-    WrapperMusicName
+    WrapperMusicName,
+    style
 } from '../../style/MusicStyle';
 import { useToast } from 'react-native-toast-notifications';
+import { typeDevice } from '../../utils';
 
-export default function Music({ route }) {
-    const { musicTxt, audio, author, musicTitle, image } = route.params;
+export default function Music({ route, navigation }) {
+    const {
+        musicTxt,
+        audio,
+        author,
+        musicTitle,
+        image,
+        isCipher,
+        cipher,
+        isVideo,
+        linkVideo,
+        number
+    } = route.params;
+
     const { show } = useToast();
 
     const data = {
@@ -38,6 +54,7 @@ export default function Music({ route }) {
     }
 
     const modalizeRef = useRef(null);
+    const menuModalRef = useRef(null);
 
     const [showButtonPlay, setShowButtonPlay] = useState(undefined);
     const [typeIcon, setTypeIcon] = useState('play');
@@ -48,6 +65,7 @@ export default function Music({ route }) {
     const [duration, setDuration] = useState(0);
     const [isMounted, setIsMounted] = useState(false);
     const [positionModal, setPositionModal] = useState('');
+    const [dataList, setDataList] = useState([]);
 
     async function loadMusic() {
         try {
@@ -143,6 +161,28 @@ export default function Music({ route }) {
         setShowButtonPlay(Boolean(audio));
     }, [audio])
 
+    useEffect(() => {
+        navigation.setOptions({
+            headerRight: () => (
+                <Pressable onPress={openModalMenu} android_disableSound={true}>
+                    <View style={[style.headerContainer]}>
+                        <View style={[style.headerButton]}>
+                            <Entypo name="dots-three-horizontal" size={15} color="#FFF" />
+                        </View>
+                    </View>
+                </Pressable>
+            ),
+        });
+    }, [navigation]);
+
+    const openModalMenu = () => {
+        menuModalRef.current?.open();
+    }
+    const closeModalMusicAudio = () => {
+        setPositionModal('initial');
+        modalizeRef.current?.close();
+    }
+
     const showModalMusicAudio = () => {
         modalizeRef.current?.open();
     }
@@ -219,34 +259,196 @@ export default function Music({ route }) {
         );
     }
 
+    const copyText = () => {
+        const copyMusic = `${musicTitle}\n${author}\n\n${musicTxt}`;
+
+        Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+        Alert.alert(
+            'Deseja copiar ?',
+            `Você quer copiar a música ${musicTitle} - ${author} ?`,
+            [
+                {
+                    text: 'Copiar',
+                    onPress: async () => await Clipboard.setStringAsync(copyMusic)
+                },
+                {
+                    text: 'Cancelar',
+                    style: 'cancel'
+                }
+            ]
+        );
+    }
+
+    useEffect(() => {
+        const list = [
+            { id: 1, label: 'Compartilhar', visible: true, icon: 'share', fun: 'sharing' },
+            { id: 2, label: `Baixar - ${musicTitle}`, icon: 'download', visible: true, disabled: true },
+            { id: 3, label: 'Ver no YouTube', icon: 'logo-youtube', subId: 'video', visible: false, fun: 'videos' },
+            { id: 4, label: 'Ir para cifra', icon: 'open', subId: 'cifra', visible: false, fun: 'ciphers' },
+        ]
+
+        list.forEach((element) => {
+            if (element.subId) {
+                if ([isCipher].includes(element.subId)) {
+                    element.visible = true
+                }
+
+                if ([isVideo].includes(element.subId)) {
+                    element.visible = true
+                }
+            }
+        })
+        setDataList(list);
+    }, []);
+
+    const goToVideo = () => Linking.openURL(linkVideo);
+
+    const sharingMusic = async () => {
+        try {
+            let linkShare = `${musicTitle}\n${author}\n\n${musicTxt}`;
+
+            if (typeDevice.Android())
+                linkShare += '\n\n https://play.google.com/store/apps/details?id=br.org.icoc.novacancao';
+
+            await Share.share({
+                message: linkShare,
+                url: 'https://apple.com/br',
+                title: 'Cante Uma Nova Canção'
+            });
+
+        } catch (error) {
+            alert(error.message);
+        }
+    }
+
+    const goToCipher = () => {
+        navigation.navigate(
+            'Home',
+            {
+                screen: 'MusicCipherInHome',
+                params: {
+                    numMusic: number,
+                    musicTitle: musicTitle,
+                    author: author,
+                    cipher: cipher
+                },
+            }
+        )
+    };
+
+    const renderItem = ({ item, separators }) => {
+        const pressed = (param) => {
+            const action = {
+                sharing: () => sharingMusic(),
+                videos: () => goToVideo(),
+                ciphers: () => goToCipher()
+            }
+
+            action[param]();
+        }
+
+        return (
+            <>
+                {
+                    item.visible &&
+                    <View>
+                        <TouchableOpacity
+                            key={item.id}
+                            onPress={() => pressed(item.fun)}
+                            onShowUnderlay={separators.highlight}
+                            onHideUnderlay={separators.unhighlight}
+                            activeOpacity={0.4}
+                            style={{ width: '100%', opacity: item.disabled && 0.5 }}
+                            disabled={item.disabled}
+                        >
+                            <View style={[style.modalButtons]}>
+                                <View style={{
+                                    display: 'flex',
+                                    flexDirection: 'row',
+                                    alignItems: 'center',
+                                }}>
+                                    <Ionicons name={item.icon} size={20} color="#FFF" />
+                                    <Text style={[style.textButton]} numberOfLines={1}>
+                                        {item.label}
+                                    </Text>
+                                </View>
+                                <View style={{
+                                    display: 'flex',
+                                    flexDirection: 'row',
+                                    alignItems: 'center'
+                                }}>
+                                    {
+                                        item.disabled &&
+                                        <Text style={{ color: themes.dark.colors.primary }}>Em breve!</Text>
+                                    }
+                                    <MaterialIcons name="keyboard-arrow-right" size={20} color={themes.dark.colors.primary + '90'} />
+                                </View>
+                            </View>
+                        </TouchableOpacity >
+                    </View >
+                }
+            </>
+        )
+    };
+
+    const renderSeparator = ({ leadingItem, highlighted }) => {
+        return (
+            <>
+                {
+                    leadingItem.visible &&
+                    <View style={[style.separator]} />
+                }
+            </>
+        )
+    };
+
     return (
         <Wrapper>
             <ScrollView>
                 <Container>
-                    <MusicLetter>
+                    <MusicLetter onLongPress={copyText} suppressHighlighting>
                         {musicTxt}
                     </MusicLetter>
                 </Container>
             </ScrollView>
 
-            {/* {showButtonPlay &&
-                <TouchableOpacity style={style.floatButtom} onPress={showModalMusicAudio}>
-                    <MaterialIcons name="audiotrack" size={24} color="#fff" />
-                </TouchableOpacity>
-            } */}
+            <Modalize
+                ref={menuModalRef}
+                onOpen={closeModalMusicAudio}
+                onClose={showModalMusicAudio}
+                threshold={50}
+                handlePosition='inside'
+                adjustToContentHeight
+                handleStyle={{
+                    backgroundColor: "#FFFFFF25"
+                }}
+                modalStyle={{
+                    backgroundColor: themes.dark.colors.card,
+                }}
+                flatListProps={
+                    {
+                        data: dataList,
+                        renderItem: renderItem,
+                        ItemSeparatorComponent: renderSeparator,
+                        keyExtractor: (item) => item.id,
+                    }
+                }
+            >
+            </Modalize>
+
             {(isMounted && showButtonPlay) &&
                 <Modalize
                     ref={modalizeRef}
                     alwaysOpen={60}
                     modalHeight={445}
+                    velocity={100}
+                    threshold={200}
                     handlePosition='inside'
                     withHandle={positionModal === 'top'}
                     withOverlay={false}
-                    disableScrollIfPossible={true}
-                    tapGestureEnabled={true}
-                    useNativeDriver={true}
-                    velocity={1}
-                    panGestureComponentEnabled={true}
+                    disableScrollIfPossible
+                    tapGestureEnabled
+                    useNativeDriver
                     onPositionChange={setPositionModal}
                     scrollViewProps={
                         {
@@ -269,20 +471,28 @@ export default function Music({ route }) {
                         positionModal !== 'top' &&
                         <ContainerMiniPlayer>
                             <WarpperMiniPlayer>
-                                <ContentMusicName>
-                                    <Image
-                                        style={{ width: 40, height: 40, borderRadius: 8 }}
-                                        source={data[image]}
-                                    />
-                                    <WrapperMusicName>
-                                        <MusicNameMiniPlayer numberOfLines={1}>
-                                            {musicTitle}
-                                        </MusicNameMiniPlayer>
-                                        <AuthorMusicMiniPlayer>
-                                            {author}
-                                        </AuthorMusicMiniPlayer>
-                                    </WrapperMusicName>
-                                </ContentMusicName>
+                                <Pressable
+                                    onPress={() => {
+                                        setPositionModal('top')
+                                        modalizeRef.current?.open('top')
+                                    }}
+                                    style={{ width: '85%' }}
+                                >
+                                    <ContentMusicName>
+                                        <Image
+                                            style={{ width: 40, height: 40, borderRadius: 8 }}
+                                            source={data[image]}
+                                        />
+                                        <WrapperMusicName>
+                                            <MusicNameMiniPlayer numberOfLines={1}>
+                                                {musicTitle}
+                                            </MusicNameMiniPlayer>
+                                            <AuthorMusicMiniPlayer>
+                                                {author}
+                                            </AuthorMusicMiniPlayer>
+                                        </WrapperMusicName>
+                                    </ContentMusicName>
+                                </Pressable>
                                 <TouchableOpacity onPress={playOrPause} style={style.playOrPause}>
                                     <FontAwesome5 name={typeIcon} size={20} color='#fff' />
                                 </TouchableOpacity>
@@ -298,7 +508,7 @@ export default function Music({ route }) {
                                 source={data[image]}
                             />
                             <ContentHeader>
-                                <MusicName>
+                                <MusicName numberOfLines={1}>
                                     {musicTitle}
                                 </MusicName>
                                 <AuthorMusic>
@@ -312,9 +522,9 @@ export default function Music({ route }) {
                                         value={progress}
                                         minimumValue={0}
                                         maximumValue={duration}
-                                        maximumTrackTintColor='gray'
-                                        minimumTrackTintColor='#0B97D3'
-                                        thumbTintColor='#0B97D3'
+                                        maximumTrackTintColor='#FFFFFF50'
+                                        minimumTrackTintColor={themes.dark.colors.primary}
+                                        thumbTintColor={themes.dark.colors.primary}
                                         onSlidingStart={value => advancedMusic({ status: 'start', value: value })}
                                         onSlidingComplete={value => advancedMusic({ status: 'completed', value: value })}
                                     />
@@ -353,44 +563,3 @@ export default function Music({ route }) {
         </Wrapper>
     );
 }
-
-const style = StyleSheet.create({
-    floatButtom: {
-        position: 'absolute',
-        width: 50,
-        height: 50,
-        alignItems: 'center',
-        justifyContent: 'center',
-        right: 30,
-        bottom: 30,
-        borderRadius: 30,
-        backgroundColor: '#0B97D3c3',
-        display: 'flex',
-        flexDirection: 'row'
-    },
-    playAndPause: {
-        backgroundColor: '#0B97D3',
-        borderRadius: 30,
-        width: 60,
-        height: 60,
-        alignItems: 'center',
-        justifyContent: 'center',
-        alignContent: 'center'
-    },
-    playOrPause: {
-        paddingRight: 15
-    },
-    container: {
-        width: '100%',
-        height: 2,
-        backgroundColor: '#EFEFF4',
-        borderRadius: 10,
-        overflow: 'hidden',
-        position: 'relative',
-        top: 5
-    },
-    progress: {
-        height: 2,
-        backgroundColor: '#0B97D3',
-    },
-});
