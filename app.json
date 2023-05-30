@@ -2,7 +2,7 @@
   "expo": {
     "name": "C.U.N.C",
     "slug": "AnthonyOliveira",
-    "version": "2.1.4",
+    "version": "2.1.5",
     "orientation": "portrait",
     "icon": "./src/assets/note_logo.png",
     "backgroundColor": "#000000",
