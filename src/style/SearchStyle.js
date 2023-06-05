@@ -1,11 +1,13 @@
+import { StyleSheet } from "react-native";
 import styled from "styled-components/native";
+import themes from "./themes";
 
 export const Container = styled.View`
+    display: flex;
     align-items: center;
     padding-top: 20px;
     width: 100%;
     height: 100%;
-    flex: 1;
 `;
 
 export const SearchInput = styled.TextInput`
@@ -14,8 +16,7 @@ export const SearchInput = styled.TextInput`
     border-color: #0B97D3;
     height: 40px;
     padding: 10px;
-    margin-bottom: 10px;
-    width: 90%;
+    width: ${({ changeWidth }) => changeWidth ? '75%' : '100%'} 
     color: ${props => props.theme.color};
 `;
 
@@ -32,3 +33,23 @@ export const ListView = styled.View`
     flex: 1;
     align-items: center;
 `;
+
+export const styles = StyleSheet.create({
+    wrapper: {
+        width: '100%',
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "space-around",
+        flexDirection: "row",
+        paddingHorizontal: 10
+    },
+    textCancel: {
+        color: themes.dark.colors.primary,
+        fontSize: 16
+    },
+    containerRecentSeaches: {
+        paddingHorizontal: 10,
+        width: '100%',
+        flex: 1,
+    }
+})
