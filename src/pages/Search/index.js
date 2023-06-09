@@ -8,6 +8,7 @@ import themes from "../../style/themes";
 import { useToast } from "react-native-toast-notifications";
 import MusicContext from "../../contexts/music";
 import { formatNameMusic } from "../../utils";
+import { AntDesign } from '@expo/vector-icons';
 import RecentSearches from "../../components/RecentSearches";
 import SearchesContext from "../../contexts/search";
 
@@ -179,31 +180,51 @@ export default function Search({ navigation }) {
     function cancelSelection() {
         Keyboard.dismiss();
         setTextValue('');
+        setTextSearch('');
         setIsFocus(false);
         setDataMusic([]);
+    }
+
+    function changeText(value) {
+        searcMusicTemp(value);
+        setTextValue(value);
     }
 
     return (
         <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
             <Container>
                 <View style={[styles.wrapper]}>
-                    <SearchInput
-                        placeholder={"Pesquisar música ..."}
-                        placeholderTextColor={'#c0c0c0'}
-                        onChangeText={(text) => {
-                            searcMusicTemp(text)
-                            setTextValue(text)
-                        }}
-                        onSubmitEditing={searchMusic}
-                        selectionColor={themes.dark.colors.primary}
-                        onFocus={() => getRecentSearchesInMemory()}
-                        onPressIn={() => {
-                            setIsFocus(true)
-                        }}
-                        changeWidth={isFocus}
-                        style={{ color: '#FFFF' }}
-                        value={textValue}
-                    />
+                    <View style={[styles.positionAndAlingCenter, { width: isFocus ? '75%' : '100%' }]}>
+                        <SearchInput
+                            placeholder={"Pesquisar música ..."}
+                            placeholderTextColor={'#c0c0c0'}
+                            onChangeText={(text) => changeText(text)}
+                            onSubmitEditing={searchMusic}
+                            selectionColor={themes.dark.colors.primary}
+                            onFocus={() => getRecentSearchesInMemory()}
+                            onPressIn={() => setIsFocus(true)}
+                            style={{ color: '#FFFF' }}
+                            value={textValue}
+                        />
+
+                        {textValue.length ?
+                            <Pressable
+                                onPress={() => {
+                                    setTextValue('');
+                                    setTextSearch('');
+                                    setIsFocus(true);
+                                }}
+                                style={[styles.pressPosition]}
+                            >
+                                <View style={[styles.cleanInputIcon]}>
+                                    <AntDesign name="closecircle" size={16} color="#FFFFFFA1" />
+                                </View>
+                            </Pressable>
+                            : null
+                        }
+
+                    </View>
+
                     {isFocus &&
                         <Pressable style={{ width: 65 }} onPress={cancelSelection}>
                             <Text style={[styles.textCancel]} >Cancelar</Text>
