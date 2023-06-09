@@ -16,7 +16,8 @@ export const SearchInput = styled.TextInput`
     border-color: #0B97D3;
     height: 40px;
     padding: 10px;
-    width: ${({ changeWidth }) => changeWidth ? '75%' : '100%'} 
+    padding-right: 35px;
+    width: 100%;
     color: ${props => props.theme.color};
 `;
 
@@ -51,5 +52,21 @@ export const styles = StyleSheet.create({
         paddingHorizontal: 10,
         width: '100%',
         flex: 1,
-    }
+    },
+    positionAndAlingCenter: {
+        display: 'flex',
+        alignItems: 'center',
+        flexDirection: 'row'
+    },
+    cleanInputIcon: {
+        height: 30,
+        width: 25,
+        display: "flex",
+        alignItems: "center",
+        flexDirection: "row",
+    },
+    pressPosition: {
+        position: 'relative',
+        right: '70%',
+    },
 })
