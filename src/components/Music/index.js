@@ -30,6 +30,7 @@ import {
 } from '../../style/MusicStyle';
 import { useToast } from 'react-native-toast-notifications';
 import { typeDevice } from '../../utils';
+import qs from 'qs';
 
 export default function Music({ route, navigation }) {
     const {
@@ -285,6 +286,7 @@ export default function Music({ route, navigation }) {
             { id: 2, label: `Baixar - ${musicTitle}`, icon: 'download', visible: true, disabled: true },
             { id: 3, label: 'Ver no YouTube', icon: 'logo-youtube', subId: 'video', visible: false, fun: 'videos' },
             { id: 4, label: 'Ir para cifra', icon: 'open', subId: 'cifra', visible: false, fun: 'ciphers' },
+            { id: 5, label: 'Relatar um problema', icon: 'alert-circle', visible: true, fun: 'help' },
         ]
 
         list.forEach((element) => {
@@ -336,12 +338,41 @@ export default function Music({ route, navigation }) {
         )
     };
 
+    const submitProblemfound = async () => {
+        try {
+            const to = 'anthony.silvaoliveira@outlook.com';
+            const subject = 'Quero relatar um problema';
+            const body = `Olá, \n\n Vi um erro na música ${musicTitle} do autor ${author}! \n\n\n Relate o problema aqui ...`;
+
+            const query = qs.stringify({
+                subject,
+                body,
+                cc: '',
+                bcc: ''
+            });
+
+            let url = `mailto:${to}?${query}`;
+
+            const canOpen = await Linking.canOpenURL(url);
+
+            if (!canOpen) {
+                show('Não foi possível abrir o seu app de email', { type: 'danger' });
+            }
+
+            return Linking.openURL(url);
+
+        } catch (error) {
+            show('Ops! Houve um erro ao abrir o seu app de email', { type: 'danger' });
+        }
+    }
+
     const renderItem = ({ item, separators }) => {
         const pressed = (param) => {
             const action = {
                 sharing: () => sharingMusic(),
                 videos: () => goToVideo(),
-                ciphers: () => goToCipher()
+                ciphers: () => goToCipher(),
+                help: () => submitProblemfound(),
             }
 
             action[param]();
