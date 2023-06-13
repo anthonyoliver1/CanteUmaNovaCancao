@@ -23,7 +23,9 @@ export function SearchProvider({ children }) {
     }, [recentSearches]);
 
     const setRecentSearchesInMemory = useCallback(async (param) => {
-        await AsyncStorage.setItem('@SEARCH_MUSIC', JSON.stringify(param));
+        const order = param.sort((a, b) => a.id < b.id);
+
+        await AsyncStorage.setItem('@SEARCH_MUSIC', JSON.stringify(order));
     }, []);
 
     const deleteAllSearch = async () => {

@@ -10,27 +10,25 @@ export const FilterContainer = styled.View`
 `;
 
 export const Wrapper = styled.View`
-    background-color: #1A1A1A7A;
+    background-color: #1A1A1A3A;
     border-radius: 20px;
     padding: 10px 20px;
     margin-horizontal: 4px;
 
     ${props =>
         props.selected && css`
-            background-color: ${props => props.theme.colors.card};
-            padding: 15px 25px;
+            background-color: ${props => props.theme.colors.primary};
             border-radius: 30px;
         `
     }
 `;
 
 export const TextButton = styled.Text`
-    color: #FFFFFFA9;
+    color: #FFFFFF;
     font-size: 13px;
 
     ${props =>
         props.selected && css`
-            color: #FFFFFF;
             font-weight: 700;
         `
     }

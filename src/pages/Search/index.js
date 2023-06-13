@@ -110,9 +110,10 @@ export default function Search({ navigation }) {
         );
 
         if (recentSearches.length && !getEqualsValues && textInSearch.length) {
-            const getAllIds = recentSearches[recentSearches.length - 1].id;
+            const getAllIds = recentSearches.sort((a, b) => a.id > b.id);
+            const lastId = getAllIds[getAllIds.length - 1].id;
 
-            recentSearches.push({ id: getAllIds + 1, search: textInSearch, lastUpdate: date });
+            recentSearches.push({ id: lastId + 1, search: textInSearch, lastUpdate: date });
             const dataNew = [...new Map(recentSearches.map(item => [item.search, item])).values()];
 
             setRecentSearchesInMemory(dataNew);
