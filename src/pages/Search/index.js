@@ -226,8 +226,8 @@ export default function Search({ navigation }) {
                     </View>
 
                     {isFocus &&
-                        <Pressable style={{ width: 65 }} onPress={cancelSelection}>
-                            <Text style={[styles.textCancel]} >Cancelar</Text>
+                        <Pressable style={{ maxWidth: 90 }} onPress={cancelSelection}>
+                            <Text style={[styles.textCancel]} numberOfLines={1} >Cancelar</Text>
                         </Pressable>
                     }
                 </View>
