@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "C.U.N.C",
+    "name": "Nova Canção",
     "slug": "AnthonyOliveira",
-    "version": "2.1.5",
+    "version": "2.1.7",
     "orientation": "portrait",
     "icon": "./src/assets/note_logo.png",
     "backgroundColor": "#000000",
