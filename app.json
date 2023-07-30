@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "Nova Canção",
-    "slug": "AnthonyOliveira",
-    "version": "2.1.4",
+    "name": "Cante uma Nova Cancao",
+    "slug": "NovaCancao",
+    "version": "3.0.0",
     "orientation": "portrait",
     "icon": "./src/assets/cunc.png",
     "backgroundColor": "#000000",
@@ -20,7 +20,7 @@
     "ios": {
       "supportsTablet": true,
       "userInterfaceStyle": "automatic",
-      "bundleIdentifier": "com.anthony.dev.AnthonyOliveira",
+      "bundleIdentifier": "br.org.icoc.novacancao",
       "infoPlist": {
         "UIBackgroundModes": [
           "audio"
@@ -28,15 +28,16 @@
       }
     },
     "android": {
+      "package": "br.org.icoc.novacancao",
+      "versionCode": 40,
       "userInterfaceStyle": "automatic",
       "adaptiveIcon": {
         "foregroundImage": "./src/assets/cunc.png"
-      },
-      "package": "com.anthony.dev.AnthonyOliveira"
+      }
     },
     "extra": {
       "eas": {
-        "projectId": "5ae4da61-7aa9-43f0-a20c-e821698d8055"
+        "projectId": "e840c608-30d7-4fde-8516-a0db43d421f5"
       }
     }
   }

@@ -25,7 +25,7 @@
       <dict>
         <key>CFBundleURLSchemes</key>
         <array>
-          <string>com.anthony.dev.AnthonyOliveira</string>
+          <string>br.org.icoc.novacancao</string>
         </array>
       </dict>
       <dict>
