@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { Dimensions, Image, TouchableOpacity, View, VirtualizedList } from 'react-native';
 import { Container, InfoMusic, List, Wrapper } from '../../style/LyricsStyle';
 import { Author, Kids, Title } from '../../../style';
@@ -91,7 +91,7 @@ export default function Lyrics({ navigation }) {
             'all': () => {
                 setMusic(
                     allMusics.filter(i => i.number)
-                        .sort((a, b) => a.number > b.number)
+                        .sort((a, b) => a.number - b.number)
                 );
             },
             'audaz': () => {
@@ -105,21 +105,21 @@ export default function Lyrics({ navigation }) {
                 setMusic(
                     allMusics
                         .filter(i => i.author.includes('Igreja'))
-                        .sort((a, b) => a.number > b.number)
+                        .sort((a, b) => a.number - b.number)
                 );
             },
             'kids': () => {
                 setMusic(
                     allMusics
                         .filter(i => i.kids)
-                        .sort((a, b) => a.number > b.number)
+                        .sort((a, b) => a.number - b.number)
                 );
             },
             'natal': () => {
                 setMusic(
                     allMusics
                         .filter(i => i.natal)
-                        .sort((a, b) => a.number > b.number)
+                        .sort((a, b) => a.number - b.number)
 
                 );
             }
@@ -127,6 +127,8 @@ export default function Lyrics({ navigation }) {
 
         action[params]();
     }
+
+    const cachedMusics = useMemo(() => music, [music])
 
     const keyExtractor = (item) => item.number;
 
@@ -178,11 +180,11 @@ export default function Lyrics({ navigation }) {
 
     return (
         <Container>
-            {allMusics.length ?
+            {allMusics.length && music.length ?
                 <VirtualizedList
                     ref={listRef}
                     ListHeaderComponent={filter}
-                    data={music}
+                    data={cachedMusics}
                     initialNumToRender={50}
                     keyExtractor={keyExtractor}
                     renderItem={renderItem}
