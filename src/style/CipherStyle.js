@@ -1,10 +1,18 @@
-import styled , { css } from "styled-components/native";
+import styled, { css } from "styled-components/native";
 
 export const Cipher = styled.Text`
-    text-align: justify;
-    line-height: 25px;
+    line-height: 30px;
     font-size: 16px;
-    margin-bottom: ${props => props.margin ? props.margin : '60px'};
-    color: ${props => props.isCipher ? 'red' :  props.theme.color};
-    padding: 5px 10px;
+    font-weight: 700;
+    color: ${({ theme }) => theme.colors.primary};
+    position: absolute;
+    top: 20px;
+    left: 20px;
+`;
+
+export const Lyrics = styled.Text`
+    line-height: 30px;
+    font-size: 16px;
+    color: ${({ theme }) => theme.color};
+    white-space: nowrap;
 `;

@@ -67,8 +67,8 @@ export default function Cipher({ navigation }) {
                     />
                     <InfoMusic width={widthScreen}>
                         <View>
-                            <Title>{formatNameMusic(item)}</Title>
-                            <Author>{item.author}</Author>
+                            <Title numberOfLines={1}>{formatNameMusic(item)}</Title>
+                            <Author numberOfLines={1}>{item.author}</Author>
                         </View>
                         <View>
                             {item.kids && <Kids>kids</Kids>}

@@ -3,7 +3,8 @@ import Router from './src/routes/router';
 import themes from './src/style/themes'
 import { ToastProvider } from 'react-native-toast-notifications'
 import { MusicProvider } from './src/contexts/music';
-import  { ConnectionProvider } from './src/contexts/connection';
+import { ConnectionProvider } from './src/contexts/connection';
+import { SearchProvider } from './src/contexts/search';
 
 export default function App() {
   return (
@@ -20,7 +21,9 @@ export default function App() {
     >
       <MusicProvider>
         <ConnectionProvider>
-          <Router />
+          <SearchProvider>
+            <Router />
+          </SearchProvider>
         </ConnectionProvider>
       </MusicProvider>
     </ToastProvider>
