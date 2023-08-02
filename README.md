@@ -9,10 +9,10 @@
 </p>
 
 <h1 align="center">
-    <img alt="Cante Uma Nova Canção" title="Cante Uma Nova Canção" src="assets/images_readme/banner-cunc-1.png" style="border-radius: 15px"/>
+    <img alt="Cante Uma Nova Canção" title="Cante Uma Nova Canção" src="src/assets/images_readme/banner-cunc-1.png" style="border-radius: 15px"/>
     <p style="display: flex; align-items: center; justify-content: center;line-height: 22px; margin-top: 15px">
         Cante Uma Nova Canção
-        <img src="assets/note_logo.png" width="25" style="border-radius: 5px; margin-left: 10px;" alt="Logo">
+        <img src="src/assets/note_logo.png" width="25" style="border-radius: 5px; margin-left: 10px;" alt="Logo">
     </P>
 </h1>
 
@@ -36,12 +36,12 @@
 <br>
 
 <p align="center">
-    <img src="assets/images_readme/cunc_home.jpeg" width="350" style="border-radius: 15px" height="740" alt="print musica">
-    <img src="assets/images_readme/cunc_music.jpeg" width="350" style="border-radius: 15px" height="740" alt="print musica">
-    <img src="assets/images_readme/cunc_cipher.jpeg" width="350" style="border-radius: 15px" height="740" alt="print musica">
-    <img src="assets/images_readme/cunc_cipher_ex.jpeg" width="350" style="border-radius: 15px" height="740" alt="print musica">
-    <img src="assets/images_readme/cunc_search.jpeg" width="350" style="border-radius: 15px" height="740" alt="print busca">
-    <img src="assets/images_readme/cunc_about.jpeg" width="350" style="border-radius: 15px" height="740" alt="print sobre">
+    <img src="src/assets/images_readme/cunc_home.jpeg" width="350" style="border-radius: 15px" height="740" alt="print musica">
+    <img src="src/assets/images_readme/cunc_music.jpeg" width="350" style="border-radius: 15px" height="740" alt="print musica">
+    <img src="src/assets/images_readme/cunc_cipher.jpeg" width="350" style="border-radius: 15px" height="740" alt="print musica">
+    <img src="src/assets/images_readme/cunc_cipher_ex.jpeg" width="350" style="border-radius: 15px" height="740" alt="print musica">
+    <img src="src/assets/images_readme/cunc_search.jpeg" width="350" style="border-radius: 15px" height="740" alt="print busca">
+    <img src="src/assets/images_readme/cunc_about.jpeg" width="350" style="border-radius: 15px" height="740" alt="print sobre">
 </p>
 
 ### :wrench: **Tecnologias utilizadas**
