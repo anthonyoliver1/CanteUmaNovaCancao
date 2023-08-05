@@ -57,7 +57,6 @@ export default function Music({ route, navigation }) {
     const modalizeRef = useRef(null);
     const menuModalRef = useRef(null);
 
-    const [showButtonPlay, setShowButtonPlay] = useState(undefined);
     const [typeIcon, setTypeIcon] = useState('play');
     const [musicStarted, setMusicStarted] = useState(false);
     const [sound, setSound] = useState();
@@ -67,6 +66,39 @@ export default function Music({ route, navigation }) {
     const [isMounted, setIsMounted] = useState(false);
     const [positionModal, setPositionModal] = useState('');
     const [dataList, setDataList] = useState([]);
+
+    useEffect(() => {
+        loadMusic();
+        dataModalOptions();
+        renderButtonHeaderOptions();
+    }, []);
+
+    useEffect(() => {
+        return () => {
+            sound && sound.unloadAsync();
+        }
+    }, [sound]);
+
+    useEffect(() => {
+        if (progress > 0 && progress === duration) {
+            setTypeIcon('play');
+            sound.stopAsync();
+        }
+    }, [progress, duration, sound]);
+
+    useEffect(() => {
+        const position = infoFile.positionMillis / 1000;
+        const duration = infoFile.durationMillis / 1000;
+
+        if (infoFile && infoFile.positionMillis) {
+            setProgress(position);
+            setDuration(duration);
+        } else {
+            setProgress(0);
+            setDuration(0);
+        }
+
+    }, [infoFile]);
 
     async function loadMusic() {
         try {
@@ -96,12 +128,14 @@ export default function Music({ route, navigation }) {
             );
 
             setSound(sound);
+            setIsMounted((await sound.getStatusAsync()).isLoaded);
 
             sound.setOnPlaybackStatusUpdate(setInfoFile);
         } catch (error) {
             console.log('Deu erro: ', error);
-            const notFoundMessage = 'Não foi possível carregar a música';
 
+            setIsMounted(false);
+            const notFoundMessage = 'Não foi possível carregar a música';
             return show(notFoundMessage, { type: 'danger' });
         }
     }
@@ -118,34 +152,6 @@ export default function Music({ route, navigation }) {
         }
     }
 
-    useEffect(() => {
-        let timeM = infoFile.positionMillis / 1000;
-        let du = infoFile.durationMillis / 1000;
-
-        (infoFile && infoFile.positionMillis) ? setProgress(timeM) : setProgress(0);
-        (infoFile && infoFile.durationMillis) ? setDuration(du) : setDuration(0);
-    }, [infoFile]);
-
-    useEffect(() => {
-        if (progress > 0 && progress === duration) {
-            setTypeIcon('play');
-            sound.pauseAsync();
-            sound.setPositionAsync(0);
-        }
-    }, [progress, duration, sound]);
-
-    useEffect(() => {
-        setIsMounted(!isMounted);
-        loadMusic();
-    }, []);
-
-    useEffect(() => {
-        return () => {
-            sound && sound.unloadAsync();
-            setIsMounted(!isMounted);
-        }
-    }, [sound]);
-
     // const checkFile = async () => {
     //     if (typeDevice.mobile()) {
     //         const file = FileSystem.documentDirectory + 'O Sonho.mp3'
@@ -158,11 +164,7 @@ export default function Music({ route, navigation }) {
     //     checkFile()
     // })
 
-    useEffect(() => {
-        setShowButtonPlay(Boolean(audio));
-    }, [audio])
-
-    useEffect(() => {
+    const renderButtonHeaderOptions = () => {
         navigation.setOptions({
             headerRight: () => (
                 <Pressable onPress={openModalMenu} android_disableSound={true}>
@@ -174,7 +176,7 @@ export default function Music({ route, navigation }) {
                 </Pressable>
             ),
         });
-    }, [navigation]);
+    };
 
     const openModalMenu = () => {
         menuModalRef.current?.open();
@@ -280,7 +282,7 @@ export default function Music({ route, navigation }) {
         );
     }
 
-    useEffect(() => {
+    const dataModalOptions = () => {
         const list = [
             { id: 1, label: 'Compartilhar', visible: true, icon: 'share', fun: 'sharing' },
             { id: 2, label: `Baixar - ${musicTitle}`, icon: 'download', visible: true, disabled: true },
@@ -301,7 +303,7 @@ export default function Music({ route, navigation }) {
             }
         })
         setDataList(list);
-    }, []);
+    };
 
     const goToVideo = () => Linking.openURL(linkVideo);
 
@@ -467,7 +469,7 @@ export default function Music({ route, navigation }) {
             >
             </Modalize>
 
-            {(isMounted && showButtonPlay) &&
+            {(isMounted) &&
                 <Modalize
                     ref={modalizeRef}
                     alwaysOpen={60}
