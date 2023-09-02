@@ -14,5 +14,4 @@ export const Lyrics = styled.Text`
     line-height: 30px;
     font-size: 16px;
     color: ${({ theme }) => theme.color};
-    white-space: nowrap;
 `;

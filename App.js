@@ -1,6 +1,10 @@
 import React from 'react';
 import Router from './src/routes/router';
 import themes from './src/style/themes'
+
+import 'react-native-reanimated';
+import 'react-native-gesture-handler';
+
 import { ToastProvider } from 'react-native-toast-notifications'
 import { MusicProvider } from './src/contexts/music';
 import { ConnectionProvider } from './src/contexts/connection';
