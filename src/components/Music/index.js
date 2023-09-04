@@ -472,6 +472,7 @@ export default function Music({ route, navigation }) {
                     ref={modalizeRef}
                     alwaysOpen={60}
                     modalHeight={445}
+                    avoidKeyboardLikeIOS={true}
                     velocity={100}
                     threshold={200}
                     handlePosition='inside'

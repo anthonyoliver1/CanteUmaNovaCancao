@@ -67,7 +67,7 @@
 💡 (Seguir todos os passos de instalação do Expo CLI)
 
 **Build Android**
-- Java 11 ou superior
+- Java 11 ou posterior **
 - Android Studio
 - Dispositivo Android ou Emulador *
 
@@ -75,6 +75,8 @@
 - MacOS
 - Xcode
 - Dispositivos iOS ou Emulador *
+
+<h6 style="color:#ff0000">** Expo SDK 48 - versão atual</h6>
 
 *&nbsp;(Necessário ter o APP <b>Expo Go</b> instalado em  dispositivos Android ou iOS).
 
