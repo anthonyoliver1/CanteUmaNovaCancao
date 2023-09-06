@@ -1,7 +1,8 @@
-import styled from "styled-components/native";
+import { StyleSheet } from 'react-native';
 
-export const Container = styled.View`
-    flex: 1;
-    align-items: center;
-    background-color: #0B97D3
-`;
+export const styles = StyleSheet.create({
+    container: {
+        alignItems: 'center',
+        backgroundColor: '#0B97D3'
+    },
+});

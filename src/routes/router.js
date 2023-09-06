@@ -260,7 +260,7 @@ export default function Router() {
         if (checkingConnectionAndMusicLocal || inLoading) return;
 
         getMusics();
-    }, [inLoading])
+    }, [inLoading, isConnection, allMusics])
 
     const forceReload = () => {
         setInLoading(true);

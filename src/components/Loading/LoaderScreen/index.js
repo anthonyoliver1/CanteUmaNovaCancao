@@ -1,26 +1,31 @@
 import React from "react";
-import { Container } from "../../../style/LoaderScreenStyle";
-import { MotiImage } from 'moti';
+import { styles } from "../../../style/LoaderScreenStyle";
+import { MotiImage, MotiView } from 'moti';
+import { View } from "react-native";
 
 export default function Loader() {
     return (
-        <Container>
+        <View
+            style={[styles.container]}
+        >
             <MotiImage
+                animateInitialState={true}
                 from={{
-                    translateY: 0,
+                    translateY: -30,
                 }}
                 animate={{
-                    translateY: -30,
+                    translateY: 0,
                     opacity: 1
                 }}
                 transition={{
                     type: 'timing',
                     duration: 1000,
-                    repeat: 4,
+                    repeat: 4
                 }}
-                style={{ width: '50%', height: '100%' }}
+
+                style={[{ width: '50%', height: '100%' }]}
                 source={require('../../../assets/splash_logo.png')}
             />
-        </Container>
+        </View>
     )
 }
