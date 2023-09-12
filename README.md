@@ -18,11 +18,12 @@
 
 <p align="center">
     <a href="#computer-sobre-o-projeto">Sobre</a> &nbsp | &nbsp  
+    <a href="#open_file_folder-estrutura-do-projeto">Estrutura do projeto</a> &nbsp | &nbsp  
     <a href="#art-layout">Layout</a> &nbsp  | &nbsp 
     <a href="#wrench-tecnologias-utilizadas">Tecnologias utilizadas</a> &nbsp  | &nbsp 
     <a href="#pushpin-pré-requisitos">Pré-requisitos</a> &nbsp  | &nbsp 
     <a href="#zap-rodando-a-aplicação">Rodando a aplicação</a> &nbsp  | &nbsp 
-    <a href="#construction_workerautor">Autor</a>
+    <a href="#construction_worker-autor">Autor</a>
 </p>
 
 ### :computer: **Sobre o projeto**
@@ -31,6 +32,64 @@
     Um app de música criado com <a href="https://reactnative.dev/" target="_blank">🔗 React Native</a> para ter as músicas da Igreja de Cristo Internacional
     na palma da mão e poder acompanhar, ouvir e cantar onde estiver.
 </p>
+
+### :open_file_folder: **Estrutura do Projeto**
+
+``` text
+├── App.js
+├── app.json
+├── babel.config.js
+├── eas.json
+├── index.js
+├── metro.config.js
+├── package.json
+├── src
+│   ├── assets
+│   │   ├── images_readme
+│   │   ├── music
+│   ├── components
+│   │   ├── ErrorScreen
+│   │   ├── Filter
+│   │   ├── Loading
+│   │   ├── Music
+│   │   ├── MusicCipher
+│   │   ├── PrivacyPolicy
+│   │   ├── RecentSearches
+│   │   ├── SpecialPage
+│   │   └── TermsOfUse
+│   ├── contexts
+│   │   ├── connection.js
+│   │   ├── music.js
+│   │   └── search.js
+│   ├── pages
+│   │   ├── About
+│   │   ├── Cipher
+│   │   ├── Lyrics
+│   │   └── Search
+│   ├── routes
+│   │   └── router.js
+│   ├── service
+│   │   ├── api.js
+│   │   └── http.js
+│   ├── style
+│   │   ├── AboutStyle.js
+│   │   ├── CipherStyle.js
+│   │   ├── ErrorScreenStyle.js
+│   │   ├── FilterStyle.js
+│   │   ├── LoaderScreenStyle.js
+│   │   ├── LoadingIndicatorStyle.js
+│   │   ├── LyricsStyle.js
+│   │   ├── MusicStyle.js
+│   │   ├── RecentSearchesStyles.js
+│   │   ├── SearchStyle.js
+│   │   ├── SpecialEditionStyle.js
+│   │   ├── TermsAndPrivacyStyle.js
+│   │   └── themes
+│   └── utils
+│       ├── index.js
+│       └── mockMusicData.json
+└── style.js
+```
 
 ### :art: **Layout**
 <br>
@@ -75,6 +134,8 @@
 - MacOS
 - Xcode
 - Dispositivos iOS ou Emulador *
+
+<h6 style="color:#ff0000">** Expo SDK 49 - versão atual</h6>
 
 *&nbsp;(Necessário ter o APP <b>Expo Go</b> instalado em  dispositivos Android ou iOS).
 
