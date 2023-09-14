@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { Alert, Image, Linking, Pressable, ScrollView, Share, Text, TouchableOpacity, View } from 'react-native';
 import { Entypo, Ionicons, MaterialIcons, FontAwesome5 } from '@expo/vector-icons';
 import { Modalize } from 'react-native-modalize';
@@ -31,6 +31,7 @@ import {
 import { useToast } from 'react-native-toast-notifications';
 import { typeDevice } from '../../utils';
 import qs from 'qs';
+import ConnectionContext from '../../contexts/connection';
 
 export default function Music({ route, navigation }) {
     const {
@@ -45,6 +46,10 @@ export default function Music({ route, navigation }) {
         linkVideo,
         number
     } = route.params;
+
+    const {
+        getNetworkStateAsync
+    } = useContext(ConnectionContext);
 
     const { show } = useToast();
 
@@ -68,7 +73,7 @@ export default function Music({ route, navigation }) {
     const [dataList, setDataList] = useState([]);
 
     useEffect(() => {
-        loadMusic();
+        verifyConnectionAndLoadMusic();
         dataModalOptions();
         renderButtonHeaderOptions();
     }, []);
@@ -90,7 +95,7 @@ export default function Music({ route, navigation }) {
         const position = infoFile.positionMillis / 1000;
         const duration = infoFile.durationMillis / 1000;
 
-        if (infoFile && infoFile.positionMillis) {
+        if (infoFile && infoFile.durationMillis) {
             setProgress(position);
             setDuration(duration);
         } else {
@@ -99,6 +104,14 @@ export default function Music({ route, navigation }) {
         }
 
     }, [infoFile]);
+
+    const verifyConnectionAndLoadMusic = async () => {
+        const response = await getNetworkStateAsync();
+
+        if (response) {
+            loadMusic();
+        }
+    }
 
     async function loadMusic() {
         try {
