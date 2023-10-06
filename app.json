@@ -2,7 +2,7 @@
   "expo": {
     "name": "Nova Canção",
     "slug": "AnthonyOliveira",
-    "version": "2.1.8",
+    "version": "2.1.9",
     "orientation": "portrait",
     "icon": "./src/assets/note_logo.png",
     "backgroundColor": "#000000",

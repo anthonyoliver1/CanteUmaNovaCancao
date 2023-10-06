@@ -15,6 +15,8 @@
     "build:apk": "eas build -p android --profile preview",
     "build:dev-android": "eas build --profile development --platform android",
     "build:dev-ios": "eas build --profile development-simulator --platform ios",
+    "build:android-develop-apk": "npm run clean-module && npm install && npx expo-doctor && npm install && npx expo prebuild && cd android && ./gradlew clean && ./gradlew :app:assembleRelease && cd ../",
+    "clean-module": "rm -rf node_modules package-lock.json && npm cache clean --force",
     "dependecies-in-use": "npx depcheck"
   },
   "dependencies": {
@@ -40,7 +42,7 @@
     "qs": "^6.10.2",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "react-native": "0.71.8",
+    "react-native": "0.71.13",
     "react-native-gesture-handler": "~2.9.0",
     "react-native-modalize": "^2.1.1",
     "react-native-reanimated": "~2.14.4",
