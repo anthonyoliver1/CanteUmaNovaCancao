@@ -1,5 +1,5 @@
 <p align="center" style="display: flex; align-items: center; justify-content: space-evenly; align-content: center; line-height: 10px;">
-    <img src="https://img.shields.io/badge/NODE-%3E%3D14.17.4-brightgreen?style=for-the-badge">
+    <img src="https://img.shields.io/badge/NODE-%3E%3D18.17.1-brightgreen?style=for-the-badge">
     <img src="https://img.shields.io/badge/NPM-%3E%3D7.20.5-orange?style=for-the-badge">
     <img src="https://img.shields.io/badge/Android-v10-yellowgreen?style=for-the-badge">
     <img src="https://img.shields.io/badge/iOS-v13-lightgrey?style=for-the-badge">
