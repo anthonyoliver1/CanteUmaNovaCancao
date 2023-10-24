@@ -1,11 +1,14 @@
 import React, { useContext, useEffect, useState } from "react";
-import { FlatList, Keyboard, Pressable, Text, TouchableOpacity, View } from "react-native";
+import { Alert, FlatList, Keyboard, Pressable, Text, TouchableOpacity, View } from "react-native";
 import { AntDesign, MaterialCommunityIcons } from '@expo/vector-icons';
 import { styles } from "../../style/RecentSearchesStyles";
 import themes from "../../style/themes";
 import SearchesContext from "../../contexts/search";
+import { useToast } from "react-native-toast-notifications";
 
 export default function RecentSearches({ searchForRecent }) {
+    const { show } = useToast();
+
     const {
         recentSearches,
         deleteAllSearch,
@@ -44,12 +47,33 @@ export default function RecentSearches({ searchForRecent }) {
         const dataSearchEmpty = [];
         setDataSearchOrdained(dataSearchEmpty);
         deleteAllSearch();
+
+        show('As buscas recentes foram removidas', { type: 'success' });
     }
 
     const clearSelectedRecentResearches = async (idSearch) => {
         const cloneData = dataSearchOrdained.filter(({ id }) => id !== idSearch);
         setDataSearchOrdained(cloneData);
         deleteSearchById(cloneData);
+    }
+
+    const confirmClean = () => {
+        Alert.alert(
+            'Atenção!',
+            'Você tem certeza que deseja limpar todas as Buscas recentes ?',
+            [
+                {
+                    text: 'Limpar',
+                    onPress: () => {
+                        clearAllRecentResearches();
+                    }
+                },
+                {
+                    text: 'Cancelar',
+                    style: 'cancel'
+                }
+            ]
+        );
     }
 
     const renderItem = ({ item, separators }) => {
@@ -79,7 +103,7 @@ export default function RecentSearches({ searchForRecent }) {
         <View style={{ flex: 1 }}>
             <View style={[styles.header]}>
                 <Text style={[styles.titleHeader]}> Buscas recentes </Text>
-                <Pressable onPress={clearAllRecentResearches}>
+                <Pressable onPress={confirmClean}>
                     <Text
                         style={[styles.titleHeader, {
                             color: themes.dark.colors.primary, fontSize: 15
