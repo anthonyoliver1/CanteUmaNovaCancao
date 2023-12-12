@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useRef, useState } from 'react';
 import { Alert, Image, Linking, Pressable, ScrollView, Share, Text, TouchableOpacity, View } from 'react-native';
 import { Entypo, Ionicons, MaterialIcons, FontAwesome5 } from '@expo/vector-icons';
 import { Modalize } from 'react-native-modalize';
-import { Audio, InterruptionModeAndroid, InterruptionModeIOS, PitchCorrectionQuality } from 'expo-av';
 import { Wrapper } from '../../../style';
 import * as FileSystem from 'expo-file-system';
 import * as Clipboard from 'expo-clipboard'
@@ -29,9 +28,12 @@ import {
     style
 } from '../../style/MusicStyle';
 import { useToast } from 'react-native-toast-notifications';
-import { typeDevice } from '../../utils';
+import { typeDevice, verifyUrlConnection } from '../../utils';
 import qs from 'qs';
 import ConnectionContext from '../../contexts/connection';
+import TrackPlayer, { Capability, Event, IOSCategoryOptions, useProgress, useTrackPlayerEvents, State } from 'react-native-track-player';
+import MusicContext from '../../contexts/music';
+import { EventsTrackerPlayer } from './constants';
 
 export default function Music({ route, navigation }) {
     const {
@@ -40,6 +42,7 @@ export default function Music({ route, navigation }) {
         author,
         musicTitle,
         image,
+        album,
         isCipher,
         cipher,
         isVideo,
@@ -51,23 +54,28 @@ export default function Music({ route, navigation }) {
         getNetworkStateAsync
     } = useContext(ConnectionContext);
 
+    const {
+        isPlayerWorked,
+        playerUp
+    } = useContext(MusicContext)
+
     const { show } = useToast();
+
+    const {
+        duration,
+        position
+    } = useProgress();
 
     const data = {
         'sonho': require('../../assets/o_sonho.png'),
         'caminhos': require('../../assets/caminhos.png'),
-        'undefined': require('../../assets/cunc.png')
+        'ICI': require('../../assets/cunc.png')
     }
 
     const modalizeRef = useRef(null);
     const menuModalRef = useRef(null);
 
     const [typeIcon, setTypeIcon] = useState('play');
-    const [musicStarted, setMusicStarted] = useState(false);
-    const [sound, setSound] = useState();
-    const [infoFile, setInfoFile] = useState({});
-    const [progress, setProgress] = useState(0);
-    const [duration, setDuration] = useState(0);
     const [isMounted, setIsMounted] = useState(false);
     const [positionModal, setPositionModal] = useState('');
     const [dataList, setDataList] = useState([]);
@@ -79,90 +87,114 @@ export default function Music({ route, navigation }) {
     }, []);
 
     useEffect(() => {
-        return () => {
-            sound && sound.unloadAsync();
-        }
-    }, [sound]);
-
-    useEffect(() => {
-        if (progress > 0 && progress === duration) {
+        if (position > 0 && position >= duration) {
             setTypeIcon('play');
-            sound.stopAsync();
+            resetPosition();
         }
-    }, [progress, duration, sound]);
-
-    useEffect(() => {
-        const position = infoFile.positionMillis / 1000;
-        const duration = infoFile.durationMillis / 1000;
-
-        if (infoFile && infoFile.durationMillis) {
-            setProgress(position);
-            setDuration(duration);
-        } else {
-            setProgress(0);
-            setDuration(0);
-        }
-
-    }, [infoFile]);
+    }, [position, duration]);
 
     const verifyConnectionAndLoadMusic = async () => {
         const response = await getNetworkStateAsync();
 
         if (response) {
-            loadMusic();
+            loadPlayer();
         }
     }
 
-    async function loadMusic() {
+    const cleanQueue = async () => {
         try {
-            if (!audio) return;
+            await TrackPlayer.stop();
+            const index = await TrackPlayer.getActiveTrackIndex();
+            await TrackPlayer.remove(index);
+            await TrackPlayer.removeUpcomingTracks(); // Limpa a fila toda
+        } catch (error) {
+            console.error('[CLEAN QUEUE]', error);
+        }
+    }
 
-            const source = {
-                uri: encodeURI(`https://novacancao.azureedge.net/${audio}`)
-            };
+    const resetPosition = async () => {
+        await TrackPlayer.pause();
+        await TrackPlayer.seekTo(0);
+    }
 
-            const initialStatus = {
-                shouldPlay: false,
-                pitchCorrectionQuality: PitchCorrectionQuality.High,
-                shouldCorrectPitch: true
-            };
+    useTrackPlayerEvents(EventsTrackerPlayer, (event) => {
+        if ([Event.RemotePlay, Event.RemoteStop].includes(event.type)) {
+            setTypeIcon('pause');
+        }
 
-            await Audio.setAudioModeAsync({
-                playsInSilentModeIOS: true,
-                staysActiveInBackground: true,
-                playThroughEarpieceAndroid: false,
-                interruptionModeAndroid: InterruptionModeAndroid.DoNotMix,
-                interruptionModeIOS: InterruptionModeIOS.DoNotMix
+        if (event.type === Event.RemotePause) {
+            setTypeIcon('play');
+        }
+    });
+
+    const loadPlayer = async () => {
+        try {
+            if (!isPlayerWorked) {
+                await TrackPlayer.setupPlayer(
+                    {
+                        minBuffer: 20,
+                        maxBuffer: 20,
+                        iosCategoryOptions: [IOSCategoryOptions.InterruptSpokenAudioAndMixWithOthers]
+                    }
+                );
+
+                playerUp(true);
+            }
+
+            await TrackPlayer.updateOptions({
+                // Media controls capabilities
+                capabilities: [
+                    Capability.Play,
+                    Capability.Pause
+                ],
+                // Capabilities that will show up when the notification is in the compact form on Android
+                compactCapabilities: [
+                    Capability.Play,
+                    Capability.Pause
+                ],
+
+                notificationCapabilities: [
+                    Capability.Play,
+                    Capability.Pause
+                ],
             });
 
-            const { sound } = await Audio.Sound.createAsync(
-                source,
-                initialStatus
-            );
+            if (
+                (await TrackPlayer.getActiveTrack())?.title === musicTitle &&
+                ([State.Playing].includes((await TrackPlayer.getPlaybackState()).state))
+            ) {
+                setIsMounted(true);
+                setTypeIcon('pause');
+                return;
+            }
 
-            setSound(sound);
-            setIsMounted((await sound.getStatusAsync()).isLoaded);
+            if ((await TrackPlayer.getQueue()).length) {
+                cleanQueue();
+            }
 
-            sound.setOnPlaybackStatusUpdate(setInfoFile);
+            const track = {
+                title: musicTitle,
+                artist: author,
+                album: album,
+                artwork: data[image],
+                url: encodeURI(`https://novacancao.azureedge.net/${audio}`),
+            };
+
+            // const isLoaded = await verifyUrlConnection(track.url);
+            // if (!isLoaded) throw 'Houve falha ao carregar a música';
+
+            await TrackPlayer.add(track);
+            setIsMounted(true);
         } catch (error) {
-            console.log('Deu erro: ', error);
-
+            const notLoadedMusicMessage = 'Não foi possível carregar a música';
             setIsMounted(false);
-            const notFoundMessage = 'Não foi possível carregar a música';
-            return show(notFoundMessage, { type: 'danger' });
+            show(notLoadedMusicMessage, { type: 'danger' });
+            console.error('[SETUP PLAYER ERROR]', error);
         }
     }
 
     async function playOrPauseSound(params) {
-        if (musicStarted) {
-            params.includes('play') ? await sound.playAsync() : await sound.pauseAsync();
-            return;
-        }
-
-        if (!params.includes('open')) {
-            await sound.playAsync();
-            setMusicStarted(true);
-        }
+        params.includes('play') ? await TrackPlayer.play() : await TrackPlayer.pause();
     }
 
     // const checkFile = async () => {
@@ -209,42 +241,38 @@ export default function Music({ route, navigation }) {
             playOrPauseSound('play');
         }
 
-        if (typeIcon === 'pause' && progress > 0) {
+        if (typeIcon === 'pause' && position > 0) {
             setTypeIcon('play');
             playOrPauseSound('pause');
         }
     }
 
-    const forwardButton = () => {
-        if (infoFile && infoFile.positionMillis) sound.setPositionAsync(infoFile.positionMillis + 10000);
+    const forwardButton = async () => {
+        await TrackPlayer.seekTo(position + 10);
     }
 
-    const backwardButton = () => {
-        if (infoFile && infoFile.positionMillis) sound.setPositionAsync(infoFile.positionMillis - 10000);
+    const backwardButton = async () => {
+        await TrackPlayer.seekTo(position - 10);
     }
 
-    const advancedMusic = ({ status, value }) => {
-        let timeMusic = value * 1000;
-
+    const advancedMusic = async ({ status, value }) => {
         if (status == 'start') {
             playOrPauseSound('pause');
             setTypeIcon('play');
         }
 
         if (status == 'completed') {
-
-            if (timeMusic >= infoFile.positionMillis) {
-                sound.setPositionAsync(timeMusic);
+            if (value >= position) {
+                await TrackPlayer.seekTo(value);
                 playOrPauseSound('play');
                 setTypeIcon('pause');
                 return;
             }
 
-            if (timeMusic <= infoFile.positionMillis) {
-                sound.setPositionAsync(timeMusic);
+            if (value <= position) {
+                await TrackPlayer.seekTo(value);
                 playOrPauseSound('play');
                 setTypeIcon('pause');
-                setProgress(timeMusic);
                 return;
             }
         }
@@ -544,7 +572,7 @@ export default function Music({ route, navigation }) {
                                     <FontAwesome5 name={typeIcon} size={20} color='#fff' />
                                 </TouchableOpacity>
                             </WarpperMiniPlayer>
-                            <ProgressBar key={'progresBar'} progress={progress} duration={duration} />
+                            <ProgressBar key={'progresBar'} progress={position} duration={duration} />
                         </ContainerMiniPlayer>
                     }
                 >
@@ -566,7 +594,7 @@ export default function Music({ route, navigation }) {
                             <ProgressConstainer>
                                 <View>
                                     <Slider
-                                        value={progress}
+                                        value={position}
                                         minimumValue={0}
                                         maximumValue={duration}
                                         maximumTrackTintColor='#FFFFFF50'
@@ -578,7 +606,7 @@ export default function Music({ route, navigation }) {
                                 </View>
 
                                 <ProgressNummber>
-                                    <Time> {formatTime(progress)} </Time>
+                                    <Time> {formatTime(position)} </Time>
                                     <Time> {formatTime(duration)} </Time>
                                 </ProgressNummber>
 
