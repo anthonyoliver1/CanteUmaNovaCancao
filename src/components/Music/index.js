@@ -84,6 +84,10 @@ export default function Music({ route, navigation }) {
         verifyConnectionAndLoadMusic();
         dataModalOptions();
         renderButtonHeaderOptions();
+
+        return () => {
+            cleanQueue();
+        }
     }, []);
 
     useEffect(() => {
@@ -103,10 +107,7 @@ export default function Music({ route, navigation }) {
 
     const cleanQueue = async () => {
         try {
-            await TrackPlayer.stop();
-            const index = await TrackPlayer.getActiveTrackIndex();
-            await TrackPlayer.remove(index);
-            await TrackPlayer.removeUpcomingTracks(); // Limpa a fila toda
+            await TrackPlayer.reset();
         } catch (error) {
             console.error('[CLEAN QUEUE]', error);
         }
@@ -145,18 +146,23 @@ export default function Music({ route, navigation }) {
                 // Media controls capabilities
                 capabilities: [
                     Capability.Play,
-                    Capability.Pause
+                    Capability.Pause,
+                    Capability.SeekTo,
                 ],
                 // Capabilities that will show up when the notification is in the compact form on Android
                 compactCapabilities: [
                     Capability.Play,
-                    Capability.Pause
+                    Capability.Pause,
+                    Capability.SeekTo,
                 ],
 
                 notificationCapabilities: [
                     Capability.Play,
-                    Capability.Pause
+                    Capability.Pause,
+                    Capability.SeekTo,
                 ],
+
+                icon: require('../../assets/cunc_icon.png'),
             });
 
             if (
@@ -180,8 +186,8 @@ export default function Music({ route, navigation }) {
                 url: encodeURI(`https://novacancao.azureedge.net/${audio}`),
             };
 
-            // const isLoaded = await verifyUrlConnection(track.url);
-            // if (!isLoaded) throw 'Houve falha ao carregar a música';
+            const isLoaded = await verifyUrlConnection(track.url);
+            if (!isLoaded) throw 'Houve uma falha ao carregar a música';
 
             await TrackPlayer.add(track);
             setIsMounted(true);
@@ -193,8 +199,36 @@ export default function Music({ route, navigation }) {
         }
     }
 
-    async function playOrPauseSound(params) {
-        params.includes('play') ? await TrackPlayer.play() : await TrackPlayer.pause();
+    const playOrPause = async () => {
+        if (typeIcon === 'play') {
+            setTypeIcon('pause');
+            await TrackPlayer.play();
+        }
+
+        if (typeIcon === 'pause' && position > 0) {
+            setTypeIcon('play');
+            await TrackPlayer.pause();
+        }
+    }
+
+    const forwardButton = async () => {
+        await TrackPlayer.seekTo(position + 10);
+    }
+
+    const backwardButton = async () => {
+        await TrackPlayer.seekTo(position - 10);
+    }
+
+    const advancedMusic = async ({ status, value }) => {
+        if (status == 'completed') {
+            if (value >= position) {
+                await TrackPlayer.seekTo(value);
+            }
+
+            if (value <= position) {
+                await TrackPlayer.seekTo(value);
+            }
+        }
     }
 
     // const checkFile = async () => {
@@ -233,49 +267,6 @@ export default function Music({ route, navigation }) {
 
     const showModalMusicAudio = () => {
         modalizeRef.current?.open();
-    }
-
-    const playOrPause = () => {
-        if (typeIcon === 'play') {
-            setTypeIcon('pause');
-            playOrPauseSound('play');
-        }
-
-        if (typeIcon === 'pause' && position > 0) {
-            setTypeIcon('play');
-            playOrPauseSound('pause');
-        }
-    }
-
-    const forwardButton = async () => {
-        await TrackPlayer.seekTo(position + 10);
-    }
-
-    const backwardButton = async () => {
-        await TrackPlayer.seekTo(position - 10);
-    }
-
-    const advancedMusic = async ({ status, value }) => {
-        if (status == 'start') {
-            playOrPauseSound('pause');
-            setTypeIcon('play');
-        }
-
-        if (status == 'completed') {
-            if (value >= position) {
-                await TrackPlayer.seekTo(value);
-                playOrPauseSound('play');
-                setTypeIcon('pause');
-                return;
-            }
-
-            if (value <= position) {
-                await TrackPlayer.seekTo(value);
-                playOrPauseSound('play');
-                setTypeIcon('pause');
-                return;
-            }
-        }
     }
 
     const formatTime = (number) => {
