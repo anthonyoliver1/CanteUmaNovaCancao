@@ -30,14 +30,18 @@
     "android": {
       "userInterfaceStyle": "automatic",
       "adaptiveIcon": {
-        "foregroundImage": "./src/assets/cunc.png"
+        "foregroundImage": "./src/assets/note_logo.png"
       },
-      "package": "com.anthony.dev.AnthonyOliveira"
+      "package": "com.anthony.dev.AnthonyOliveira",
+      "edgeToEdgeEnabled": true
     },
     "extra": {
       "eas": {
         "projectId": "e4774174-3b4d-4715-b2c1-e1eb16bcc027"
       }
-    }
+    },
+    "plugins": [
+      "expo-web-browser"
+    ]
   }
 }

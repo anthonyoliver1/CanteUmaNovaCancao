@@ -67,6 +67,6 @@ export const styles = StyleSheet.create({
     },
     pressPosition: {
         position: 'relative',
-        right: '70%',
+        right: '10%',
     },
 })

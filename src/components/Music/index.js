@@ -131,39 +131,33 @@ export default function Music({ route, navigation }) {
     const loadPlayer = async () => {
         try {
             if (!isPlayerWorked) {
-                await TrackPlayer.setupPlayer(
-                    {
-                        minBuffer: 20,
-                        maxBuffer: 20,
-                        iosCategoryOptions: [IOSCategoryOptions.InterruptSpokenAudioAndMixWithOthers]
-                    }
-                );
+                await TrackPlayer.setupPlayer();
 
                 playerUp(true);
+
+                await TrackPlayer.updateOptions({
+                    // Media controls capabilities
+                    capabilities: [
+                        Capability.Play,
+                        Capability.Pause,
+                        Capability.SeekTo,
+                    ],
+                    // Capabilities that will show up when the notification is in the compact form on Android
+                    compactCapabilities: [
+                        Capability.Play,
+                        Capability.Pause,
+                        Capability.SeekTo,
+                    ],
+
+                    notificationCapabilities: [
+                        Capability.Play,
+                        Capability.Pause,
+                        Capability.SeekTo,
+                    ],
+
+                    icon: require('../../assets/cunc_icon.png'),
+                });
             }
-
-            await TrackPlayer.updateOptions({
-                // Media controls capabilities
-                capabilities: [
-                    Capability.Play,
-                    Capability.Pause,
-                    Capability.SeekTo,
-                ],
-                // Capabilities that will show up when the notification is in the compact form on Android
-                compactCapabilities: [
-                    Capability.Play,
-                    Capability.Pause,
-                    Capability.SeekTo,
-                ],
-
-                notificationCapabilities: [
-                    Capability.Play,
-                    Capability.Pause,
-                    Capability.SeekTo,
-                ],
-
-                icon: require('../../assets/cunc_icon.png'),
-            });
 
             if (
                 (await TrackPlayer.getActiveTrack())?.title === musicTitle &&
