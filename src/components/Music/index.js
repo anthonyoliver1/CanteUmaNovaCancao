@@ -1,8 +1,7 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { Alert, Image, Linking, Pressable, ScrollView, Share, Text, TouchableOpacity, View } from 'react-native';
 import { Entypo, Ionicons, MaterialIcons, FontAwesome5 } from '@expo/vector-icons';
 import { Modalize } from 'react-native-modalize';
-import { Audio, InterruptionModeAndroid, InterruptionModeIOS, PitchCorrectionQuality } from 'expo-av';
 import { Wrapper } from '../../../style';
 import * as FileSystem from 'expo-file-system';
 import * as Clipboard from 'expo-clipboard'
@@ -29,8 +28,12 @@ import {
     style
 } from '../../style/MusicStyle';
 import { useToast } from 'react-native-toast-notifications';
-import { typeDevice } from '../../utils';
+import { typeDevice, verifyUrlConnection } from '../../utils';
 import qs from 'qs';
+import ConnectionContext from '../../contexts/connection';
+import TrackPlayer, { Capability, Event, IOSCategoryOptions, useProgress, useTrackPlayerEvents, State } from 'react-native-track-player';
+import MusicContext from '../../contexts/music';
+import { EventsTrackerPlayer } from './constants';
 
 export default function Music({ route, navigation }) {
     const {
@@ -39,6 +42,7 @@ export default function Music({ route, navigation }) {
         author,
         musicTitle,
         image,
+        album,
         isCipher,
         cipher,
         isVideo,
@@ -46,109 +50,178 @@ export default function Music({ route, navigation }) {
         number
     } = route.params;
 
+    const {
+        getNetworkStateAsync
+    } = useContext(ConnectionContext);
+
+    const {
+        isPlayerWorked,
+        playerUp
+    } = useContext(MusicContext)
+
     const { show } = useToast();
+
+    const {
+        duration,
+        position
+    } = useProgress();
 
     const data = {
         'sonho': require('../../assets/o_sonho.png'),
         'caminhos': require('../../assets/caminhos.png'),
-        'undefined': require('../../assets/cunc.png')
+        'ICI': require('../../assets/cunc.png')
     }
 
     const modalizeRef = useRef(null);
     const menuModalRef = useRef(null);
 
     const [typeIcon, setTypeIcon] = useState('play');
-    const [musicStarted, setMusicStarted] = useState(false);
-    const [sound, setSound] = useState();
-    const [infoFile, setInfoFile] = useState({});
-    const [progress, setProgress] = useState(0);
-    const [duration, setDuration] = useState(0);
     const [isMounted, setIsMounted] = useState(false);
     const [positionModal, setPositionModal] = useState('');
     const [dataList, setDataList] = useState([]);
 
     useEffect(() => {
-        loadMusic();
+        verifyConnectionAndLoadMusic();
         dataModalOptions();
         renderButtonHeaderOptions();
+
+        return () => {
+            cleanQueue();
+        }
     }, []);
 
     useEffect(() => {
-        return () => {
-            sound && sound.unloadAsync();
-        }
-    }, [sound]);
-
-    useEffect(() => {
-        if (progress > 0 && progress === duration) {
+        if (position > 0 && position >= duration) {
             setTypeIcon('play');
-            sound.stopAsync();
+            resetPosition();
         }
-    }, [progress, duration, sound]);
+    }, [position, duration]);
 
-    useEffect(() => {
-        const position = infoFile.positionMillis / 1000;
-        const duration = infoFile.durationMillis / 1000;
+    const verifyConnectionAndLoadMusic = async () => {
+        const response = await getNetworkStateAsync();
 
-        if (infoFile && infoFile.positionMillis) {
-            setProgress(position);
-            setDuration(duration);
-        } else {
-            setProgress(0);
-            setDuration(0);
-        }
-
-    }, [infoFile]);
-
-    async function loadMusic() {
-        try {
-            if (!audio) return;
-
-            const source = {
-                uri: encodeURI(`https://novacancao.azureedge.net/${audio}`)
-            };
-
-            const initialStatus = {
-                shouldPlay: false,
-                pitchCorrectionQuality: PitchCorrectionQuality.High,
-                shouldCorrectPitch: true
-            };
-
-            await Audio.setAudioModeAsync({
-                playsInSilentModeIOS: true,
-                staysActiveInBackground: true,
-                playThroughEarpieceAndroid: false,
-                interruptionModeAndroid: InterruptionModeAndroid.DoNotMix,
-                interruptionModeIOS: InterruptionModeIOS.DoNotMix
-            });
-
-            const { sound } = await Audio.Sound.createAsync(
-                source,
-                initialStatus
-            );
-
-            setSound(sound);
-            setIsMounted((await sound.getStatusAsync()).isLoaded);
-
-            sound.setOnPlaybackStatusUpdate(setInfoFile);
-        } catch (error) {
-            console.log('Deu erro: ', error);
-
-            setIsMounted(false);
-            const notFoundMessage = 'Não foi possível carregar a música';
-            return show(notFoundMessage, { type: 'danger' });
+        if (response) {
+            loadPlayer();
         }
     }
 
-    async function playOrPauseSound(params) {
-        if (musicStarted) {
-            params.includes('play') ? await sound.playAsync() : await sound.pauseAsync();
-            return;
+    const cleanQueue = async () => {
+        try {
+            await TrackPlayer.reset();
+        } catch (error) {
+            console.error('[CLEAN QUEUE]', error);
+        }
+    }
+
+    const resetPosition = async () => {
+        await TrackPlayer.pause();
+        await TrackPlayer.seekTo(0);
+    }
+
+    useTrackPlayerEvents(EventsTrackerPlayer, (event) => {
+        if ([Event.RemotePlay, Event.RemoteStop].includes(event.type)) {
+            setTypeIcon('pause');
         }
 
-        if (!params.includes('open')) {
-            await sound.playAsync();
-            setMusicStarted(true);
+        if (event.type === Event.RemotePause) {
+            setTypeIcon('play');
+        }
+    });
+
+    const loadPlayer = async () => {
+        try {
+            if (!isPlayerWorked) {
+                await TrackPlayer.setupPlayer();
+
+                playerUp(true);
+
+                await TrackPlayer.updateOptions({
+                    // Media controls capabilities
+                    capabilities: [
+                        Capability.Play,
+                        Capability.Pause,
+                        Capability.SeekTo,
+                    ],
+                    // Capabilities that will show up when the notification is in the compact form on Android
+                    compactCapabilities: [
+                        Capability.Play,
+                        Capability.Pause,
+                        Capability.SeekTo,
+                    ],
+
+                    notificationCapabilities: [
+                        Capability.Play,
+                        Capability.Pause,
+                        Capability.SeekTo,
+                    ],
+
+                    icon: require('../../assets/cunc_icon.png'),
+                });
+            }
+
+            if (
+                (await TrackPlayer.getActiveTrack())?.title === musicTitle &&
+                ([State.Playing].includes((await TrackPlayer.getPlaybackState()).state))
+            ) {
+                setIsMounted(true);
+                setTypeIcon('pause');
+                return;
+            }
+
+            if ((await TrackPlayer.getQueue()).length) {
+                cleanQueue();
+            }
+
+            const track = {
+                title: musicTitle,
+                artist: author,
+                album: album,
+                artwork: data[image],
+                url: encodeURI(`https://novacancao.azureedge.net/${audio}`),
+            };
+
+            const isLoaded = await verifyUrlConnection(track.url);
+            if (!isLoaded) throw 'Houve uma falha ao carregar a música';
+
+            await TrackPlayer.add(track);
+            setIsMounted(true);
+        } catch (error) {
+            const notLoadedMusicMessage = 'Não foi possível carregar a música';
+            setIsMounted(false);
+            show(notLoadedMusicMessage, { type: 'danger' });
+            console.error('[SETUP PLAYER ERROR]', error);
+        }
+    }
+
+    const playOrPause = async () => {
+        if (typeIcon === 'play') {
+            setTypeIcon('pause');
+            await TrackPlayer.play();
+        }
+
+        if (typeIcon === 'pause' && position > 0) {
+            setTypeIcon('play');
+            await TrackPlayer.pause();
+        }
+    }
+
+    const forwardButton = async () => {
+        await TrackPlayer.seekTo(position + 10);
+    }
+
+    const backwardButton = async () => {
+        await TrackPlayer.seekTo(position - 10);
+    }
+
+    const advancedMusic = async ({ status, value }) => {
+        if (status == 'completed') {
+            if (value >= position) {
+                await TrackPlayer.seekTo(value);
+            }
+
+            if (value <= position) {
+                await TrackPlayer.seekTo(value);
+            }
         }
     }
 
@@ -188,53 +261,6 @@ export default function Music({ route, navigation }) {
 
     const showModalMusicAudio = () => {
         modalizeRef.current?.open();
-    }
-
-    const playOrPause = () => {
-        if (typeIcon === 'play') {
-            setTypeIcon('pause');
-            playOrPauseSound('play');
-        }
-
-        if (typeIcon === 'pause' && progress > 0) {
-            setTypeIcon('play');
-            playOrPauseSound('pause');
-        }
-    }
-
-    const forwardButton = () => {
-        if (infoFile && infoFile.positionMillis) sound.setPositionAsync(infoFile.positionMillis + 10000);
-    }
-
-    const backwardButton = () => {
-        if (infoFile && infoFile.positionMillis) sound.setPositionAsync(infoFile.positionMillis - 10000);
-    }
-
-    const advancedMusic = ({ status, value }) => {
-        let timeMusic = value * 1000;
-
-        if (status == 'start') {
-            playOrPauseSound('pause');
-            setTypeIcon('play');
-        }
-
-        if (status == 'completed') {
-
-            if (timeMusic >= infoFile.positionMillis) {
-                sound.setPositionAsync(timeMusic);
-                playOrPauseSound('play');
-                setTypeIcon('pause');
-                return;
-            }
-
-            if (timeMusic <= infoFile.positionMillis) {
-                sound.setPositionAsync(timeMusic);
-                playOrPauseSound('play');
-                setTypeIcon('pause');
-                setProgress(timeMusic);
-                return;
-            }
-        }
     }
 
     const formatTime = (number) => {
@@ -531,7 +557,7 @@ export default function Music({ route, navigation }) {
                                     <FontAwesome5 name={typeIcon} size={20} color='#fff' />
                                 </TouchableOpacity>
                             </WarpperMiniPlayer>
-                            <ProgressBar key={'progresBar'} progress={progress} duration={duration} />
+                            <ProgressBar key={'progresBar'} progress={position} duration={duration} />
                         </ContainerMiniPlayer>
                     }
                 >
@@ -553,7 +579,7 @@ export default function Music({ route, navigation }) {
                             <ProgressConstainer>
                                 <View>
                                     <Slider
-                                        value={progress}
+                                        value={position}
                                         minimumValue={0}
                                         maximumValue={duration}
                                         maximumTrackTintColor='#FFFFFF50'
@@ -565,7 +591,7 @@ export default function Music({ route, navigation }) {
                                 </View>
 
                                 <ProgressNummber>
-                                    <Time> {formatTime(progress)} </Time>
+                                    <Time> {formatTime(position)} </Time>
                                     <Time> {formatTime(duration)} </Time>
                                 </ProgressNummber>
 

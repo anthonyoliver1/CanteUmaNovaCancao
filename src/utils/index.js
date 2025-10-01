@@ -49,3 +49,9 @@ export const formatNameMusic = (value) => {
 
     return title;
 }
+
+export const verifyUrlConnection = async (value) => {
+    const resp = await fetch(value)
+
+    return resp.status === 200;
+}

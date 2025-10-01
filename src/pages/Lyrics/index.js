@@ -46,7 +46,8 @@ export default function Lyrics({ navigation }) {
 
     const gotToMusicText = ({ number, title, music, author, album }) => {
         const { text, audio, cifra, video } = music;
-
+        const image = album ? album : 'ICI';
+        
         navigation.navigate(
             'Home',
             {
@@ -57,7 +58,8 @@ export default function Lyrics({ navigation }) {
                     musicTitle: title,
                     audio: audio,
                     author: author,
-                    image: album,
+                    image,
+                    album,
                     isCipher: cifra && 'cifra',
                     isVideo: video && 'video',
                     cipher: cifra,

@@ -9,7 +9,7 @@ import MusicCipher from '../components/MusicCipher';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
-import { ThemeProvider } from 'styled-components';
+import { ThemeProvider } from 'styled-components/native';
 import { Dimensions } from 'react-native';
 import { typeDevice, wait } from '../utils';
 import { StatusBar } from 'expo-status-bar';
@@ -250,7 +250,7 @@ export default function Router() {
     }, [])
 
     useEffect(() => {
-        wait(4050).then(() => setInLoading(false));
+        wait(2000).then(() => setInLoading(false));
     }, [inLoading])
 
     useEffect(() => {
@@ -332,7 +332,7 @@ export default function Router() {
                             const actions = {
                                 'Home': () => iconName = focused ? 'musical-notes' : 'musical-notes-outline',
                                 'Cipher': () => iconName = focused ? 'book' : 'book-outline',
-                                'Search': () => iconName = focused ? 'md-search' : 'md-search-outline',
+                                'Search': () => iconName = focused ? 'search' : 'search-outline',
                                 'About': () => iconName = focused ? 'menu' : 'menu-outline',
                             }
 

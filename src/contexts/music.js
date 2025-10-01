@@ -7,9 +7,11 @@ const MusicContextData = {
     allMusics: {},
     allCiphers: {},
     refreshing: false,
+    isPlayerWorked: false,
     getMusics: () => { },
     getStorageMusic: () => { },
     getStorageCipher: () => { },
+    playerUp: (_param) => { },
 }
 
 const MusicContext = createContext(MusicContextData);
@@ -20,6 +22,7 @@ export function MusicProvider({ children }) {
     const [allMusics, setAllMusics] = useState({});
     const [allCiphers, setAllCiphers] = useState({});
     const [refreshing, setRefreshing] = useState(false);
+    const [isPlayerWorked, setIsPlayerWorked] = useState(false);
 
     const getMusics = async () => {
         try {
@@ -60,15 +63,21 @@ export function MusicProvider({ children }) {
 
     }
 
+    const playerUp = (param) => {
+        setIsPlayerWorked(param)
+    }
+
     return (
         <MusicContext.Provider
             value={{
                 allMusics,
                 allCiphers,
                 refreshing,
+                isPlayerWorked,
                 getMusics,
                 getStorageMusic,
-                getStorageCipher
+                getStorageCipher,
+                playerUp
             }}
         >
             {children}

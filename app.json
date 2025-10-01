@@ -4,7 +4,7 @@
     "slug": "NovaCancao",
     "version": "3.0.0",
     "orientation": "portrait",
-    "icon": "./src/assets/cunc.png",
+    "icon": "./src/assets/note_logo.png",
     "backgroundColor": "#000000",
     "splash": {
       "image": "./src/assets/splash_logo.png",
@@ -32,13 +32,17 @@
       "versionCode": 40,
       "userInterfaceStyle": "automatic",
       "adaptiveIcon": {
-        "foregroundImage": "./src/assets/cunc.png"
-      }
+        "foregroundImage": "./src/assets/note_logo.png"
+      },
+      "edgeToEdgeEnabled": true
     },
     "extra": {
       "eas": {
         "projectId": "e840c608-30d7-4fde-8516-a0db43d421f5"
       }
-    }
+    },
+    "plugins": [
+      "expo-web-browser"
+    ]
   }
 }

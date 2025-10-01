@@ -3,7 +3,7 @@ import * as Network from "expo-network";
 
 const ConnectionContextData = {
     isConnection: null,
-    getNetworkStateAsync: () => { },
+    getNetworkStateAsync: async () => { },
 }
 
 const ConnectionContext = createContext(ConnectionContextData);
@@ -14,6 +14,8 @@ export function ConnectionProvider({ children }) {
     const getNetworkStateAsync = useCallback(async () => {
         const connection = await Network.getNetworkStateAsync();
         setIsConnection(connection.isInternetReachable);
+
+        return connection.isInternetReachable;
     }, [])
 
     return (
